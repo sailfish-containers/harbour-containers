@@ -32,7 +32,9 @@ Page {
 
             MenuItem {
                 text: "Settings"
-                enabled: false
+                onClicked: {
+                    pageStack.push(Qt.resolvedUrl("MachineSettings.qml"), {container : container} )
+                }
             }
             MenuItem {
                 text: "Snapshot"
@@ -61,6 +63,7 @@ Page {
             }
             MenuItem {
                 text: is_started() ? "Stop" : "Start"
+                enabled: is_frozen() ? false : true
                 onClicked: {
                     if (is_started()){
                         daemon.call("stop_container",[container.container_name], function (result) {
@@ -69,7 +72,7 @@ Page {
                                 container.container_status = "STOPPED"
                             }
                         });
-                    }else{
+                    }else {
                         daemon.call("start_container",[container.container_name], function (result) {
                             if (result){
                                 // update model
@@ -121,8 +124,6 @@ Page {
                     anchors.horizontalCenter: parent.horizontalCenter
                     width: page.isLandscape ? parent.width/1.5 : parent.width - Theme.paddingLarge
                     spacing: Theme.paddingLarge
-
-
 
                     IconButton {
                         anchors.horizontalCenter: parent.horizontalCenter

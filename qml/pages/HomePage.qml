@@ -6,9 +6,25 @@ Page {
     id: page
 
     function freeze_all(){
+        for(var i=0;i<containersModel.count;i++){
+            if(containersModel.get(i)["container_status"] === "RUNNING" ){
+                daemon.call('freeze_container',[containersModel.get(i)["container_name"]], function (result) {
+                    containersModel.setProperty(i, "container_status", "FROZEN")
+                })
+            }
+        }
+
         return true
     }
     function stop_all(){
+        for(var i=0;i<containersModel.count;i++){
+            if(containersModel.get(i)["container_status"] === "RUNNING" ){
+                daemon.call('stop_container',[containersModel.get(i)["container_name"]], function (result) {
+                    containersModel.setProperty(i, "container_status", "FROZEN")
+                })
+            }
+        }
+
         return true
     }
 
@@ -36,7 +52,6 @@ Page {
             spacing: Theme.paddingLarge
             width: parent.width
             height: parent.height
-
 
             PageHeader {
                 id: pageHeader
@@ -115,10 +130,15 @@ Page {
             triggeredOnStart: true
             onTriggered: {
                 daemon.call('get_containers',[], function (result) {
-                    //containersModel.clear()
                     var ind = 0
                     for(var item in result){
                         // update containers cache
+                        if (containersModel.get(ind) && result[item]["container_name"] !== containersModel.get(ind)["container_name"]){
+                            // container removed
+                            containersModel.remove(ind)
+                        }
+
+                        // refresh containers
                         containersModel.set(ind, result[item])
                         ind++
                     }

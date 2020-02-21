@@ -16,6 +16,13 @@
     </message>
 </context>
 <context>
+    <name>MachineSettings</name>
+    <message>
+        <source>Settings: </source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>MachineView</name>
     <message>
         <source>Container: </source>

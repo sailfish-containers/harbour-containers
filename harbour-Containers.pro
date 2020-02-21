@@ -19,6 +19,7 @@ SOURCES += src/harbour-Containers.cpp
 DISTFILES += qml/harbour-Containers.qml \
     qml/cover/CoverPage.qml \
     qml/pages/HomePage.qml \
+    qml/pages/MachineSettings.qml \
     qml/pages/MachineView.qml \
     rpm/harbour-Containers.changes.in \
     rpm/harbour-Containers.changes.run.in \

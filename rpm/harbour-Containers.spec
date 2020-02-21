@@ -16,8 +16,7 @@ License:    LICENSE
 URL:        http://example.org/
 Source0:    %{name}-%{version}.tar.bz2
 Source100:  harbour-Containers.yaml
-Requires:   sailfishsilica-qt5 >= 0.10.9
-Requires:   sailfish-containers-dbus
+Requires:   sailfishsilica-qt5 >= 0.10.9, sailfish-containers-dbus
 BuildRequires:  pkgconfig(sailfishapp) >= 1.0.2
 BuildRequires:  pkgconfig(Qt5Core)
 BuildRequires:  pkgconfig(Qt5Qml)
