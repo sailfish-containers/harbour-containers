@@ -18,6 +18,7 @@ SOURCES += src/harbour-Containers.cpp
 
 DISTFILES += qml/harbour-Containers.qml \
     qml/cover/CoverPage.qml \
+    qml/pages/CreateDialog.qml \
     qml/pages/HomePage.qml \
     qml/pages/MachineSettings.qml \
     qml/pages/MachineView.qml \

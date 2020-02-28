@@ -10,6 +10,8 @@ Page {
     SilicaFlickable {
         anchors.fill: parent
 
+        RemorseItem { id: remorse }
+
         Column {
             spacing: Theme.paddingLarge
             width: parent.width
@@ -20,7 +22,7 @@ Page {
 
                 Rectangle {
                     anchors.fill: parent
-                    color: Theme.darkSecondaryColor
+                    color: Theme._wallpaperOverlayColor
 
                     PageHeader {
                         title: qsTr("Settings: ") + container.container_name
@@ -59,11 +61,24 @@ Page {
                     ButtonLayout {
                         Button {
                             text: "delete container"
-                            enabled: false
+                            enabled: true
+                            onClicked: daemon.call('destroy_container',[container.container_name], function (result){
+                                pageStack.push(Qt.resolvedUrl("HomePage.qml"),{})
+                            })
                         }
                     }
                 }
             }
+        }
+    }
+    Item {
+        DBusInterface {
+            id: daemon
+
+            bus: DBus.SystemBus
+            service: 'org.sailfishcontainers.daemon'
+            iface: 'org.sailfishcontainers.daemon'
+            path: '/org/sailfishcontainers/daemon'
         }
     }
 }

@@ -94,7 +94,7 @@ Page {
 
                 Rectangle {
                     anchors.fill: parent
-                    color: Theme.darkSecondaryColor
+                    color: Theme._wallpaperOverlayColor
 
                     PageHeader {
                         title: qsTr("Container: ") + container.container_name
@@ -154,6 +154,19 @@ Page {
                                 //  rootfs label, long string
                                 text: "<b>rootfs: </b>" + container.container_rootfs
                             }
+                            Label{
+                                //  rootfs label, long string
+                                text: "<b>pid: </b>" + container.container_pid
+                            }
+                            Label {
+                                text: "<b>cpu use: </b>" + container.container_cpu
+                            }
+                            Label{
+                                text: "<b>memory use: </b>" + container.container_mem
+                            }
+                            Label{
+                                text: "<b>kmem use: </b>" + container.container_kmem
+                            }
                         }
                     }
 
@@ -180,26 +193,9 @@ Page {
                             }
                         }
                     }
-                    SectionHeader{
-                        text: "resources"
-                    }
-                    Row {
-                        width: parent.width
 
-                        Column {
-                            Label {
-                                text: "<b>cpu use: </b>" + container.container_resources.cpu_use
-                            }
-                            Label{
-                                text: "<b>memory use: </b>" + container.container_resources.memory_use
-                            }
-                            Label{
-                                text: "<b>kmem use: </b>" + container.container_resources.kmem_use
-                            }
-                        }
-                    }
                     SectionHeader{
-                        text: "mounts"
+                        text: "mountpoints"
                     }
                     Row {
                         width: parent.width
