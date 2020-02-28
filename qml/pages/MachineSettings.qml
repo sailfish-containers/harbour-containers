@@ -36,7 +36,7 @@ Page {
                 height: parent.height - pageHeader.height
                 clip: true
                 cellWidth: page.isLandscape ? parent.width/1.5 : parent.width - Theme.paddingLarge
-                cellHeight: page.height *2
+                //cellHeight: auto
 
                 VerticalScrollDecorator {}
 
@@ -54,14 +54,15 @@ Page {
 
                     ButtonLayout {
                         Button {
-                            text: "icon"
+                            text: "Change icon"
                             enabled: false
                         }
                     }
                     ButtonLayout {
                         Button {
-                            text: "delete container"
+                            text: "Destroy container"
                             enabled: true
+                            color: Theme.errorColor
                             onClicked: daemon.call('destroy_container',[container.container_name], function (result){
                                 pageStack.push(Qt.resolvedUrl("HomePage.qml"),{})
                             })

@@ -7,6 +7,7 @@ Page {
     backNavigation: false
 
     property string new_container_pid: "0"
+    property string new_container_name: ""
 
     function freeze_all(){
         for(var i=0;i<containersModel.count;i++){
@@ -32,34 +33,28 @@ Page {
     }
 
     function get_container_icon(container){
-        if (container === "New container"){
-            return "image://theme/icon-m-add"
-        } else {
-            // get container icon
-            return "image://theme/icon-m-computer"
+
+        if (container_create_in_progress(container)){
+            // for container under creation
+            return ""
         }
+
+        if (container === "New container"){
+            // create container icon
+            return "image://theme/icon-m-add"
+        }
+
+        // default container icon
+        return "image://theme/icon-m-computer"
+
     }
 
-    function refresh_containers(){
-        /* Refresh containers list */
-        daemon.call('get_containers',[], function (result) {
-            if(containersModel.count > result.length+1){
-                // containers amount changed
-                containersModel.clear()
-            }
-
-            var ind = 0
-            for(var item in result){
-                // refresh containers
-                containersModel.set(ind, result[item])
-                ind++
-            }
-
-            // "Add new" icon
-            containersModel.set(ind, {"container_status":"","container_name":"New container"})
-
-            //console.log("cache refreshed")
-        })
+    function container_create_in_progress(name){
+        // check if container is under creation
+        if (name !== new_container_name){
+            return false
+        }
+        return true
     }
 
     SilicaFlickable{
@@ -98,18 +93,6 @@ Page {
                     PageHeader {
                         title: qsTr("Containers")
                     }
-                    BusyIndicator {
-                        id: busySpin
-                        size: BusyIndicatorSize.Medium
-                       // anchors.centerIn: parent
-                        anchors.left: parent.left
-                        anchors.top: parent.top
-                        anchors.leftMargin: 15
-                        anchors.topMargin: 10
-                        running: false
-
-                    }
-
                 }
             }
 
@@ -138,7 +121,7 @@ Page {
 
                         onClicked: {
                             // Go to machineView
-                            if (container_name === "New container"){
+                            if (container_name === "New container" && new_container_pid == "0"){
                                 // create container dialog
                                 var dialog = pageStack.push(Qt.resolvedUrl("CreateDialog.qml"), {name : "test"})
 
@@ -149,14 +132,31 @@ Page {
                                         if (result["result"]){
                                             // creation process started
                                             new_container_pid = result["pid"]
-                                            busySpin.running = true
+                                            new_container_name = dialog.new_name
+
+                                            //containersModel.remove(containersModel.count-1)
+                                            containersModel.set(containersModel.count-1,{"container_status":"Creation in progress...","container_name":dialog.new_name})
+                                            containersModel.set(containersModel.count,{"container_status":"","container_name":"New container"})
+
                                         }
                                     })
-                                })
+                                })                     
                             } else {
                                 // Go to container page
-                                pageStack.push(Qt.resolvedUrl("MachineView.qml"), {container : model} )
+                                if (new_container_pid == "0"){ // this lock the page until the creation is completed to avoid interferences
+                                    // no container creation in progress
+                                    pageStack.push(Qt.resolvedUrl("MachineView.qml"), {container : model} )
+                                }
+
                             }
+                        }
+
+                        BusyIndicator {
+                            id: busySpin
+                            size: BusyIndicatorSize.Large
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            running: container_create_in_progress(container_name)
+
                         }
                     }
 
@@ -199,14 +199,32 @@ Page {
                         // Check container creation
                         if(!result){
                             // LXC create completed
-                            busySpin.running = false
                             new_container_pid = "0"
-                            refresh_containers()
+                            new_container_name = ""
                         }
                     })
-                } else {
+                }
+
+                if (new_container_pid == "0") {
                     // default condition, refresh containers list
-                    refresh_containers()
+                    daemon.call('get_containers',[], function (result) {
+                        if(containersModel.count > result.length+1){
+                            // containers amount changed
+                            containersModel.clear()
+                        }
+
+                        var ind = 0
+                        for(var item in result){
+                            // refresh containers
+                            containersModel.set(ind, result[item])
+                            ind++
+                        }
+
+                        // "Add new" icon
+                        containersModel.set(ind, {"container_status":"","container_name":"New container"})
+
+                        //console.log("cache refreshed")
+                    })
                 }
             }            
         }

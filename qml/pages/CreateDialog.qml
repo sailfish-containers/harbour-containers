@@ -32,6 +32,17 @@ Dialog {
                 }
             }
         }
+        ComboBox {
+            id: archBox
+            width: parent.width
+            label: "Architecture"
+
+            menu: ContextMenu {
+                MenuItem { text: "arm64" }
+                MenuItem { text: "armhf" }
+                MenuItem { text: "i386" }
+            }
+        }
 
         ComboBox {
             id: distroBox
@@ -44,17 +55,7 @@ Dialog {
                 MenuItem { text: "kali" }
             }
         }
-        ComboBox {
-            id: archBox
-            width: parent.width
-            label: "Architecture"
 
-            menu: ContextMenu {
-                MenuItem { text: "arm64" }
-                MenuItem { text: "armhf" }
-                MenuItem { text: "i686" }
-            }
-        }
         ComboBox {
             id: releaseBox
             width: parent.width
@@ -66,6 +67,7 @@ Dialog {
                 MenuItem { text: "eon" }
             }
         }
+
         TextSwitch {
             id: desktopSwitch
             text: "Setup desktop"
@@ -73,6 +75,8 @@ Dialog {
             description: "setup container's desktop"
         }
     }
+
+    onOpened: {}
 
     onDone: {
         if (result == DialogResult.Accepted) {

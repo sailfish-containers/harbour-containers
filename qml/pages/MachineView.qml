@@ -50,14 +50,14 @@ Page {
                                 // update model
                                 container.container_status = "RUNNING"
                             }
-                        });
+                        })
                     }else{
                         daemon.call("freeze_container",[container.container_name], function (result) {
                             if (result){
                                 // update model
                                 container.container_status = "FROZEN"
                             }
-                        });
+                        })
                     }
                 }
             }
@@ -71,14 +71,14 @@ Page {
                                 // update model
                                 container.container_status = "STOPPED"
                             }
-                        });
+                        })
                     }else {
                         daemon.call("start_container",[container.container_name], function (result) {
                             if (result){
                                 // update model
                                 container.container_status = "RUNNING"
                             }
-                        });
+                        })
                     }
                 }
             }
@@ -108,7 +108,8 @@ Page {
                 height: parent.height - pageHeader.height
                 clip: true
                 cellWidth: page.isLandscape ? parent.width/1.5 : parent.width - Theme.paddingLarge
-                cellHeight: page.height *2
+                cellHeight: contentHeight //column.height //page.height *2
+                onContentHeightChanged: cellHeight = contentHeight
 
                 VerticalScrollDecorator {}
 
@@ -135,6 +136,7 @@ Page {
                         icon.height: Theme.itemSizeExtraLarge + Theme.itemSizeSmall
 
                     }
+
 
                     SectionHeader{
                         text: "details"
@@ -201,6 +203,7 @@ Page {
                         width: parent.width
 
                         Column {
+                            id: columnMountpoints
                             Repeater{
                                 model: ListModel { id: listmodelrepeater}
                                 Component.onCompleted: {
@@ -209,11 +212,14 @@ Page {
                                         //console.log(container.container_mounts[mp])
                                         listmodelrepeater.set(ind, {"mount_point":container.container_mounts[mp]})
                                         ind++
+
                                     }
+                                    gridView.cellHeight += column.height
                                 }
 
                                 Label {
                                     text: mount_point
+                                    Component.onCompleted: gridView.cellHeight += Theme.paddingLarge*1.6
                                 }
                             }
                         }
