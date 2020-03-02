@@ -1,6 +1,6 @@
 # harbour-Containers
-<center><img src="https://raw.githubusercontent.com/sailfish-containers/harbour-Containers/master/icons/172x172/harbour-Containers.png"></center>
-<center><i>A Linux containers manager for SailfishOS</i></center>
+<p align="center"><img src="https://raw.githubusercontent.com/sailfish-containers/harbour-Containers/master/icons/172x172/harbour-Containers.png"></p>
+<p align="center"><i>A Linux containers manager for SailfishOS</i></p>
 
 ## Documentation
 
