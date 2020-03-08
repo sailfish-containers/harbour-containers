@@ -8,6 +8,7 @@ Page {
 
     property string new_container_pid: "0"
     property string new_container_name: ""
+    property bool new_container_setup: true
 
     function freeze_all(){
         for(var i=0;i<containersModel.count;i++){
@@ -121,9 +122,9 @@ Page {
 
                         onClicked: {
                             // Go to machineView
-                            if (container_name === "New container" && new_container_pid == "0"){
+                            if (container_name === "New container" && new_container_pid === "0"){
                                 // create container dialog
-                                var dialog = pageStack.push(Qt.resolvedUrl("CreateDialog.qml"), {name : "test"})
+                                var dialog = pageStack.push(Qt.resolvedUrl("CreateDialog.qml"), {daemon : daemon})
 
                                 dialog.accepted.connect(function() {
 
@@ -133,6 +134,7 @@ Page {
                                             // creation process started
                                             new_container_pid = result["pid"]
                                             new_container_name = dialog.new_name
+                                            new_container_setup = dialog.new_setup
 
                                             //containersModel.remove(containersModel.count-1)
                                             containersModel.set(containersModel.count-1,{"container_status":"Creation in progress...","container_name":dialog.new_name})
@@ -145,7 +147,7 @@ Page {
                                 // Go to container page
                                 if (new_container_pid == "0"){ // this lock the page until the creation is completed to avoid interferences
                                     // no container creation in progress
-                                    pageStack.push(Qt.resolvedUrl("MachineView.qml"), {container : model} )
+                                    pageStack.push(Qt.resolvedUrl("MachineView.qml"), {container: model, daemon: daemon} )
                                 }
 
                             }
@@ -186,6 +188,7 @@ Page {
             service: 'org.sailfishcontainers.daemon'
             iface: 'org.sailfishcontainers.daemon'
             path: '/org/sailfishcontainers/daemon'
+
         }
         Timer {
             id: refreshTimer
@@ -198,9 +201,29 @@ Page {
                     daemon.call('check_process',[new_container_pid], function (result){
                         // Check container creation
                         if(!result){
-                            // LXC create completed
-                            new_container_pid = "0"
-                            new_container_name = ""
+                            // LXC create completed                         
+                            if (new_container_setup){
+                                // Setup container's desktop
+                                containersModel.set(containersModel.count-2,{"container_status":"Starting container...","container_name":new_container_name})
+
+                                // Start new container
+                                daemon.call('start_container',[new_container_name], function (result) {
+                                    // Run setup script
+                                    daemon.call('setup_container',[new_container_name,"xfce4"], function (result) {
+                                        // refresh pid to check on timer
+                                        new_container_pid = result["pid"]
+                                        new_container_setup = false
+
+                                        // update container's status
+                                        containersModel.set(containersModel.count-2,{"container_status":"Installing packages...","container_name":new_container_name})
+
+                                    })
+                                })
+                            } else {
+                                // creation/setup completed
+                                new_container_pid = "0"
+                                new_container_name = ""
+                            }
                         }
                     })
                 }

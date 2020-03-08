@@ -1,11 +1,11 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
-import Nemo.DBus 2.0
 
 Page {
     id: page
 
     property var container // container object from dbus
+    property var daemon    // sailfish-containers daemon object
 
     function is_started(){
         // get Boolean for status: on = true, everything else = false
@@ -33,7 +33,7 @@ Page {
             MenuItem {
                 text: "Settings"
                 onClicked: {
-                    pageStack.push(Qt.resolvedUrl("MachineSettings.qml"), {container : container} )
+                    pageStack.push(Qt.resolvedUrl("MachineSettings.qml"), {container : container, daemon: daemon} )
                 }
             }
             MenuItem {
@@ -181,7 +181,14 @@ Page {
 
                         Button {
                             text: "attach"
-                            enabled: false
+                            enabled: is_started() ? true : false
+                            onClicked: {
+                                daemon.call("start_shell",[container.container_name], function (result) {
+                                    if (result){
+                                    // shell started
+                                    }
+                                });
+                            }
                         }
                         Button {
                             text: "X session"
@@ -226,16 +233,6 @@ Page {
                     }
                 }
             }
-        }
-    }
-    Item {
-        DBusInterface {
-            id: daemon
-
-            bus: DBus.SystemBus
-            service: 'org.sailfishcontainers.daemon'
-            iface: 'org.sailfishcontainers.daemon'
-            path: '/org/sailfishcontainers/daemon'
         }
     }
 }

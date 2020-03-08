@@ -2,6 +2,13 @@ import QtQuick 2.2
 import Sailfish.Silica 1.0
 
 Dialog {
+    // Dbus datemon object
+    property var daemon
+
+    // Available distros from LXC repos
+    property var distros: []
+
+    // new value from this dialog
     property string new_name
     property string new_arch
     property string new_distro
@@ -10,6 +17,24 @@ Dialog {
 
     id: mainDialog
     canAccept: false
+
+    Component.onCompleted: {
+        daemon.call("get_tpl_distro",[], function (result) {
+
+            for (var data in result){
+                distroBox_model.append({ distro_name: result[data]})
+                distros[data] = result[data]
+            }
+            daemon.call("get_tpl_version",[distros[data]], function (result) {
+                releaseBox_model.clear()
+
+                for (var data in result){
+                    releaseBox_model.append({ release_name: result[data]})
+                    //console.log(result[data])
+                }
+            })
+        })
+    }
 
     Column {
         width: parent.width
@@ -50,9 +75,24 @@ Dialog {
             label: "Distribution"
 
             menu: ContextMenu {
-                MenuItem { text: "ubuntu" }
-                MenuItem { text: "debian" }
-                MenuItem { text: "kali" }
+                Repeater {
+                    model: ListModel{
+                        id: distroBox_model
+                    }
+
+                    MenuItem { text: distro_name }
+                }
+            }
+
+            onCurrentIndexChanged: {
+                daemon.call("get_tpl_version",[distros[currentIndex]], function (result) {
+                    releaseBox_model.clear()
+
+                    for (var data in result){
+                        releaseBox_model.append({ release_name: result[data]})
+                        //console.log(result[data])
+                    }
+                })
             }
         }
 
@@ -62,9 +102,12 @@ Dialog {
             label: "Release"
 
             menu: ContextMenu {
-                MenuItem { text: "bionic" }
-                MenuItem { text: "cosmic" }
-                MenuItem { text: "eon" }
+                Repeater{
+                    model: ListModel{
+                        id: releaseBox_model
+                    }
+                    MenuItem { text: release_name }
+                }
             }
         }
 
@@ -75,8 +118,6 @@ Dialog {
             description: "setup container's desktop"
         }
     }
-
-    onOpened: {}
 
     onDone: {
         if (result == DialogResult.Accepted) {

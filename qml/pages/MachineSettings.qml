@@ -1,16 +1,14 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
-import Nemo.DBus 2.0
 
 Page {
     id: page
 
     property var container // container object from dbus
+    property var daemon    // sailfish-containers daemon object
 
     SilicaFlickable {
         anchors.fill: parent
-
-        RemorseItem { id: remorse }
 
         Column {
             spacing: Theme.paddingLarge
@@ -63,23 +61,17 @@ Page {
                             text: "Destroy container"
                             enabled: true
                             color: Theme.errorColor
-                            onClicked: daemon.call('destroy_container',[container.container_name], function (result){
-                                pageStack.push(Qt.resolvedUrl("HomePage.qml"),{})
-                            })
+                            onClicked: {
+                                var remorse = Remorse.popupAction(root, Remorse.deletedText, function() {
+                                    daemon.call('destroy_container',[container.container_name], function (result){
+                                        pageStack.push(Qt.resolvedUrl("HomePage.qml"),{})
+                                    })
+                                })
+                            }
                         }
                     }
                 }
             }
-        }
-    }
-    Item {
-        DBusInterface {
-            id: daemon
-
-            bus: DBus.SystemBus
-            service: 'org.sailfishcontainers.daemon'
-            iface: 'org.sailfishcontainers.daemon'
-            path: '/org/sailfishcontainers/daemon'
         }
     }
 }
