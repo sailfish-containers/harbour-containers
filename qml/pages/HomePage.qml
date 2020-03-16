@@ -110,70 +110,77 @@ Page {
                 model: ListModel {
                     id: containersModel
                 }
-                delegate: Column {
+                delegate: BackgroundItem {
+                    //contentHeight: itemColumn.height
+                    width:  Theme.itemSizeExtraLarge + Theme.itemSizeSmall + Theme.paddingSmall
+                    height:  Theme.itemSizeExtraLarge + Theme.itemSizeSmall + Theme.itemSizeExtraSmall
+                    onClicked: {
+                        // Go to machineView
+                        if (container_name === "New container" && new_container_pid === "0"){
+                            // create container dialog
+                            var dialog = pageStack.push(Qt.resolvedUrl("CreateDialog.qml"), {daemon : daemon})
 
-                    IconButton {
-                        width: icon.width //+ Theme.paddingLarge //GridView.view.width
-                        height: icon.height - Theme.paddingLarge - Theme.paddingLarge
+                            dialog.accepted.connect(function() {
 
-                        icon.source: get_container_icon(container_name)
-                        icon.width: Theme.itemSizeExtraLarge + Theme.itemSizeSmall //GridView.view.width
-                        icon.height: Theme.itemSizeExtraLarge + Theme.itemSizeSmall
+                                // Create new container
+                                daemon.call('create_container',[dialog.new_name,dialog.new_distro,dialog.new_arch,dialog.new_release], function (result) {
+                                    if (result["result"]){
+                                        // creation process started
+                                        new_container_pid = result["pid"]
+                                        new_container_name = dialog.new_name
+                                        new_container_setup = dialog.new_setup
 
-                        onClicked: {
-                            // Go to machineView
-                            if (container_name === "New container" && new_container_pid === "0"){
-                                // create container dialog
-                                var dialog = pageStack.push(Qt.resolvedUrl("CreateDialog.qml"), {daemon : daemon})
+                                        //containersModel.remove(containersModel.count-1)
+                                        containersModel.set(containersModel.count-1,{"container_status":"Creation in progress...","container_name":dialog.new_name})
+                                        containersModel.set(containersModel.count,{"container_status":"","container_name":"New container"})
 
-                                dialog.accepted.connect(function() {
+                                    }
+                                })
+                            })
+                        } else {
+                            // Go to container page
+                            if (new_container_pid == "0"){ // this lock the page until the creation is completed to avoid interferences
+                                // no container creation in progress
+                                pageStack.push(Qt.resolvedUrl("MachineView.qml"), {container: model, daemon: daemon} )
+                            }
 
-                                    // Create new container
-                                    daemon.call('create_container',[dialog.new_name,dialog.new_distro,dialog.new_arch,dialog.new_release], function (result) {
-                                        if (result["result"]){
-                                            // creation process started
-                                            new_container_pid = result["pid"]
-                                            new_container_name = dialog.new_name
-                                            new_container_setup = dialog.new_setup
+                        }
+                    }
+                    Column {
+                        id: itemColumn
 
-                                            //containersModel.remove(containersModel.count-1)
-                                            containersModel.set(containersModel.count-1,{"container_status":"Creation in progress...","container_name":dialog.new_name})
-                                            containersModel.set(containersModel.count,{"container_status":"","container_name":"New container"})
+                        Item{
+                            width: iconitem.width //+ Theme.paddingLarge //GridView.view.width
+                            height: Theme.itemSizeExtraLarge + Theme.itemSizeExtraSmall - Theme.paddingLarge
 
-                                        }
-                                    })
-                                })                     
-                            } else {
-                                // Go to container page
-                                if (new_container_pid == "0"){ // this lock the page until the creation is completed to avoid interferences
-                                    // no container creation in progress
-                                    pageStack.push(Qt.resolvedUrl("MachineView.qml"), {container: model, daemon: daemon} )
-                                }
+                            Icon {
+                                id: iconitem
+                                source: get_container_icon(container_name)
+                                width: Theme.itemSizeExtraLarge + Theme.itemSizeSmall //GridView.view.width
+                                height: Theme.itemSizeExtraLarge + Theme.itemSizeExtraSmall
+                            }
 
+                            BusyIndicator {
+                                id: busySpin
+                                size: BusyIndicatorSize.Large
+                                anchors.horizontalCenter: parent.horizontalCenter
+                                running: container_create_in_progress(container_name)
                             }
                         }
 
-                        BusyIndicator {
-                            id: busySpin
-                            size: BusyIndicatorSize.Large
+                        Label {
+                            //anchors.bottom: parent.bottom
                             anchors.horizontalCenter: parent.horizontalCenter
-                            running: container_create_in_progress(container_name)
+                            text: container_status
+                            color: Theme.secondaryColor
+                            font.pixelSize: Theme.fontSizeExtraSmallBase
 
                         }
-                    }
-
-                    Label {
-                        //anchors.bottom: parent.bottom
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        text: container_status
-                        color: Theme.secondaryColor
-                        font.pixelSize: Theme.fontSizeExtraSmallBase
-
-                    }
-                    Label {
-                        //anchors.bottom: parent.bottom
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        text: container_name
+                        Label {
+                            //anchors.bottom: parent.bottom
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            text: container_name
+                        }
                     }
                 }
             }
