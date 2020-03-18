@@ -37,8 +37,10 @@ Page {
                 }
             }
             MenuItem {
-                text: "Snapshot"
-                enabled: false
+                text: "Snapshots"
+                onClicked: {
+                    pageStack.push(Qt.resolvedUrl("MachineSnapshots.qml"), {container : container, daemon: daemon} )
+                }
             }
             MenuItem {
                 text: is_frozen() ? "Unfreeze" : "Freeze"
@@ -139,7 +141,7 @@ Page {
 
 
                     SectionHeader{
-                        text: "details"
+                        text: qsTr("Details")
                     }
                     Row {
 
@@ -147,40 +149,40 @@ Page {
 
                         Column {
                             Label {
-                                text: "<b>name: </b>" + container.container_name
+                                text: "<b>" + qsTr("name:") + "</b> " + container.container_name
                             }
                             Label{
-                                text: "<b>state: </b>" + container.container_status
-                            }
-                            Label{
-                                //  rootfs label, long string
-                                text: "<b>rootfs: </b>" + container.container_rootfs
+                                text: "<b>" + qsTr("state:") + "</b> " + container.container_status
                             }
                             Label{
                                 //  rootfs label, long string
-                                text: "<b>pid: </b>" + container.container_pid
+                                text: "<b>" + qsTr("rootfs:") + "</b> " + container.container_rootfs
+                            }
+                            Label{
+                                //  rootfs label, long string
+                                text: "<b>" + qsTr("pid:") + "</b> " + container.container_pid
                             }
                             Label {
-                                text: "<b>cpu use: </b>" + container.container_cpu
+                                text: "<b>" + qsTr("cpu use:") + "</b> " + container.container_cpu
                             }
                             Label{
-                                text: "<b>memory use: </b>" + container.container_mem
+                                text: "<b>" + qsTr("memory use:") + "</b> " + container.container_mem
                             }
                             Label{
-                                text: "<b>kmem use: </b>" + container.container_kmem
+                                text: "<b>" + qsTr("kmem use:") + "</b> " + container.container_kmem
                             }
                         }
                     }
 
                     SectionHeader {
-                        text: "session"
+                        text: qsTr("Session")
                     }
 
                     ButtonLayout {
                         enabled: is_started()
 
                         Button {
-                            text: "attach"
+                            text: qsTr("attach")
                             enabled: is_started() ? true : false
                             onClicked: {
                                 daemon.call("start_shell",[container.container_name], function (result) {
@@ -191,7 +193,7 @@ Page {
                             }
                         }
                         Button {
-                            text: "X session"
+                            text: qsTr("X session")
                             enabled: is_started() ? true : false
                             onClicked: {
                                 daemon.call("start_xsession",[container.container_name], function (result) {
@@ -204,7 +206,7 @@ Page {
                     }
 
                     SectionHeader{
-                        text: "mountpoints"
+                        text: qsTr("mountpoints")
                     }
                     Row {
                         width: parent.width

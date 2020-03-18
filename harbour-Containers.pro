@@ -21,6 +21,7 @@ DISTFILES += qml/harbour-Containers.qml \
     qml/pages/CreateDialog.qml \
     qml/pages/HomePage.qml \
     qml/pages/MachineSettings.qml \
+    qml/pages/MachineSnapshots.qml \
     qml/pages/MachineView.qml \
     rpm/harbour-Containers.changes.in \
     rpm/harbour-Containers.changes.run.in \

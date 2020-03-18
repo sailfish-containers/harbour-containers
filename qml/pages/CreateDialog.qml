@@ -115,7 +115,7 @@ Dialog {
             id: desktopSwitch
             text: "Setup desktop"
             checked: true
-            description: "setup container's desktop"
+            description: qsTr("Setup container's desktop, may take long time. Currently only debian based systems are supported by the scripts. In addition Xwayland may need to be rebuilt based on guest's libc version. Read more: https://github.com/sailfish-containers/lxc-templates-desktop/wiki/Desktop")
         }
     }
 

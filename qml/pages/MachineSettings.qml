@@ -62,7 +62,7 @@ Page {
                             enabled: true
                             color: Theme.errorColor
                             onClicked: {
-                                var remorse = Remorse.popupAction(root, Remorse.deletedText, function() {
+                                var remorse = Remorse.popupAction(page, Remorse.deletedText, function() {
                                     daemon.call('destroy_container',[container.container_name], function (result){
                                         pageStack.push(Qt.resolvedUrl("HomePage.qml"),{})
                                     })

@@ -103,7 +103,7 @@ Page {
                 height: parent.height - pageHeader.height - Theme.paddingLarge
                 clip: true
                 cellWidth: Theme.itemSizeExtraLarge + Theme.itemSizeSmall + Theme.paddingSmall
-                cellHeight: Theme.itemSizeExtraLarge + Theme.itemSizeSmall + Theme.paddingLarge + Theme.paddingSmall
+                cellHeight: Theme.itemSizeExtraLarge*2 //+ Theme.paddingLarge
 
                 VerticalScrollDecorator {}
 
@@ -113,7 +113,7 @@ Page {
                 delegate: BackgroundItem {
                     //contentHeight: itemColumn.height
                     width:  Theme.itemSizeExtraLarge + Theme.itemSizeSmall + Theme.paddingSmall
-                    height:  Theme.itemSizeExtraLarge + Theme.itemSizeSmall + Theme.itemSizeExtraSmall
+                    height:  Theme.itemSizeExtraLarge*2 //+ Theme.itemSize //+ Theme.itemSizeExtraSmall
                     onClicked: {
                         // Go to machineView
                         if (container_name === "New container" && new_container_pid === "0"){
@@ -151,13 +151,13 @@ Page {
 
                         Item{
                             width: iconitem.width //+ Theme.paddingLarge //GridView.view.width
-                            height: Theme.itemSizeExtraLarge + Theme.itemSizeExtraSmall - Theme.paddingLarge
+                            height: iconitem.height - Theme.paddingLarge
 
                             Icon {
                                 id: iconitem
                                 source: get_container_icon(container_name)
                                 width: Theme.itemSizeExtraLarge + Theme.itemSizeSmall //GridView.view.width
-                                height: Theme.itemSizeExtraLarge + Theme.itemSizeExtraSmall
+                                height: Theme.itemSizeExtraLarge + Theme.itemSizeSmall
                             }
 
                             BusyIndicator {
