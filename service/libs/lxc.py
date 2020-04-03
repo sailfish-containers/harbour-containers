@@ -70,11 +70,11 @@ def get_containers():
     return res
 
 
-def get_templates():
+def get_templates(meta_index="https://images.linuxcontainers.org/meta/1.0/index-system"):
     """ Get available templates from sfos-download """
 
     tpl = []
-    res = subprocess.check_output(["curl","https://images.linuxcontainers.org/meta/1.0/index-system","-L"]).decode()
+    res = subprocess.check_output(["curl", meta_index, "-L"]).decode()
 
     for line in res.split('\n'):
 

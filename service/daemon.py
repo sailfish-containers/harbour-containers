@@ -95,7 +95,7 @@ class ContainersService(dbus.service.Object):
         def _add_guest_mp(self, name ):
             """ add scripts mountpoint to container """
 
-            return lxc.add_mountpoint(name, "/usr/share/harbour-Containers/scripts/guest","mnt/guest", False)
+            return lxc.add_mountpoint(name, "%s/scripts/guest" % self.current_path, "mnt/guest", False)
 
         @dbus.service.method(DBUS_IFACE)
         def mount_scripts(self, name):
@@ -224,10 +224,10 @@ class ContainersService(dbus.service.Object):
         return self._get_template_version(tpl)
 
 
-        @dbus.service.method(DBUS_IFACE)
-        def get_mounts(self, name):
-            if name in self.containers:
-                return lxc.get_mounts(name)
+    @dbus.service.method(DBUS_IFACE)
+    def get_mounts(self, name):
+        if name in self.containers:
+            return lxc.get_mounts(name)
 
     @dbus.service.method(DBUS_IFACE)
     def create_container(self, name, dist, arch, release):

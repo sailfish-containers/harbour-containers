@@ -216,14 +216,19 @@ Page {
                             Repeater{
                                 model: ListModel { id: listmodelrepeater}
                                 Component.onCompleted: {
-                                    var ind = 0
-                                    for (var mp in container.container_mounts){
-                                        //console.log(container.container_mounts[mp])
-                                        listmodelrepeater.set(ind, {"mount_point":container.container_mounts[mp]})
-                                        ind++
+                                    // get container's mountpoints from daemon
+                                    daemon.call('get_mounts',[container.container_name], function (result){
 
-                                    }
-                                    gridView.cellHeight += column.height
+                                        var ind = 0
+                                        for (var mp in result){
+                                            //console.log(container.container_mounts[mp])
+                                            listmodelrepeater.set(ind, {"mount_point":result[mp]})
+                                            ind++
+
+                                        }
+                                        gridView.cellHeight += column.height
+                                    })
+
                                 }
 
                                 Label {

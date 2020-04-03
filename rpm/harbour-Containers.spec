@@ -60,6 +60,9 @@ rm -rf %{buildroot}
 chmod +x  %{buildroot}/usr/share/harbour-Containers/service/daemon.py
 chmod +x  %{buildroot}/usr/share/harbour-Containers/scripts/host/*.sh
 chmod +x  %{buildroot}/usr/share/harbour-Containers/scripts/guest/*.sh
+chmod +x  %{buildroot}/usr/share/harbour-Containers/scripts/guest/sessions/*.sh
+chmod +x  %{buildroot}/usr/share/harbour-Containers/scripts/guest/setups/*.sh
+
 # << install post
 
 desktop-file-install --delete-original       \

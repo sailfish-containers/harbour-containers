@@ -165,6 +165,9 @@ Page {
                                 size: BusyIndicatorSize.Large
                                 anchors.horizontalCenter: parent.horizontalCenter
                                 running: container_create_in_progress(container_name)
+                                anchors.bottom: parent.bottom
+                                anchors.bottomMargin: Theme.paddingMedium
+
                             }
                         }
 
