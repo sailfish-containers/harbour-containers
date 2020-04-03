@@ -1,4 +1,4 @@
 [D-BUS Service]
 Name=org.sailfishcontainers.daemon
-Exec=/usr/share/harbour-Containers/service/daemon.py
+Exec=/usr/share/harbour-containers/service/daemon.py
 User=root

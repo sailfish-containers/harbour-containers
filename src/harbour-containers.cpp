@@ -6,7 +6,7 @@
 
 int main(int argc, char *argv[])
 {
-    // SailfishApp::main() will display "qml/harbour-Containers.qml", if you need more
+    // SailfishApp::main() will display "qml/harbour-containers.qml", if you need more
     // control over initialization, you can use:
     //
     //   - SailfishApp::application(int, char *[]) to get the QGuiApplication *
