@@ -11,10 +11,12 @@ Before proceeding, it's important to take a look at LXC kernel requirements:
 
 ## Requirements
 
- - nemo-qml-plugin-dbus ( https://git.merproject.org/mer-core/nemo-qml-plugin-dbus )
+ - nemo-qml-plugin-dbus-qt5 ( https://git.merproject.org/mer-core/nemo-qml-plugin-dbus )
  - lxc-templates-desktop ( https://github.com/sailfish-containers/lxc-templates-desktop )
  - qxdisplay ( https://github.com/sailfish-containers/qxdisplay )
- - sailfish-containers-dbus ( https://github.com/sailfish-containers/sailfish-containers-dbus )
+ - python3-base
+ - python3-gobject
+ - dbus-python3
 
 ## License
 

@@ -16,7 +16,12 @@ License:    LICENSE
 URL:        http://example.org/
 Source0:    %{name}-%{version}.tar.bz2
 Source100:  harbour-Containers.yaml
-Requires:   sailfishsilica-qt5 >= 0.10.9, sailfish-containers-dbus
+Requires:   sailfishsilica-qt5 >= 0.10.9
+Requires:   lxc-templates-desktop
+Requires:   python3-gobject
+Requires:   dbus-python3
+Requires:   nemo-qml-plugin-dbus-qt5
+Requires:   qxdisplay
 BuildRequires:  pkgconfig(sailfishapp) >= 1.0.2
 BuildRequires:  pkgconfig(Qt5Core)
 BuildRequires:  pkgconfig(Qt5Qml)
@@ -47,15 +52,23 @@ make %{?_smp_mflags}
 %install
 rm -rf %{buildroot}
 # >> install pre
+
 # << install pre
 %qmake5_install
 
 # >> install post
+chmod +x  %{buildroot}/usr/share/harbour-Containers/service/daemon.py
+chmod +x  %{buildroot}/usr/share/harbour-Containers/scripts/host/*.sh
+chmod +x  %{buildroot}/usr/share/harbour-Containers/scripts/guest/*.sh
 # << install post
 
 desktop-file-install --delete-original       \
   --dir %{buildroot}%{_datadir}/applications             \
    %{buildroot}%{_datadir}/applications/*.desktop
+
+%post
+systemctl enable sailfish-containers
+systemctl restart sailfish-containers
 
 %files
 %defattr(-,root,root,-)
@@ -63,5 +76,9 @@ desktop-file-install --delete-original       \
 %{_datadir}/%{name}
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
+%{_datadir}/icons/hicolor/*/apps/%{name}.png
+/etc/dbus-1/system.d/org.sailfishcontainers.daemon.conf
+/usr/share/dbus-1/system-services/org.sailfishcontainers.daemon.service
+/etc/systemd/system/sailfish-containers.service
 # >> files
 # << files

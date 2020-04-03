@@ -1,0 +1,10 @@
+[Unit]
+Description=SailfishContainers daemon
+
+[Service]
+Type=dbus
+BusName=org.sailfishcontainers.daemon
+ExecStart=/usr/share/harbour-Containers/service/daemon.py
+
+[Install]
+WantedBy=graphical.target

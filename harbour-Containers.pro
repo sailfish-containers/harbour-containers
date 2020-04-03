@@ -16,6 +16,46 @@ CONFIG += sailfishapp
 
 SOURCES += src/harbour-Containers.cpp
 
+scripts-dir.path = /usr/share/harbour-Containers/scripts
+
+scripts-dir-guest.path = /usr/share/harbour-Containers/scripts/guest
+scripts-dir-guest.files = scripts/guest/*.sh
+
+scripts-dir-guest-sessions.path = /usr/share/harbour-Containers/scripts/guest/sessions
+scripts-dir-guest-sessions.files = scripts/guest/sessions/*.sh
+
+scripts-dir-guest-setups.path = /usr/share/harbour-Containers/scripts/guest/setups
+scripts-dir-guest-setups.files = scripts/guest/setups/*.sh
+
+scripts-dir-host.path = /usr/share/harbour-Containers/scripts/host
+scripts-dir-host.files = scripts/host/*.sh
+
+systemd-dbus.path = /usr/share/dbus-1/system-services
+systemd-dbus.files = systemd/org.sailfishcontainers.daemon.service
+
+systemd-config.path = /etc/dbus-1/system.d
+systemd-config.files = systemd/org.sailfishcontainers.daemon.conf
+
+systemd-main.path = /etc/systemd/system
+systemd-main.files = systemd/sailfish-containers.service
+
+service.path = /usr/share/harbour-Containers/service
+service.files = service/*.py
+
+service-libs.path = /usr/share/harbour-Containers/service/libs
+service-libs.files = service/libs/*.py
+
+INSTALLS += scripts-dir \
+    scripts-dir-guest \
+    scripts-dir-guest-sessions \
+    scripts-dir-guest-setups \
+    scripts-dir-host \
+    service \
+    service-libs \
+    systemd-dbus \
+    systemd-config \
+    systemd-main
+
 DISTFILES += qml/harbour-Containers.qml \
     qml/cover/CoverPage.qml \
     qml/pages/CreateDialog.qml \
@@ -28,7 +68,15 @@ DISTFILES += qml/harbour-Containers.qml \
     rpm/harbour-Containers.spec \
     rpm/harbour-Containers.yaml \
     translations/*.ts \
-    harbour-Containers.desktop
+    harbour-Containers.desktop \
+    service/*.py \
+    systemd/* \
+    service/libs/*.py \
+    scripts/guest/*.sh \
+    scripts/guest/*.sh \
+    scripts/guest/sessions/*.sh \
+    scripts/guest/setups/*.sh \
+    scripts/host/*.sh
 
 SAILFISHAPP_ICONS = 86x86 108x108 128x128 172x172
 
