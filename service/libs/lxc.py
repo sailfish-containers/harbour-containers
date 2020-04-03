@@ -159,11 +159,21 @@ def destroy(name, rootfs=""):
 
     return True
 
-def get_snapshots(name, snapshot_name):
-    """ TODO: Get snapshots of lxc container from name """
-    out = subprocess.check_output(['lxc-snapshot', '-n', name, '-L'])
+def get_snapshots(name):
+    """ Get snapshots of lxc container from name """
+    out = subprocess.check_output(['lxc-snapshot', '-n', name, '-L']).decode()
+    res = []
 
-    return True
+    for line in out.split("\n"):
+        try:
+            title = line.split(" (")[0]
+            date  = line.split(") ")[1]
+
+            res.append({ "snap_name": title, "snap_ts": date })
+        except:
+            pass
+
+    return res
 
 def take_snapshot(name, snapshot_name):
     """ Take a snapshot of lxc container from name """

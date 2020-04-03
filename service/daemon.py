@@ -46,7 +46,6 @@ class ContainersService(dbus.service.Object):
                     'container_mem'      : self.containers[container]["container_mem"],
                     'container_kmem'     : self.containers[container]["container_kmem"],
                     'container_rootfs'   : self.containers[container]["container_rootfs"],
-                    #'container_mounts'   : dbus.Dictionary(self.containers[container]["container_mounts"], signature='sv'),
                 }, signature='sv'))
 
         return list_out
@@ -92,13 +91,13 @@ class ContainersService(dbus.service.Object):
         unique = list(set(versions)) # return unique versions list
         return unique
 
-        def _add_guest_mp(self, name ):
-            """ add scripts mountpoint to container """
+    def _add_guest_mp(self, name):
+        """ add scripts mountpoint to container """
 
-            return lxc.add_mountpoint(name, "%s/scripts/guest" % self.current_path, "mnt/guest", False)
+        return lxc.add_mountpoint(name, "%s/scripts/guest" % self.current_path, "mnt/guest", False)
 
-        @dbus.service.method(DBUS_IFACE)
-        def mount_scripts(self, name):
+    @dbus.service.method(DBUS_IFACE)
+    def mount_scripts(self, name):
             """ add scripts mountpoint to container, via dbus """
             if name in self.containers:
                 self._add_guest_mp(name)
@@ -226,8 +225,21 @@ class ContainersService(dbus.service.Object):
 
     @dbus.service.method(DBUS_IFACE)
     def get_mounts(self, name):
+        """ get container's mountpoints """
         if name in self.containers:
             return lxc.get_mounts(name)
+
+    @dbus.service.method(DBUS_IFACE)
+    def get_snapshots(self, name):
+        """ get container's snapshots """
+        if name in self.containers:
+
+            snapshots = lxc.get_snapshots(name)
+
+            if len(snapshots) < 1:
+                return false
+
+            return snapshots
 
     @dbus.service.method(DBUS_IFACE)
     def create_container(self, name, dist, arch, release):

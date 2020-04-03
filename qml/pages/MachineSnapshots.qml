@@ -42,20 +42,26 @@ Page {
                 width: page.isLandscape ? parent.width/1.5 : parent.width - Theme.paddingLarge
                 height: parent.height - pageHeader.height
                 anchors.horizontalCenter: parent.horizontalCenter
+                Component.onCompleted: {
+                    daemon.call('get_snapshots',[container.container_name], function (result){
+                        if (result !== false){
+                            for (var snap in result){
+                                snapshostsListModel.append(result)
+                            }
+                        }
+                    })
+                }
 
                 model: ListModel {
-                    ListElement { snap: "snap1" }
-                    ListElement { snap: "snap0" }
-                    ListElement { snap: "snap2" }
-                    ListElement { snap: "snap3" }
-                    ListElement { snap: "test" }
+                    id : snapshostsListModel
+
                 }
                 delegate: BackgroundItem {
                     width: ListView.view.width
                     height: Theme.itemSizeSmall
 
                     Label {
-                        text: snap
+                        text: "<b>" + snap_name + "</b> " + snap_ts
                     }
                 }
             }
