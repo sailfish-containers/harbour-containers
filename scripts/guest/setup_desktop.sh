@@ -3,23 +3,16 @@
 # run as root inside a container
 
 # get username and uid
-if [ "$#" -ne 1 ] 
-then
-	# if not args provided
-	# set to sailfish default
-	USER_UID=100000
-else
-	# set custom user uid
-	USER_UID=$1
-fi
-if [ "$#" -ne 2 ] 
+if [ "$#" -ne 1 ]
 then
 	# set default user
 	USER_NAME="user"
 else
-	# set custom user uid
-	USER_NAME=$2
+        USER_NAME=$1
 fi
+
+# get user uid
+USER_UID=`id -u $USER_NAME`
 
 # get arch and libc version for xwayland
 ARCH=`arch`
@@ -44,13 +37,7 @@ DISTRO_VER=${DISTRO_FILE#"ID="}
 
 case $DISTRO_VER in
 	"kali"|"ubuntu"|"mint"|"devuan")
-
-		if [ -f "/opt/.leste" ]
-		then
-			DISTRO_VER="leste"
-		else
-			DISTRO_VER="debian"
-		fi
+                DISTRO_VER="debian"
 	;;
 
 	"archarm"|"archlinux")
@@ -79,13 +66,6 @@ then
 	curl "https://github.com/sailfish-containers/xserver/releases/download/b1/Xwayland.${ARCH}.${LIBC_VER}.bin" -L --output /opt/bin/Xwayland
 	chown $USER_NAME:$USER_NAME -R /opt/bin
 	chmod +x /opt/bin/Xwayland
-fi
-
-# check for startx
-if [ ! -f "/opt/bin/startx" ]
-then
-	# set xfce4 as default session
-	ln -s /mnt/guest/sessions/xfce4.sh /opt/bin/startx
 fi
 
 echo "[+] container is ready!"

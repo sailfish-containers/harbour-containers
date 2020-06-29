@@ -97,8 +97,8 @@ class ContainersService(dbus.service.Object):
         return lxc.add_mountpoint(name, "%s/scripts/guest" % self.current_path, "mnt/guest", False)
 
     @dbus.service.method(DBUS_IFACE)
-    def mount_scripts(self, name):
-            """ add scripts mountpoint to container, via dbus """
+    def init_config(self, name):
+            """ add required mountpoints on container's config """
             if name in self.containers:
                 self._add_guest_mp(name)
 
@@ -269,7 +269,7 @@ class ContainersService(dbus.service.Object):
         if self.containers[name]["container_status"] == "RUNNING":
             try:
                 # get popen object
-                proc = lxc.setup_container(name, self.user_name, self.user_uid, environment)
+                proc = lxc.setup_container(name, self.user_name, environment)
 
                 # store popen on running processes
                 self.processes[str(proc.pid)] = proc
@@ -294,18 +294,6 @@ class ContainersService(dbus.service.Object):
                 # subprocess completed, remove from processes
                 self.processes[pid].wait()
                 del self.processes[pid]
-
-        return False
-
-    @dbus.service.method(DBUS_IFACE)
-    def set_flag(self, name, flag):
-        """ experimental, set setup flags """
-        self._refresh()
-
-        if self.containers[name]["container_status"] == "STARTED":
-
-            lxc.set_flag(name, flag) # lxc.set_flag("test","leste")
-            return True
 
         return False
 

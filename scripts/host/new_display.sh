@@ -4,7 +4,6 @@
 USER_UID=$2
 DISPLAY_ID=$1
 
-#export EGL_DRIVER="egl_gallium"
 export EGL_PLATFORM="wayland"
 export QT_QPA_PLATFORM="wayland"
 export QT_WAYLAND_DISABLE_WINDOWDECORATION="1"

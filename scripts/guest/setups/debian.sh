@@ -23,7 +23,7 @@ fi
 apt update
 
 # install xfce-desktop
-apt install -y sudo xfce4 curl
+apt install -y sudo xfce4 curl # Xephyr
 
 # add user to sudoers
-adduser user sudo
+adduser $USER_NAME sudo

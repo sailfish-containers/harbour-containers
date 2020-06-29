@@ -60,7 +60,6 @@ rm -rf %{buildroot}
 chmod +x  %{buildroot}/usr/share/%{name}/service/daemon.py
 chmod +x  %{buildroot}/usr/share/%{name}/scripts/host/*.sh
 chmod +x  %{buildroot}/usr/share/%{name}/scripts/guest/*.sh
-chmod +x  %{buildroot}/usr/share/%{name}/scripts/guest/sessions/*.sh
 chmod +x  %{buildroot}/usr/share/%{name}/scripts/guest/setups/*.sh
 
 # << install post

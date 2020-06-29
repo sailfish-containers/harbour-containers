@@ -202,20 +202,20 @@ def restore_create_snapshot(name, snapshot_name, new_name):
     # desktop started
     return restore_process
 
-def setup_container(name, user_name, user_uid, session):
+def setup_container(name, user_name, session):
     """ setup container x session """
     FNULL = open(os.devnull, 'w') # fix for session hang
 
-    setup_process = subprocess.Popen(['lxc-attach', '-n', name, '/mnt/guest/setup_desktop.sh', '%s' % user_uid, '%s' % user_name, "%s" % session], stdout=FNULL, stderr=subprocess.STDOUT, shell=False)
+    setup_process = subprocess.Popen(['lxc-attach', '-n', name, '/mnt/guest/setup_desktop.sh','%s' % user_name], stdout=FNULL, stderr=subprocess.STDOUT, shell=False)
 
     # desktop started
     return setup_process
 
-def start_desktop(name, display_id):
+def start_desktop(name, display_id, user_name="user"): #fixme
     """ start desktop guestsscript """
     FNULL = open(os.devnull, 'w') # fix for session hang
 
-    desktop_session = subprocess.Popen(['lxc-attach', '-n', name, '/mnt/guest/start_desktop.sh', '%s' % display_id], stdout=FNULL, stderr=subprocess.STDOUT, shell=False)
+    desktop_session = subprocess.Popen(['lxc-attach', '-n', name, '/mnt/guest/start_desktop.sh', '%s' % display_id, '%s' % user_name ], stdout=FNULL, stderr=subprocess.STDOUT, shell=False)
 
     # desktop started
     return True
@@ -228,12 +228,6 @@ def start_shell(name, path):
     shell = subprocess.Popen(['%s/host/attach.sh' % scripts_path, name], stdout=FNULL, stderr=subprocess.STDOUT, shell=False)
 
     return shell
-
-def set_flag(name, flag):
-    """ create a flag for setup_desktop.sh """
-    subprocess.check_output(['lxc-attach', '-n', name, 'touch', '/opt/.%s' % flag])
-
-    return True
 
 def add_mountpoint(name, source, dest, rw=False):
     """ add a mountpoint to container """

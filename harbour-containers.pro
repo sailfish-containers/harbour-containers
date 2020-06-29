@@ -21,11 +21,11 @@ scripts-dir.path = /usr/share/harbour-containers/scripts
 scripts-dir-guest.path = /usr/share/harbour-containers/scripts/guest
 scripts-dir-guest.files = scripts/guest/*.sh
 
-scripts-dir-guest-sessions.path = /usr/share/harbour-containers/scripts/guest/sessions
-scripts-dir-guest-sessions.files = scripts/guest/sessions/*.sh
-
 scripts-dir-guest-setups.path = /usr/share/harbour-containers/scripts/guest/setups
 scripts-dir-guest-setups.files = scripts/guest/setups/*.sh
+
+scripts-dir-guest-configs.path = /usr/share/harbour-containers/scripts/guest/configs
+scripts-dir-guest-configs.files = scripts/guest/configs/*
 
 scripts-dir-host.path = /usr/share/harbour-containers/scripts/host
 scripts-dir-host.files = scripts/host/*.sh
@@ -47,8 +47,8 @@ service-libs.files = service/libs/*.py
 
 INSTALLS += scripts-dir \
     scripts-dir-guest \
-    scripts-dir-guest-sessions \
     scripts-dir-guest-setups \
+    scripts-dir-guest-configs \
     scripts-dir-host \
     service \
     service-libs \
@@ -67,15 +67,15 @@ DISTFILES += qml/harbour-containers.qml \
     rpm/harbour-containers.changes.in \
     rpm/harbour-containers.changes.run.in \
     rpm/harbour-containers.yaml \
+    scripts/guest/configs/xserverrc \
     translations/*.ts \
     harbour-containers.desktop \
     service/*.py \
     systemd/* \
     service/libs/*.py \
     scripts/guest/*.sh \
-    scripts/guest/*.sh \
-    scripts/guest/sessions/*.sh \
     scripts/guest/setups/*.sh \
+    scripts/guest/configs/*.sh \
     scripts/host/*.sh
 
 SAILFISHAPP_ICONS = 86x86 108x108 128x128 172x172
