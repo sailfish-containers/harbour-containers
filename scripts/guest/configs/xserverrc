@@ -1,0 +1,4 @@
+#!/bin/sh
+
+#exec /usr/bin/X -nolisten tcp "$@"
+exec /opt/bin/Xwayland -nolisten tcp "$@"

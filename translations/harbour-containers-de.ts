@@ -44,67 +44,67 @@
 <context>
     <name>MachineView</name>
     <message>
-        <location filename="../qml/pages/MachineView.qml" line="102"/>
+        <location filename="../qml/pages/MachineView.qml" line="97"/>
         <source>Container: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/MachineView.qml" line="144"/>
+        <location filename="../qml/pages/MachineView.qml" line="139"/>
         <source>Details</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/MachineView.qml" line="152"/>
+        <location filename="../qml/pages/MachineView.qml" line="147"/>
         <source>name:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/MachineView.qml" line="155"/>
+        <location filename="../qml/pages/MachineView.qml" line="150"/>
         <source>state:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/MachineView.qml" line="159"/>
+        <location filename="../qml/pages/MachineView.qml" line="154"/>
         <source>rootfs:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/MachineView.qml" line="163"/>
+        <location filename="../qml/pages/MachineView.qml" line="158"/>
         <source>pid:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/MachineView.qml" line="166"/>
+        <location filename="../qml/pages/MachineView.qml" line="161"/>
         <source>cpu use:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/MachineView.qml" line="169"/>
+        <location filename="../qml/pages/MachineView.qml" line="164"/>
         <source>memory use:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/MachineView.qml" line="172"/>
+        <location filename="../qml/pages/MachineView.qml" line="167"/>
         <source>kmem use:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/MachineView.qml" line="178"/>
+        <location filename="../qml/pages/MachineView.qml" line="173"/>
         <source>Session</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/MachineView.qml" line="185"/>
+        <location filename="../qml/pages/MachineView.qml" line="180"/>
         <source>attach</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/MachineView.qml" line="196"/>
+        <location filename="../qml/pages/MachineView.qml" line="191"/>
         <source>X session</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/MachineView.qml" line="209"/>
+        <location filename="../qml/pages/MachineView.qml" line="204"/>
         <source>mountpoints</source>
         <translation type="unfinished"></translation>
     </message>

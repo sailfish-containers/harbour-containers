@@ -47,6 +47,7 @@ Files:
   - '/etc/dbus-1/system.d/org.sailfishcontainers.daemon.conf'
   - '/usr/share/dbus-1/system-services/org.sailfishcontainers.daemon.service'
   - '/etc/systemd/system/sailfish-containers.service'
+  - '/usr/share/polkit-1/actions/org.sailfishcontainers.daemon.policy'
 
 # For more information about yaml and what's supported in Sailfish OS
 # build system, please see https://wiki.merproject.org/wiki/Spectacle

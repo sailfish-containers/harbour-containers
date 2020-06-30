@@ -13,7 +13,7 @@ Page {
     function freeze_all(){
         for(var i=0;i<containersModel.count;i++){
             if(containersModel.get(i)["container_status"] === "RUNNING" ){
-                daemon.call('freeze_container',[containersModel.get(i)["container_name"]], function (result) {
+                daemon.call('container_freeze',[containersModel.get(i)["container_name"]], function (result) {
                     containersModel.setProperty(i, "container_status", "FROZEN")
                 })
             }
@@ -24,7 +24,7 @@ Page {
     function stop_all(){
         for(var i=0;i<containersModel.count;i++){
             if(containersModel.get(i)["container_status"] === "RUNNING" ){
-                daemon.call('stop_container',[containersModel.get(i)["container_name"]], function (result) {
+                daemon.call('container_stop',[containersModel.get(i)["container_name"]], function (result) {
                     containersModel.setProperty(i, "container_status", "FROZEN")
                 })
             }
@@ -123,7 +123,7 @@ Page {
                             dialog.accepted.connect(function() {
 
                                 // Create new container
-                                daemon.call('create_container',[dialog.new_name,dialog.new_distro,dialog.new_arch,dialog.new_release], function (result) {
+                                daemon.call('container_create',[dialog.new_name,dialog.new_distro,dialog.new_arch,dialog.new_release], function (result) {
                                     if (result["result"]){
                                         // creation process started
                                         new_container_pid = result["pid"]
@@ -217,9 +217,9 @@ Page {
                                 containersModel.set(containersModel.count-2,{"container_status":"Starting container...","container_name":new_container_name})
 
                                 // Start new container
-                                daemon.call('start_container',[new_container_name], function (result) {
+                                daemon.call('container_start',[new_container_name], function (result) {
                                     // Run setup script
-                                    daemon.call('setup_container',[new_container_name,"xfce4"], function (result) {
+                                    daemon.call('container_setup',[new_container_name,"xfce4"], function (result) {
                                         // refresh pid to check on timer
                                         new_container_pid = result["pid"]
                                         new_container_setup = false

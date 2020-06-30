@@ -32,6 +32,51 @@ class ContainersService(dbus.service.Object):
         self.templates       = {} # "raw" templates cache
         self.display_counter = 0  # qxcompositor's display sockets
 
+        # polkit auth
+        self.dbus_info = None
+        self.polkit = None
+
+    def _check_polkit_privilege(self, sender, conn, privilege):
+        # Get Peer PID
+        if self.dbus_info is None:
+            # Get DBus Interface and get info thru that
+            self.dbus_info = dbus.Interface(conn.get_object("org.freedesktop.DBus",
+                                                            "/org/freedesktop/DBus/Bus", False),
+                                            "org.freedesktop.DBus")
+        pid = self.dbus_info.GetConnectionUnixProcessID(sender)
+
+        # Query polkit
+        if self.polkit is None:
+            self.polkit = dbus.Interface(dbus.SystemBus().get_object(
+            "org.freedesktop.PolicyKit1",
+            "/org/freedesktop/PolicyKit1/Authority", False),
+                                        "org.freedesktop.PolicyKit1.Authority")
+
+        # Check auth against polkit; if it times out, try again
+        try:
+            auth_response = self.polkit.CheckAuthorization(
+                ("unix-process", {"pid": dbus.UInt32(pid, variant_level=1),
+                                   "start-time": dbus.UInt64(0, variant_level=1)}),
+                privilege, {"AllowUserInteraction": "true"}, dbus.UInt32(1), "", timeout=600)
+            print(auth_response)
+            (is_auth, _, details) = auth_response
+        except dbus.DBusException as e:
+            if e._dbus_error_name == "org.freedesktop.DBus.Error.ServiceUnknown":
+                # polkitd timeout, retry
+                self.polkit = None
+                return self._check_polkit_privilege(sender, conn, privilege)
+            else:
+                # it's another error, propagate it
+                raise
+
+        if not is_auth:
+            # Aww, not authorized :(
+            print(":(")
+            return False
+
+        print("Successful authorization!")
+
+        return True
 
     def _dbus_dict(self):
         """ Fix dictionary for dbus """
@@ -97,7 +142,7 @@ class ContainersService(dbus.service.Object):
         return lxc.add_mountpoint(name, "%s/scripts/guest" % self.current_path, "mnt/guest", False)
 
     @dbus.service.method(DBUS_IFACE)
-    def init_config(self, name):
+    def container_init_config(self, name):
             """ add required mountpoints on container's config """
             if name in self.containers:
                 self._add_guest_mp(name)
@@ -106,7 +151,7 @@ class ContainersService(dbus.service.Object):
             return False
 
     @dbus.service.method(DBUS_IFACE)
-    def start_xsession(self, name):
+    def container_xsession_start(self, name):
         """ start xwayland desktop session on guest """
         self._refresh()
 
@@ -121,14 +166,7 @@ class ContainersService(dbus.service.Object):
         return False
 
     @dbus.service.method(DBUS_IFACE)
-    def get_containers(self):
-        """ get containers list """
-        self._refresh()
-
-        return self._dbus_dict()
-
-    @dbus.service.method(DBUS_IFACE)
-    def start_container(self, name):
+    def container_start(self, name):
         """ start lxc container """
         self._refresh()
 
@@ -140,7 +178,7 @@ class ContainersService(dbus.service.Object):
         return False
 
     @dbus.service.method(DBUS_IFACE)
-    def stop_container(self, name):
+    def container_stop(self, name):
         """ stop lxc container """
         self._refresh()
 
@@ -152,7 +190,7 @@ class ContainersService(dbus.service.Object):
         return False
 
     @dbus.service.method(DBUS_IFACE)
-    def freeze_container(self, name):
+    def container_freeze(self, name):
         """ freeze lxc container """
         self._refresh()
 
@@ -161,14 +199,7 @@ class ContainersService(dbus.service.Object):
 
             return True
 
-        return False
-
-    @dbus.service.method(DBUS_IFACE)
-    def unfreeze_container(self, name):
-        """ unfreeze lxc container """
-        self._refresh()
-
-        if self.containers[name]["container_status"] == "FROZEN":
+        elif self.containers[name]["container_status"] == "FROZEN":
             lxc.unfreeze(name)
 
             return True
@@ -176,7 +207,7 @@ class ContainersService(dbus.service.Object):
         return False
 
     @dbus.service.method(DBUS_IFACE)
-    def destroy_container(self, name):
+    def container_destroy(self, name):
         """ destroy lxc container """
         self._refresh()
 
@@ -188,7 +219,7 @@ class ContainersService(dbus.service.Object):
         return False
 
     @dbus.service.method(DBUS_IFACE)
-    def snapshot_container(self, name, snapshot_name):
+    def container_snapshot(self, name, snapshot_name):
         """ take container's snapshot """
         self._refresh()
 
@@ -200,14 +231,14 @@ class ContainersService(dbus.service.Object):
         return False
 
     @dbus.service.method(DBUS_IFACE)
-    def get_tpl(self):
+    def tpl_get(self):
         """ Get available distributions """
         self.templates = lxc.get_templates() # refresh templates cache
 
         return self.templates
 
     @dbus.service.method(DBUS_IFACE)
-    def get_tpl_distro(self):
+    def tpl_get_distro(self):
         """ Get available distributions """
         if len(self.templates) < 1:
             self.templates = lxc.get_templates()
@@ -215,7 +246,7 @@ class ContainersService(dbus.service.Object):
         return self._get_templates_names()
 
     @dbus.service.method(DBUS_IFACE)
-    def get_tpl_version(self, tpl):
+    def tpl_get_version(self, tpl):
         """ get available templates """
         if len(self.templates) < 1:
             self.templates = lxc.get_templates()
@@ -224,13 +255,13 @@ class ContainersService(dbus.service.Object):
 
 
     @dbus.service.method(DBUS_IFACE)
-    def get_mounts(self, name):
+    def container_get_mounts(self, name):
         """ get container's mountpoints """
         if name in self.containers:
             return lxc.get_mounts(name)
 
     @dbus.service.method(DBUS_IFACE)
-    def get_snapshots(self, name):
+    def container_get_snapshots(self, name):
         """ get container's snapshots """
         if name in self.containers:
 
@@ -242,7 +273,7 @@ class ContainersService(dbus.service.Object):
             return snapshots
 
     @dbus.service.method(DBUS_IFACE)
-    def create_container(self, name, dist, arch, release):
+    def container_create(self, name, dist, arch, release):
         """ create containers from template """
         self._refresh()
 
@@ -262,14 +293,14 @@ class ContainersService(dbus.service.Object):
         return dbus.Dictionary({ "result" : False, "err": dbus.String("container exist") }, signature="sv")
 
     @dbus.service.method(DBUS_IFACE)
-    def setup_container(self, name, environment):
+    def container_xsession_setup(self, name, environment):
         """ run setup scripts  """
         self._refresh()
 
         if self.containers[name]["container_status"] == "RUNNING":
             try:
                 # get popen object
-                proc = lxc.setup_container(name, self.user_name, environment)
+                proc = lxc.setup_xsession(name, self.user_name, environment)
 
                 # store popen on running processes
                 self.processes[str(proc.pid)] = proc
@@ -279,6 +310,17 @@ class ContainersService(dbus.service.Object):
                 return dbus.Dictionary({ "result" : False, "err": "setup_desktop.sh failed"}, signature="sv")
 
         return dbus.Dictionary({ "result" : False, "err": "container is not running" }, signature="sv")
+
+    @dbus.service.method(DBUS_IFACE)
+    def container_attach(self, name):
+        """ attach to container shell """
+        self._refresh()
+
+        if self.containers[name]["container_status"] == "RUNNING":
+            lxc.start_shell(name, self.current_path)
+
+            return True
+        return False
 
     @dbus.service.method(DBUS_IFACE)
     def check_process(self, pid):
@@ -297,16 +339,13 @@ class ContainersService(dbus.service.Object):
 
         return False
 
+
     @dbus.service.method(DBUS_IFACE)
-    def start_shell(self, name):
-        """ attach to container shell """
+    def get_containers(self):
+        """ get containers list """
         self._refresh()
 
-        if self.containers[name]["container_status"] == "RUNNING":
-            lxc.start_shell(name, self.current_path)
-
-            return True
-        return False
+        return self._dbus_dict()
 
 
 if __name__ == "__main__":

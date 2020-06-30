@@ -43,8 +43,8 @@ Page {
                 height: parent.height - pageHeader.height
                 anchors.horizontalCenter: parent.horizontalCenter
                 Component.onCompleted: {
-                    daemon.call('get_snapshots',[container.container_name], function (result){
-                        if (result !== false){
+                    daemon.call('container_get_snapshots',[container.container_name], function (result){
+                        if (result){
                             for (var snap in result){
                                 snapshostsListModel.append(result)
                             }

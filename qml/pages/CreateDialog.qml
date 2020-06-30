@@ -19,13 +19,13 @@ Dialog {
     canAccept: false
 
     Component.onCompleted: {
-        daemon.call("get_tpl_distro",[], function (result) {
+        daemon.call("tpl_get_distro",[], function (result) {
 
             for (var data in result){
                 distroBox_model.append({ distro_name: result[data]})
                 distros[data] = result[data]
             }
-            daemon.call("get_tpl_version",[distros[data]], function (result) {
+            daemon.call("tpl_get_version",[distros[data]], function (result) {
                 releaseBox_model.clear()
 
                 for (var data in result){
@@ -85,7 +85,7 @@ Dialog {
             }
 
             onCurrentIndexChanged: {
-                daemon.call("get_tpl_version",[distros[currentIndex]], function (result) {
+                daemon.call("tpl_get_version",[distros[currentIndex]], function (result) {
                     releaseBox_model.clear()
 
                     for (var data in result){

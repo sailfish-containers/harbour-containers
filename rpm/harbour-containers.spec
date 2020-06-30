@@ -68,10 +68,6 @@ desktop-file-install --delete-original       \
   --dir %{buildroot}%{_datadir}/applications             \
    %{buildroot}%{_datadir}/applications/*.desktop
 
-%post
-systemctl enable sailfish-containers
-systemctl restart sailfish-containers
-
 %files
 %defattr(-,root,root,-)
 %{_bindir}
@@ -82,5 +78,6 @@ systemctl restart sailfish-containers
 /etc/dbus-1/system.d/org.sailfishcontainers.daemon.conf
 /usr/share/dbus-1/system-services/org.sailfishcontainers.daemon.service
 /etc/systemd/system/sailfish-containers.service
+/usr/share/polkit-1/actions/org.sailfishcontainers.daemon.policy
 # >> files
 # << files

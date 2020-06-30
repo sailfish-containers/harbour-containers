@@ -151,6 +151,11 @@ def unfreeze(name):
 
 def destroy(name, rootfs=""):
     """ Destroy a lxc container from name """
+
+    if name == "aliendalvik":
+        # preserve aliendalvik :)
+        return False
+
     out = subprocess.check_output(['lxc-destroy', '-n', name])
 
     if out != "":
@@ -180,8 +185,6 @@ def take_snapshot(name, snapshot_name):
     FNULL = open(os.devnull, 'w') # fix for session hang
 
     snap_process = subprocess.Popen(['lxc-snapshot', '-n', name, snapshot_name], stdout=FNULL, stderr=subprocess.STDOUT, shell=False)
-
-    # desktop started
     return snap_process
 
 def restore_snapshot(name, snapshot_name):
@@ -189,8 +192,6 @@ def restore_snapshot(name, snapshot_name):
     FNULL = open(os.devnull, 'w') # fix for session hang
 
     restore_process = subprocess.Popen(['lxc-snapshot', '-n', name, '-r', snapshot_name], stdout=FNULL, stderr=subprocess.STDOUT, shell=False)
-
-    # desktop started
     return restore_process
 
 def restore_create_snapshot(name, snapshot_name, new_name):
@@ -198,17 +199,13 @@ def restore_create_snapshot(name, snapshot_name, new_name):
     FNULL = open(os.devnull, 'w') # fix for session hang
 
     restore_process = subprocess.Popen(['lxc-snapshot', '-n', name, '-r', snapshot_name, '-N', new_name], stdout=FNULL, stderr=subprocess.STDOUT, shell=False)
-
-    # desktop started
     return restore_process
 
-def setup_container(name, user_name, session):
+def setup_xsession(name, user_name, session):
     """ setup container x session """
     FNULL = open(os.devnull, 'w') # fix for session hang
 
     setup_process = subprocess.Popen(['lxc-attach', '-n', name, '/mnt/guest/setup_desktop.sh','%s' % user_name], stdout=FNULL, stderr=subprocess.STDOUT, shell=False)
-
-    # desktop started
     return setup_process
 
 def start_desktop(name, display_id, user_name="user"): #fixme
@@ -226,11 +223,11 @@ def start_shell(name, path):
     FNULL = open(os.devnull, 'w') # fix for session hang
 
     shell = subprocess.Popen(['%s/host/attach.sh' % scripts_path, name], stdout=FNULL, stderr=subprocess.STDOUT, shell=False)
-
     return shell
 
 def add_mountpoint(name, source, dest, rw=False):
     """ add a mountpoint to container """
+
     read = "rw"
     if not rw:
         read = "ro"

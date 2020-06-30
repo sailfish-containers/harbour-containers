@@ -45,22 +45,17 @@ Page {
             MenuItem {
                 text: is_frozen() ? "Unfreeze" : "Freeze"
                 enabled: is_frozen() ? true : is_started()
-                onClicked: {
-                    if (is_frozen()){
-                        daemon.call("unfreeze_container",[container.container_name], function (result) {
-                            if (result){
+                onClicked: {   
+                    daemon.call("container_freeze",[container.container_name], function (result) {
+                        if (result){
+                            if (is_frozen()){
                                 // update model
                                 container.container_status = "RUNNING"
-                            }
-                        })
-                    }else{
-                        daemon.call("freeze_container",[container.container_name], function (result) {
-                            if (result){
-                                // update model
+                            } else {
                                 container.container_status = "FROZEN"
                             }
-                        })
-                    }
+                        }
+                    })
                 }
             }
             MenuItem {
@@ -68,14 +63,14 @@ Page {
                 enabled: is_frozen() ? false : true
                 onClicked: {
                     if (is_started()){
-                        daemon.call("stop_container",[container.container_name], function (result) {
+                        daemon.call("container_stop",[container.container_name], function (result) {
                             if (result){
                                 // update model
                                 container.container_status = "STOPPED"
                             }
                         })
                     }else {
-                        daemon.call("start_container",[container.container_name], function (result) {
+                        daemon.call("container_start",[container.container_name], function (result) {
                             if (result){
                                 // update model
                                 container.container_status = "RUNNING"
@@ -185,7 +180,7 @@ Page {
                             text: qsTr("attach")
                             enabled: is_started() ? true : false
                             onClicked: {
-                                daemon.call("start_shell",[container.container_name], function (result) {
+                                daemon.call("container_attach",[container.container_name], function (result) {
                                     if (result){
                                     // shell started
                                     }
@@ -196,7 +191,7 @@ Page {
                             text: qsTr("X session")
                             enabled: is_started() ? true : false
                             onClicked: {
-                                daemon.call("start_xsession",[container.container_name], function (result) {
+                                daemon.call("container_xsession_start",[container.container_name], function (result) {
                                     if (result){
                                     // Desktop started
                                     }
@@ -217,7 +212,7 @@ Page {
                                 model: ListModel { id: listmodelrepeater}
                                 Component.onCompleted: {
                                     // get container's mountpoints from daemon
-                                    daemon.call('get_mounts',[container.container_name], function (result){
+                                    daemon.call('container_get_mounts',[container.container_name], function (result){
 
                                         var ind = 0
                                         for (var mp in result){

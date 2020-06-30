@@ -21,18 +21,18 @@ USER_UID=`id -u $USER_NAME`
 if [ ! -d "/run/user/$USER_UID" ]
 then
         # create xdg runtime directory for user
-        mkdir -p /run/$USER_NAME/$USER_UID
+        mkdir -p /run/user/$USER_UID
         sleep 1
 
         # give user permissions on xdg runtime dir
-        chown $USER_NAME:$USER_NAME /run/$USER_NAME/$USER_UID
+        chown $USER_NAME:$USER_NAME /run/user/$USER_UID
 
         # create pulse socket mountpoint
-        mkdir /run/$USER_NAME/$USER_UID/pulse
-        chown -R $USER_NAME:$USER_NAME /run/$USER_NAME/$USER_UID
+        mkdir /run/user/$USER_UID/pulse
+        chown -R $USER_NAME:$USER_NAME /run/user/$USER_UID
 
         # bind mount pulse socket
-        mount --bind /mnt/pulse /run/$USER_NAME/$USER_UID/pulse
+        mount --bind /mnt/pulse /run/user/$USER_UID/pulse
 
         # symlink wayland display
         ln -s /mnt/display /run/display
@@ -40,7 +40,7 @@ then
         # replace Xorg with Xwayland in xserverrc
         cp /mnt/guest/configs/xserverrc /etc/X11/xinit/xserverrc
 
-        sleep 2
+        sleep 1
 fi
 
 # start x session
@@ -63,7 +63,6 @@ export QT_FONT_DPI=2000
 
 # start dbus session
 #export $(dbus-launch)
-
 #sleep 2
 su $USER_NAME -c startx
 

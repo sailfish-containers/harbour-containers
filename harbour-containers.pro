@@ -33,6 +33,9 @@ scripts-dir-host.files = scripts/host/*.sh
 systemd-dbus.path = /usr/share/dbus-1/system-services
 systemd-dbus.files = systemd/org.sailfishcontainers.daemon.service
 
+systemd-polkit.path = /usr/share/polkit-1/actions
+systemd-polkit.files = systemd/org.sailfishcontainers.daemon.policy
+
 systemd-config.path = /etc/dbus-1/system.d
 systemd-config.files = systemd/org.sailfishcontainers.daemon.conf
 
@@ -68,6 +71,7 @@ DISTFILES += qml/harbour-containers.qml \
     rpm/harbour-containers.changes.run.in \
     rpm/harbour-containers.yaml \
     scripts/guest/configs/xserverrc \
+    systemd/org.sailfishcontainers.daemon.policy \
     translations/*.ts \
     harbour-containers.desktop \
     service/*.py \
