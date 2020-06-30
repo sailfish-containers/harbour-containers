@@ -11,20 +11,18 @@ import dbus.service
 import pathlib
 
 DBUS_IFACE="org.sailfishcontainers.daemon"
-DBUS_PATH ="/org/sailfishcontainers/daemon"
 
 class ContainersService(dbus.service.Object):
-    def __init__(self):
+    def __init__(self, conn=None, object_path=None, bus_name=None):
         """ sailfish-containers dbus daemon """
+
+        # init dbus
+        dbus.service.Object.__init__(self, conn, object_path, bus_name)
 
         # daemon config
         self.user_name = "nemo"
         self.user_uid  = 100000
         self.current_path = pathlib.Path(__file__).parent.parent.absolute()
-
-        # init dbus
-        bus_name = dbus.service.BusName(DBUS_IFACE, bus=dbus.SystemBus())
-        dbus.service.Object.__init__(self, bus_name, DBUS_PATH)
 
         # daemon cache
         self.containers      = {} # available lxc containers
@@ -34,32 +32,49 @@ class ContainersService(dbus.service.Object):
 
         # polkit auth
         self.dbus_info = None
-        self.polkit = None
+        self.polkit    = None
+
 
     def _check_polkit_privilege(self, sender, conn, privilege):
         # Get Peer PID
         if self.dbus_info is None:
             # Get DBus Interface and get info thru that
-            self.dbus_info = dbus.Interface(conn.get_object("org.freedesktop.DBus",
-                                                            "/org/freedesktop/DBus/Bus", False),
-                                            "org.freedesktop.DBus")
+            self.dbus_info = dbus.Interface(conn.get_object(
+                    "org.freedesktop.DBus",
+                    "/org/freedesktop/DBus/Bus",
+                    False
+                ),
+                "org.freedesktop.DBus"
+            )
         pid = self.dbus_info.GetConnectionUnixProcessID(sender)
 
         # Query polkit
         if self.polkit is None:
             self.polkit = dbus.Interface(dbus.SystemBus().get_object(
-            "org.freedesktop.PolicyKit1",
-            "/org/freedesktop/PolicyKit1/Authority", False),
-                                        "org.freedesktop.PolicyKit1.Authority")
+                    "org.freedesktop.PolicyKit1",
+                    "/org/freedesktop/PolicyKit1/Authority",
+                    False
+                ),
+                "org.freedesktop.PolicyKit1.Authority"
+            )
 
         # Check auth against polkit; if it times out, try again
         try:
             auth_response = self.polkit.CheckAuthorization(
-                ("unix-process", {"pid": dbus.UInt32(pid, variant_level=1),
-                                   "start-time": dbus.UInt64(0, variant_level=1)}),
-                privilege, {"AllowUserInteraction": "true"}, dbus.UInt32(1), "", timeout=600)
-            print(auth_response)
+                ("unix-process", {
+                    "pid": dbus.UInt32(pid, variant_level=1),
+                    "start-time": dbus.UInt64(0, variant_level=1)
+                }),
+                privilege,
+                {"AllowUserInteraction": "true"},
+                dbus.UInt32(1),
+                "",
+                timeout=600
+                )
+
+            #print(auth_response)
             (is_auth, _, details) = auth_response
+
         except dbus.DBusException as e:
             if e._dbus_error_name == "org.freedesktop.DBus.Error.ServiceUnknown":
                 # polkitd timeout, retry
@@ -70,12 +85,8 @@ class ContainersService(dbus.service.Object):
                 raise
 
         if not is_auth:
-            # Aww, not authorized :(
-            print(":(")
+            # not authorized
             return False
-
-        print("Successful authorization!")
-
         return True
 
     def _dbus_dict(self):
@@ -141,28 +152,44 @@ class ContainersService(dbus.service.Object):
 
         return lxc.add_mountpoint(name, "%s/scripts/guest" % self.current_path, "mnt/guest", False)
 
-    @dbus.service.method(DBUS_IFACE)
-    def container_init_config(self, name):
-            """ add required mountpoints on container's config """
+    @dbus.service.method(
+        dbus_interface=DBUS_IFACE,
+        in_signature="",
+        out_signature="b",
+        sender_keyword="sender",
+        connection_keyword="conn"
+    )
+    def container_init_config(self, name, sender=None, conn=None):
+        """ add required mountpoints on container's config """
+        if(self._check_polkit_privilege(sender, conn, "%s.auth" % DBUS_IFACE)):
+            # user authenticated
             if name in self.containers:
                 self._add_guest_mp(name)
 
                 return True
-            return False
+        return False
 
-    @dbus.service.method(DBUS_IFACE)
-    def container_xsession_start(self, name):
+    @dbus.service.method(
+        dbus_interface=DBUS_IFACE,
+        in_signature="",
+        out_signature="b",
+        sender_keyword="sender",
+        connection_keyword="conn"
+    )
+    def container_xsession_start(self, name, sender=None, conn=None):
         """ start xwayland desktop session on guest """
-        self._refresh()
+        if(self._check_polkit_privilege(sender, conn, "%s.auth" % DBUS_IFACE)):
+            # user authenticated
+            self._refresh()
 
-        if self.containers[name]["container_status"] == "RUNNING":
-            # create a new qxcompositor display
-            display = self._create_display()
+            if self.containers[name]["container_status"] == "RUNNING":
+                # create a new qxcompositor display
+                display = self._create_display()
 
-            # start Xwayland on the new display
-            desktop = lxc.start_desktop(name, display)
+                # start Xwayland on the new display
+                desktop = lxc.start_desktop(name, display)
 
-            return True
+                return True
         return False
 
     @dbus.service.method(DBUS_IFACE)
@@ -191,43 +218,156 @@ class ContainersService(dbus.service.Object):
 
     @dbus.service.method(DBUS_IFACE)
     def container_freeze(self, name):
-        """ freeze lxc container """
+        """ freeze/unfreeze lxc container """
         self._refresh()
 
         if self.containers[name]["container_status"] == "RUNNING":
+            # freeze container
             lxc.freeze(name)
 
             return True
 
         elif self.containers[name]["container_status"] == "FROZEN":
+            # unfreeze
             lxc.unfreeze(name)
 
             return True
 
         return False
 
-    @dbus.service.method(DBUS_IFACE)
-    def container_destroy(self, name):
+    @dbus.service.method(
+        dbus_interface=DBUS_IFACE,
+        in_signature="",
+        out_signature="b",
+        sender_keyword="sender",
+        connection_keyword="conn"
+    )
+    def container_destroy(self, name, sender=None, conn=None):
         """ destroy lxc container """
-        self._refresh()
+        if(self._check_polkit_privilege(sender, conn, "%s.auth" % DBUS_IFACE)):
+            # user authenticated
+            self._refresh()
 
-        if self.containers[name]["container_status"] == "STOPPED":
+            if self.containers[name]["container_status"] == "STOPPED":
 
-            lxc.destroy(name)
-            return True
+                lxc.destroy(name)
+                return True
+
+        return False
+
+    @dbus.service.method(
+        dbus_interface=DBUS_IFACE,
+        in_signature="",
+        out_signature="b",
+        sender_keyword="sender",
+        connection_keyword="conn"
+    )
+    def container_snapshot(self, name, snapshot_name, sender=None, conn=None):
+        """ take container's snapshot """
+        if(self._check_polkit_privilege(sender, conn, "%s.auth" % DBUS_IFACE)):
+            # user authenticated
+            self._refresh()
+
+            if self.containers[name]["container_status"] == "STOPPED":
+                lxc.snapshot(name, snaphost_name)
+
+                return True
 
         return False
 
     @dbus.service.method(DBUS_IFACE)
-    def container_snapshot(self, name, snapshot_name):
-        """ take container's snapshot """
-        self._refresh()
+    def container_get_mounts(self, name):
+        """ get container's mountpoints """
+        if name in self.containers:
+            return lxc.get_mounts(name)
 
-        if self.containers[name]["container_status"] == "STOPPED":
-            lxc.snapshot(name, snaphost_name)
+    @dbus.service.method(DBUS_IFACE)
+    def container_get_snapshots(self, name):
+        """ get container's snapshots """
+        if name in self.containers:
+            snapshots = lxc.get_snapshots(name)
 
-            return True
+            if len(snapshots) < 1:
+                return false
 
+            return snapshots
+
+    @dbus.service.method(
+        dbus_interface=DBUS_IFACE,
+        in_signature="",
+        out_signature="a{sv}",
+        sender_keyword="sender",
+        connection_keyword="conn"
+    )
+    def container_create(self, name, dist, arch, release, sender=None, conn=None):
+        """ create containers from template """
+        if(self._check_polkit_privilege(sender, conn, "%s.auth" % DBUS_IFACE)):
+            # user authenticated
+            self._refresh()
+
+            if not name in self.containers:
+                try:
+                    # get popen object
+                    proc = lxc.create(name, dist, arch, release)
+
+                    # store popen on running processes
+                    self.processes[str(proc.pid)] = proc
+
+                    return dbus.Dictionary({ "result" : True, "pid": dbus.String(str(proc.pid)) }, signature="sv")
+                except:
+                    return dbus.Dictionary({ "result" : False, "err": dbus.String("lxc-create failed")}, signature="sv")
+
+            return dbus.Dictionary({ "result" : False, "err": dbus.String("container exist") }, signature="sv")
+        return dbus.Dictionary({ "result" : False, "err": "auth failed." }, signature="sv")
+
+    @dbus.service.method(
+        dbus_interface=DBUS_IFACE,
+        in_signature="",
+        out_signature="a{sv}",
+        sender_keyword="sender",
+        connection_keyword="conn"
+    )
+    def container_xsession_setup(self, name, environment, sender=None, conn=None):
+        """ run setup scripts  """
+
+        if(self._check_polkit_privilege(sender, conn, "%s.auth" % DBUS_IFACE)):
+            # user authenticated
+            self._refresh()
+
+            if self.containers[name]["container_status"] == "RUNNING":
+                try:
+                    # get popen object
+                    proc = lxc.setup_xsession(name, self.user_name, environment)
+
+                    # store popen on running processes
+                    self.processes[str(proc.pid)] = proc
+
+                    return dbus.Dictionary({ "result" : True, "pid": str(proc.pid) }, signature="sv")
+                except:
+                    return dbus.Dictionary({ "result" : False, "err": "setup_desktop.sh failed"}, signature="sv")
+
+            return dbus.Dictionary({ "result" : False, "err": "container is not running" }, signature="sv")
+        return dbus.Dictionary({ "result" : False, "err": "auth failed." }, signature="sv")
+
+    @dbus.service.method(
+        dbus_interface=DBUS_IFACE,
+        in_signature="",
+        out_signature="b",
+        sender_keyword="sender",
+        connection_keyword="conn"
+    )
+    def container_attach(self, name, sender=None, conn=None):
+        """ attach to container shell """
+
+        # check user privilges
+        if(self._check_polkit_privilege(sender, conn, "%s.auth" % DBUS_IFACE)):
+            # user authenticated
+            self._refresh()
+
+            if self.containers[name]["container_status"] == "RUNNING":
+                lxc.start_shell(name, self.current_path)
+
+                return True
         return False
 
     @dbus.service.method(DBUS_IFACE)
@@ -253,81 +393,11 @@ class ContainersService(dbus.service.Object):
 
         return self._get_template_version(tpl)
 
-
-    @dbus.service.method(DBUS_IFACE)
-    def container_get_mounts(self, name):
-        """ get container's mountpoints """
-        if name in self.containers:
-            return lxc.get_mounts(name)
-
-    @dbus.service.method(DBUS_IFACE)
-    def container_get_snapshots(self, name):
-        """ get container's snapshots """
-        if name in self.containers:
-
-            snapshots = lxc.get_snapshots(name)
-
-            if len(snapshots) < 1:
-                return false
-
-            return snapshots
-
-    @dbus.service.method(DBUS_IFACE)
-    def container_create(self, name, dist, arch, release):
-        """ create containers from template """
-        self._refresh()
-
-        if not name in self.containers:
-            try:
-                # get popen object
-                proc = lxc.create(name, dist, arch, release)
-
-                # store popen on running processes
-                self.processes[str(proc.pid)] = proc
-
-                return dbus.Dictionary({ "result" : True, "pid": dbus.String(str(proc.pid)) }, signature="sv")
-
-            except:
-                return dbus.Dictionary({ "result" : False, "err": dbus.String("lxc-create failed")}, signature="sv")
-
-        return dbus.Dictionary({ "result" : False, "err": dbus.String("container exist") }, signature="sv")
-
-    @dbus.service.method(DBUS_IFACE)
-    def container_xsession_setup(self, name, environment):
-        """ run setup scripts  """
-        self._refresh()
-
-        if self.containers[name]["container_status"] == "RUNNING":
-            try:
-                # get popen object
-                proc = lxc.setup_xsession(name, self.user_name, environment)
-
-                # store popen on running processes
-                self.processes[str(proc.pid)] = proc
-
-                return dbus.Dictionary({ "result" : True, "pid": str(proc.pid) }, signature="sv")
-            except:
-                return dbus.Dictionary({ "result" : False, "err": "setup_desktop.sh failed"}, signature="sv")
-
-        return dbus.Dictionary({ "result" : False, "err": "container is not running" }, signature="sv")
-
-    @dbus.service.method(DBUS_IFACE)
-    def container_attach(self, name):
-        """ attach to container shell """
-        self._refresh()
-
-        if self.containers[name]["container_status"] == "RUNNING":
-            lxc.start_shell(name, self.current_path)
-
-            return True
-        return False
-
     @dbus.service.method(DBUS_IFACE)
     def check_process(self, pid):
         """ check if process is running """
 
         if pid in self.processes:
-
             poll = self.processes[str(pid)].poll()
             if poll == None:
                 # p.subprocess is alive
@@ -339,18 +409,26 @@ class ContainersService(dbus.service.Object):
 
         return False
 
-
-    @dbus.service.method(DBUS_IFACE)
-    def get_containers(self):
+    @dbus.service.method(
+        dbus_interface=DBUS_IFACE,
+        in_signature="",
+        out_signature="aa{ss}",
+        sender_keyword="sender",
+        connection_keyword="conn"
+    )
+    def get_containers(self, sender=None, conn=None):
         """ get containers list """
-        self._refresh()
 
+        self._refresh()
         return self._dbus_dict()
 
 
 if __name__ == "__main__":
     DBusGMainLoop(set_as_default=True)
-    myservice = ContainersService()
-    loop = GLib.MainLoop()
 
+    bus        = dbus.SystemBus()
+    name       = dbus.service.BusName("org.sailfishcontainers.daemon", bus)
+    sc_service = ContainersService(bus, "/org/sailfishcontainers/daemon")
+
+    loop = GLib.MainLoop()
     loop.run()

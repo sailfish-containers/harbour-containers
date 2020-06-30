@@ -86,14 +86,12 @@ Page {
 
             PageHeader {
                 id: pageHeader
+                title: qsTr("Containers")
 
                 Rectangle {
                     anchors.fill: parent
-                    color: Theme._wallpaperOverlayColor
-
-                    PageHeader {
-                        title: qsTr("Containers")
-                    }
+                    color: Theme.highlightBackgroundColor
+                    opacity: 0.15
                 }
             }
 
@@ -220,7 +218,7 @@ Page {
                                 daemon.call('container_start',[new_container_name], function (result) {
                                     // Run setup script
                                     daemon.call('container_setup',[new_container_name,"xfce4"], function (result) {
-                                        // refresh pid to check on timer
+                                        // refresh pid
                                         new_container_pid = result["pid"]
                                         new_container_setup = false
 

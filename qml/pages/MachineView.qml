@@ -87,15 +87,13 @@ Page {
             height: parent.height
 
             PageHeader {
-                   id: pageHeader
+                id: pageHeader
+                title: qsTr("Container: ") + container.container_name
 
                 Rectangle {
                     anchors.fill: parent
-                    color: Theme._wallpaperOverlayColor
-
-                    PageHeader {
-                        title: qsTr("Container: ") + container.container_name
-                    }
+                    color: Theme.highlightBackgroundColor
+                    opacity: 0.15
                 }
             }
 
@@ -200,38 +198,75 @@ Page {
                         }
                     }
 
-                    SectionHeader{
-                        text: qsTr("mountpoints")
-                    }
-                    Row {
-                        width: parent.width
+                    ExpandingSectionGroup {
+                        currentIndex: 0
 
-                        Column {
-                            id: columnMountpoints
-                            Repeater{
-                                model: ListModel { id: listmodelrepeater}
-                                Component.onCompleted: {
-                                    // get container's mountpoints from daemon
-                                    daemon.call('container_get_mounts',[container.container_name], function (result){
+                        ExpandingSection {
 
-                                        var ind = 0
-                                        for (var mp in result){
-                                            //console.log(container.container_mounts[mp])
-                                            listmodelrepeater.set(ind, {"mount_point":result[mp]})
-                                            ind++
+                            title: qsTr("mountpoints")
 
-                                        }
-                                        gridView.cellHeight += column.height
-                                    })
+                            content.sourceComponent: Column {
+                                width: section.width
+                                Repeater{
+                                    model: ListModel { id: listmodelrepeater}
+                                    Component.onCompleted: {
+                                        // get container's mountpoints from daemon
+                                        daemon.call('container_get_mounts',[container.container_name], function (result){
 
-                                }
+                                            var ind = 0
+                                            for (var mp in result){
+                                                //console.log(container.container_mounts[mp])
+                                                listmodelrepeater.set(ind, {"mount_point":result[mp]})
+                                                ind++
 
-                                Label {
-                                    text: mount_point
-                                    Component.onCompleted: gridView.cellHeight += Theme.paddingLarge*1.6
+                                            }
+                                            gridView.cellHeight += column.height
+                                        })
+
+                                    }
+
+                                    Label {
+                                        text: mount_point
+                                        Component.onCompleted: gridView.cellHeight += Theme.paddingLarge*1.6
+                                    }
                                 }
                             }
                         }
+
+                        ExpandingSection {
+                            id: section
+
+                            title: qsTr("advanced options")
+
+                            content.sourceComponent: Column {
+                                width: section.width
+
+                                ButtonLayout {
+                                    enabled: is_started()
+
+                                    Button {
+                                        text: qsTr("setup xsession")
+                                        enabled: false
+                                        onClicked: {
+                                            //daemon.call("container_xsession_setup",[container.container_name,"xfce4"], function (result) {
+                                                //if (result){
+                                                // shell started
+                                              //  }
+                                            //});
+                                        }
+                                    }
+                                    Button {
+                                        text: qsTr("init container config")
+                                        enabled: false
+                                        onClicked: {
+                                            // TODO
+                                        }
+                                    }
+                                }
+
+                            }
+                        }
+
                     }
                 }
             }

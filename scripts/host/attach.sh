@@ -15,4 +15,4 @@ export WAYLAND_DISPLAY="../../display/wayland-0"
 
 mkdir -p /run/user/0
 
-su nemo -c "/usr/bin/fingerterm -e 'echo \"lxc-attach: $1\"; echo \"Enter developer mode password\";devel-su lxc-attach -n $1 /bin/bash;'"
+/usr/bin/fingerterm -e "lxc-attach -n $1 /bin/bash;"

@@ -36,6 +36,7 @@ Requires:
   - dbus-python3
   - nemo-qml-plugin-dbus-qt5
   - qxdisplay
+  - sailfish-polkit-agent
 
 # All installed files
 Files:

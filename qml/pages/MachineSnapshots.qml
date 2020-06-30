@@ -27,14 +27,12 @@ Page {
 
             PageHeader {
                 id: pageHeader
+                title: qsTr("Snapshots: ") + container.container_name
 
                 Rectangle {
                     anchors.fill: parent
-                    color: Theme._wallpaperOverlayColor
-
-                    PageHeader {
-                        title: qsTr("Snapshots: ") + container.container_name
-                    }
+                    color: Theme.highlightBackgroundColor
+                    opacity: 0.15
                 }
             }
 

@@ -56,6 +56,7 @@ INSTALLS += scripts-dir \
     service \
     service-libs \
     systemd-dbus \
+    systemd-polkit \
     systemd-config \
     systemd-main
 
