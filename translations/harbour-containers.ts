@@ -4,15 +4,15 @@
 <context>
     <name>CoverPage</name>
     <message>
-        <location filename="../qml/cover/CoverPage.qml" line="8"/>
-        <source>Containers</source>
+        <location filename="../qml/cover/CoverPage.qml" line="26"/>
+        <source>&lt;b&gt;Containers&lt;/b&gt;</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>CreateDialog</name>
     <message>
-        <location filename="../qml/pages/CreateDialog.qml" line="118"/>
+        <location filename="../qml/pages/CreateDialog.qml" line="121"/>
         <source>Setup container&apos;s desktop, may take long time. Currently only debian based systems are supported by the scripts. In addition Xwayland may need to be rebuilt based on guest&apos;s libc version. Read more: https://github.com/sailfish-containers/lxc-templates-desktop/wiki/Desktop</source>
         <translation type="unfinished"></translation>
     </message>
@@ -20,7 +20,7 @@
 <context>
     <name>HomePage</name>
     <message>
-        <location filename="../qml/pages/HomePage.qml" line="89"/>
+        <location filename="../qml/pages/HomePage.qml" line="103"/>
         <source>Containers</source>
         <translation type="unfinished"></translation>
     </message>
@@ -114,7 +114,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/MachineView.qml" line="248"/>
+        <location filename="../qml/pages/MachineView.qml" line="247"/>
         <source>setup xsession</source>
         <translation type="unfinished"></translation>
     </message>

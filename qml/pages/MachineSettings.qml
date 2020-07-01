@@ -62,7 +62,7 @@ Page {
                             onClicked: {
                                 var remorse = Remorse.popupAction(page, Remorse.deletedText, function() {
                                     daemon.call('container_destroy',[container.container_name], function (result){
-                                        pageStack.push(Qt.resolvedUrl("HomePage.qml"),{})
+                                        pageStack.push(Qt.resolvedUrl("HomePage.qml"),{daemon: daemon})
                                     })
                                 })
                             }

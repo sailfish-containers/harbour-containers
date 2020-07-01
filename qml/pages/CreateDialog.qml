@@ -19,6 +19,9 @@ Dialog {
     canAccept: false
 
     Component.onCompleted: {
+        daemon.call("preauth",[], function (result){
+            console.log(result)
+        })
         daemon.call("tpl_get_distro",[], function (result) {
 
             for (var data in result){

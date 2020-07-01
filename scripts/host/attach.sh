@@ -1,7 +1,15 @@
 #!/bin/bash
 # sailfish-containers-dbus: attach to container
+# args: username, cmd
 
-#export EGL_DRIVER="egl_gallium"
+if [ "$#" -ne 2 ]
+then
+        # set default user
+        CMD="/bin/bash"
+else
+        CMD=$2
+fi
+
 export EGL_PLATFORM="wayland"
 export QT_QPA_PLATFORM="wayland"
 export QT_WAYLAND_DISABLE_WINDOWDECORATION="1"
@@ -15,4 +23,4 @@ export WAYLAND_DISPLAY="../../display/wayland-0"
 
 mkdir -p /run/user/0
 
-/usr/bin/fingerterm -e "lxc-attach -n $1 /bin/bash;"
+/usr/bin/fingerterm  -e "lxc-attach -n $1 $CMD;"

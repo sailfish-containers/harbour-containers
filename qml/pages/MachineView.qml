@@ -242,31 +242,33 @@ Page {
                                 width: section.width
 
                                 ButtonLayout {
-                                    enabled: is_started()
 
                                     Button {
                                         text: qsTr("setup xsession")
-                                        enabled: false
+                                        enabled: is_started() ? true : false
+
                                         onClicked: {
-                                            //daemon.call("container_xsession_setup",[container.container_name,"xfce4"], function (result) {
-                                                //if (result){
+                                            daemon.call("container_xsession_setup",[container.container_name,"xfce4"], function (result) {
+                                                if (result){
                                                 // shell started
-                                              //  }
-                                            //});
+                                                }
+                                            });
                                         }
                                     }
                                     Button {
                                         text: qsTr("init container config")
-                                        enabled: false
+                                        enabled: is_started() ? false : true
                                         onClicked: {
-                                            // TODO
+                                            daemon.call("container_init_config",[container.container_name], function (result) {
+                                                if (result){
+                                                // init started
+                                                }
+                                            });
                                         }
                                     }
                                 }
-
                             }
                         }
-
                     }
                 }
             }

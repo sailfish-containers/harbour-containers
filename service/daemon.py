@@ -163,8 +163,7 @@ class ContainersService(dbus.service.Object):
         """ add required mountpoints on container's config """
         if(self._check_polkit_privilege(sender, conn, "%s.auth" % DBUS_IFACE)):
             # user authenticated
-            if name in self.containers:
-                self._add_guest_mp(name)
+           if self._add_guest_mp(name):
 
                 return True
         return False
@@ -197,10 +196,12 @@ class ContainersService(dbus.service.Object):
         """ start lxc container """
         self._refresh()
 
-        if self.containers[name]["container_status"] == "STOPPED":
+        #if self.containers[name]["container_status"] == "STOPPED": # fix for new containers
+        try:
             lxc.start(name)
 
             return True
+        except: pass
 
         return False
 
@@ -301,7 +302,7 @@ class ContainersService(dbus.service.Object):
     )
     def container_create(self, name, dist, arch, release, sender=None, conn=None):
         """ create containers from template """
-        if(self._check_polkit_privilege(sender, conn, "%s.auth" % DBUS_IFACE)):
+        if self._check_polkit_privilege(sender, conn, "%s.auth" % DBUS_IFACE):
             # user authenticated
             self._refresh()
 
@@ -323,7 +324,7 @@ class ContainersService(dbus.service.Object):
     @dbus.service.method(
         dbus_interface=DBUS_IFACE,
         in_signature="",
-        out_signature="a{sv}",
+        out_signature="b",
         sender_keyword="sender",
         connection_keyword="conn"
     )
@@ -335,19 +336,10 @@ class ContainersService(dbus.service.Object):
             self._refresh()
 
             if self.containers[name]["container_status"] == "RUNNING":
-                try:
-                    # get popen object
-                    proc = lxc.setup_xsession(name, self.user_name, environment)
+                lxc.start_shell(name, self.current_path, "/mnt/guest/setup_desktop.sh")
 
-                    # store popen on running processes
-                    self.processes[str(proc.pid)] = proc
-
-                    return dbus.Dictionary({ "result" : True, "pid": str(proc.pid) }, signature="sv")
-                except:
-                    return dbus.Dictionary({ "result" : False, "err": "setup_desktop.sh failed"}, signature="sv")
-
-            return dbus.Dictionary({ "result" : False, "err": "container is not running" }, signature="sv")
-        return dbus.Dictionary({ "result" : False, "err": "auth failed." }, signature="sv")
+                return True
+        return False
 
     @dbus.service.method(
         dbus_interface=DBUS_IFACE,
@@ -365,7 +357,7 @@ class ContainersService(dbus.service.Object):
             self._refresh()
 
             if self.containers[name]["container_status"] == "RUNNING":
-                lxc.start_shell(name, self.current_path)
+                lxc.start_shell(name, self.current_path, "/bin/bash")
 
                 return True
         return False
@@ -421,6 +413,19 @@ class ContainersService(dbus.service.Object):
 
         self._refresh()
         return self._dbus_dict()
+
+    @dbus.service.method(
+        dbus_interface=DBUS_IFACE,
+        in_signature="",
+        out_signature="b",
+        sender_keyword="sender",
+        connection_keyword="conn"
+    )
+    def preauth(self, sender=None, conn=None):
+        """ destroy lxc container """
+        if(self._check_polkit_privilege(sender, conn, "%s.auth" % DBUS_IFACE)):
+            return True
+        return False
 
 
 if __name__ == "__main__":

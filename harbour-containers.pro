@@ -71,7 +71,10 @@ DISTFILES += qml/harbour-containers.qml \
     rpm/harbour-containers.changes.in \
     rpm/harbour-containers.changes.run.in \
     rpm/harbour-containers.yaml \
+    scripts/guest/build_xwayland.sh \
+    scripts/guest/configs/wlseat.patch \
     scripts/guest/configs/xserverrc \
+    scripts/guest/setup_wrapper.sh \
     systemd/org.sailfishcontainers.daemon.policy \
     translations/*.ts \
     harbour-containers.desktop \

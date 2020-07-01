@@ -217,12 +217,12 @@ def start_desktop(name, display_id, user_name="user"): #fixme
     # desktop started
     return True
 
-def start_shell(name, path):
+def start_shell(name, path, cmd):
     """ start fingerterm bash session on container """
     scripts_path = "%s/scripts" % str(path)
     FNULL = open(os.devnull, 'w') # fix for session hang
 
-    shell = subprocess.Popen(['%s/host/attach.sh' % scripts_path, name], stdout=FNULL, stderr=subprocess.STDOUT, shell=False)
+    shell = subprocess.Popen(['%s/host/attach.sh' % scripts_path, name, cmd], stdout=FNULL, stderr=subprocess.STDOUT, shell=False)
     return shell
 
 def add_mountpoint(name, source, dest, rw=False):
@@ -234,11 +234,13 @@ def add_mountpoint(name, source, dest, rw=False):
 
     mp_line = 'lxc.mount.entry = %s %s none bind,create=dir,%s 0 0\n' % (source, dest, read)
 
+    # check
     with open('/var/lib/lxc/%s/config' % name, 'r') as f:
         for line in f.readlines():
             if line == mp_line:
                 return False
 
+    # add mountpoint
     with open('/var/lib/lxc/%s/config' % name, 'a') as file:
         file.write(mp_line)
 

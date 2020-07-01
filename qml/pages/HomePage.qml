@@ -1,14 +1,11 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
-import Nemo.DBus 2.0
 
 Page {
     id: page
     backNavigation: false
 
-    property string new_container_pid: "0"
-    property string new_container_name: ""
-    property bool new_container_setup: true
+    property var daemon
 
     function freeze_all(){
         for(var i=0;i<containersModel.count;i++){
@@ -33,6 +30,23 @@ Page {
         return true
     }
 
+    function setup_container_xsession(name){
+
+        daemon.call('container_init_config',[name], function(out){
+            if (out){
+                // guest mountpoint added to container config file
+                // Start new container
+                daemon.call('container_start',[name], function (result) {
+                    if (result){
+                        // Container started
+                        // Run setup script
+                        daemon.call('container_xsession_setup',[name,"xfce4"], function (result) {})
+                    }
+                })
+            }
+        })
+    }
+
     function get_container_icon(container){
 
         if (container_create_in_progress(container)){
@@ -52,7 +66,7 @@ Page {
 
     function container_create_in_progress(name){
         // check if container is under creation
-        if (name !== new_container_name){
+        if (name !== daemon.new_container_name){
             return false
         }
         return true
@@ -114,7 +128,7 @@ Page {
                     height:  Theme.itemSizeExtraLarge*2 //+ Theme.itemSize //+ Theme.itemSizeExtraSmall
                     onClicked: {
                         // Go to machineView
-                        if (container_name === "New container" && new_container_pid === "0"){
+                        if (container_name === "New container" && daemon.new_container_pid === "0"){
                             // create container dialog
                             var dialog = pageStack.push(Qt.resolvedUrl("CreateDialog.qml"), {daemon : daemon})
 
@@ -124,9 +138,9 @@ Page {
                                 daemon.call('container_create',[dialog.new_name,dialog.new_distro,dialog.new_arch,dialog.new_release], function (result) {
                                     if (result["result"]){
                                         // creation process started
-                                        new_container_pid = result["pid"]
-                                        new_container_name = dialog.new_name
-                                        new_container_setup = dialog.new_setup
+                                        daemon.new_container_pid = result["pid"]
+                                        daemon.new_container_name = dialog.new_name
+                                        daemon.new_container_setup = dialog.new_setup
 
                                         //containersModel.remove(containersModel.count-1)
                                         containersModel.set(containersModel.count-1,{"container_status":"Creation in progress...","container_name":dialog.new_name})
@@ -137,7 +151,7 @@ Page {
                             })
                         } else {
                             // Go to container page
-                            if (new_container_pid == "0"){ // this lock the page until the creation is completed to avoid interferences
+                            if (daemon.new_container_pid == "0"){ // this lock the page until the creation is completed to avoid interferences
                                 // no container creation in progress
                                 pageStack.push(Qt.resolvedUrl("MachineView.qml"), {container: model, daemon: daemon} )
                             }
@@ -188,76 +202,56 @@ Page {
         }
     }
 
-    Item {
-        DBusInterface {
-            id: daemon
+    Timer {
+        id: refreshTimer
+        interval: 15000 // 15 sec
+        repeat: true
+        running: (Qt.application.state == Qt.ApplicationActive && daemon.new_container_pid == "0") || daemon.new_container_pid !== "0"
+        triggeredOnStart: true
+        onTriggered: {
+            if (daemon.new_container_pid != "0") {
+                daemon.call('check_process',[daemon.new_container_pid], function (result){
+                    // Check container creation
+                    if(!result){
+                        if (daemon.new_container_setup){
+                            // Setup container's desktop
+                            // user selection
+                            containersModel.set(containersModel.count-2,{"container_status":"Starting setup...","container_name":daemon.new_container_name})
+                            // add guest mountpoint to container
+                            setup_container_xsession(daemon.new_container_name)
 
-            bus: DBus.SystemBus
-            service: 'org.sailfishcontainers.daemon'
-            iface: 'org.sailfishcontainers.daemon'
-            path: '/org/sailfishcontainers/daemon'
-
-        }
-        Timer {
-            id: refreshTimer
-            interval: 18000 // 18 sec
-            repeat: true
-            running: true
-            triggeredOnStart: true
-            onTriggered: {
-                if (new_container_pid != "0") {
-                    daemon.call('check_process',[new_container_pid], function (result){
-                        // Check container creation
-                        if(!result){
-                            // LXC create completed                         
-                            if (new_container_setup){
-                                // Setup container's desktop
-                                containersModel.set(containersModel.count-2,{"container_status":"Starting container...","container_name":new_container_name})
-
-                                // Start new container
-                                daemon.call('container_start',[new_container_name], function (result) {
-                                    // Run setup script
-                                    daemon.call('container_setup',[new_container_name,"xfce4"], function (result) {
-                                        // refresh pid
-                                        new_container_pid = result["pid"]
-                                        new_container_setup = false
-
-                                        // update container's status
-                                        containersModel.set(containersModel.count-2,{"container_status":"Installing packages...","container_name":new_container_name})
-
-                                    })
-                                })
-                            } else {
-                                // creation/setup completed
-                                new_container_pid = "0"
-                                new_container_name = ""
-                            }
                         }
-                    })
-                }
+                        // LXC create completed
+                        // creation/setup completed
+                        daemon.new_container_pid = "0"
+                        daemon.new_container_name = ""
 
-                if (new_container_pid == "0") {
-                    // default condition, refresh containers list
-                    daemon.call('get_containers',[], function (result) {
-                        if(containersModel.count > result.length+1){
-                            // containers amount changed
-                            containersModel.clear()
-                        }
+                        //daemon.new_container_setup = false
 
-                        var ind = 0
-                        for(var item in result){
-                            // refresh containers
-                            containersModel.set(ind, result[item])
-                            ind++
-                        }
+                    }
+                })
+            } else {
 
-                        // "Add new" icon
-                        containersModel.set(ind, {"container_status":"","container_name":"New container"})
+                // default condition, refresh containers list
+                daemon.call('get_containers',[], function (result) {
+                    if(containersModel.count > result.length+1){
+                        // containers amount changed
+                        containersModel.clear()
+                    }
 
-                        //console.log("cache refreshed")
-                    })
-                }
-            }            
+                    var ind = 0
+                    for(var item in result){
+                        // refresh containers
+                        containersModel.set(ind, result[item])
+                        ind++
+                    }
+
+                    // "Add new" icon
+                    containersModel.set(ind, {"container_status":"","container_name":"New container"})
+
+                    //console.log("cache refreshed")
+                })
+            }
         }
     }
 }
