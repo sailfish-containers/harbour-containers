@@ -61,9 +61,12 @@ INSTALLS += scripts-dir \
     systemd-main
 
 DISTFILES += qml/harbour-containers.qml \
+    qml/components/Database.qml \
     qml/cover/CoverPage.qml \
+    qml/icons/* \
     qml/pages/CreateDialog.qml \
     qml/pages/HomePage.qml \
+    qml/pages/IconPickerDialog.qml \
     qml/pages/MachineSettings.qml \
     qml/pages/MachineSnapshots.qml \
     qml/pages/MachineView.qml \

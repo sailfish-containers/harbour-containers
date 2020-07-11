@@ -6,6 +6,7 @@ Page {
     backNavigation: false
 
     property var daemon
+    property var db
 
     function freeze_all(){
         for(var i=0;i<containersModel.count;i++){
@@ -48,6 +49,12 @@ Page {
     }
 
     function get_container_icon(container){
+        var db_icon = db.get_icon(container)
+
+        if (db_icon !== ""){
+            return "../icons/"+db_icon
+        }
+
 
         if (container_create_in_progress(container)){
             // for container under creation
@@ -111,11 +118,11 @@ Page {
 
             SilicaGridView {
                 id: gridView
-                width: parent.width //- Theme.paddingLarge
+                width: parent.width
                 height: parent.height - pageHeader.height - Theme.paddingLarge
                 clip: true
                 cellWidth: Theme.itemSizeExtraLarge + Theme.itemSizeSmall + Theme.paddingSmall
-                cellHeight: Theme.itemSizeExtraLarge*2 //+ Theme.paddingLarge
+                cellHeight: Theme.itemSizeExtraLarge*2
 
                 VerticalScrollDecorator {}
 
@@ -125,7 +132,7 @@ Page {
                 delegate: BackgroundItem {
                     //contentHeight: itemColumn.height
                     width:  Theme.itemSizeExtraLarge + Theme.itemSizeSmall + Theme.paddingSmall
-                    height:  Theme.itemSizeExtraLarge*2 //+ Theme.itemSize //+ Theme.itemSizeExtraSmall
+                    height:  Theme.itemSizeExtraLarge*2
                     onClicked: {
                         // Go to machineView
                         if (container_name === "New container" && daemon.new_container_pid === "0"){
@@ -151,10 +158,10 @@ Page {
                             })
                         } else {
                             // Go to container page
-                            if (daemon.new_container_pid == "0"){ // this lock the page until the creation is completed to avoid interferences
+                            //if (daemon.new_container_pid == "0"){ // this lock the page until the creation is completed to avoid interferences
                                 // no container creation in progress
-                                pageStack.push(Qt.resolvedUrl("MachineView.qml"), {container: model, daemon: daemon} )
-                            }
+                            pageStack.push(Qt.resolvedUrl("MachineView.qml"), {container: model, daemon: daemon, icon: iconitem, db: db} )
+                            //}
 
                         }
                     }
@@ -162,13 +169,13 @@ Page {
                         id: itemColumn
 
                         Item{
-                            width: iconitem.width //+ Theme.paddingLarge //GridView.view.width
+                            width: iconitem.width
                             height: iconitem.height - Theme.paddingLarge
 
                             Icon {
                                 id: iconitem
                                 source: get_container_icon(container_name)
-                                width: Theme.itemSizeExtraLarge + Theme.itemSizeSmall //GridView.view.width
+                                width: Theme.itemSizeExtraLarge + Theme.itemSizeSmall
                                 height: Theme.itemSizeExtraLarge + Theme.itemSizeSmall
                             }
 
@@ -225,9 +232,6 @@ Page {
                         // creation/setup completed
                         daemon.new_container_pid = "0"
                         daemon.new_container_name = ""
-
-                        //daemon.new_container_setup = false
-
                     }
                 })
             } else {
@@ -248,8 +252,6 @@ Page {
 
                     // "Add new" icon
                     containersModel.set(ind, {"container_status":"","container_name":"New container"})
-
-                    //console.log("cache refreshed")
                 })
             }
         }

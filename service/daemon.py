@@ -161,7 +161,7 @@ class ContainersService(dbus.service.Object):
     )
     def container_init_config(self, name, sender=None, conn=None):
         """ add required mountpoints on container's config """
-        if(self._check_polkit_privilege(sender, conn, "%s.auth" % DBUS_IFACE)):
+        if self._check_polkit_privilege(sender, conn, "%s.auth" % DBUS_IFACE):
             # user authenticated
            if self._add_guest_mp(name):
 
@@ -245,7 +245,7 @@ class ContainersService(dbus.service.Object):
     )
     def container_destroy(self, name, sender=None, conn=None):
         """ destroy lxc container """
-        if(self._check_polkit_privilege(sender, conn, "%s.auth" % DBUS_IFACE)):
+        if self._check_polkit_privilege(sender, conn, "%s.auth" % DBUS_IFACE):
             # user authenticated
             self._refresh()
 
@@ -265,7 +265,7 @@ class ContainersService(dbus.service.Object):
     )
     def container_snapshot(self, name, snapshot_name, sender=None, conn=None):
         """ take container's snapshot """
-        if(self._check_polkit_privilege(sender, conn, "%s.auth" % DBUS_IFACE)):
+        if self._check_polkit_privilege(sender, conn, "%s.auth" % DBUS_IFACE):
             # user authenticated
             self._refresh()
 

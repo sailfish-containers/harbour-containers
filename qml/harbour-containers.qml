@@ -10,10 +10,14 @@ ApplicationWindow
     Daemon {
         id: dbus_daemon
     }
+    Database {
+        id: main_db
+    }
 
     initialPage: Component{
         HomePage {
             daemon: dbus_daemon
+            db: main_db
         }
     }
     cover: CoverPage {

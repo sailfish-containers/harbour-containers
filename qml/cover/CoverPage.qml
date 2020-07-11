@@ -52,7 +52,7 @@ CoverBackground {
     }
     Timer {
         id: slowTimer
-        interval: 60000 * 15 // 15 min
+        interval: 60000 * 8 // 8 min
         repeat: true
         triggeredOnStart: true
         running: cover.status === Cover.Active && daemon.new_container_pid == "0"
@@ -70,7 +70,6 @@ CoverBackground {
                     ind++
                 }
             })
-
         }
     }
 }

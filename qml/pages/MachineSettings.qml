@@ -6,6 +6,8 @@ Page {
 
     property var container // container object from dbus
     property var daemon    // sailfish-containers daemon object
+    property var icon      // qml icon object
+    property var db        // settings db
 
     SilicaFlickable {
         anchors.fill: parent
@@ -51,7 +53,19 @@ Page {
                     ButtonLayout {
                         Button {
                             text: "Change icon"
-                            enabled: false
+                            onClicked: {
+                                var dialog = pageStack.push(Qt.resolvedUrl("IconPickerDialog.qml"), {daemon : daemon})
+
+                                dialog.accepted.connect(function() {
+                                    console.log(dialog.new_icon)
+                                    if (dialog.new_icon !== ""){
+                                        db.set_icon(container.container_name, dialog.new_icon) // change icon in db
+                                        icon.source = dialog.new_icon // change current icon
+                                    }
+
+
+                                })
+                            }
                         }
                     }
                     ButtonLayout {
@@ -61,7 +75,12 @@ Page {
                             color: Theme.errorColor
                             onClicked: {
                                 var remorse = Remorse.popupAction(page, Remorse.deletedText, function() {
+
+                                    // delete container's config
+                                    db.delete_container(container.container_name)
+
                                     daemon.call('container_destroy',[container.container_name], function (result){
+                                        // return to home
                                         pageStack.push(Qt.resolvedUrl("HomePage.qml"),{daemon: daemon})
                                     })
                                 })

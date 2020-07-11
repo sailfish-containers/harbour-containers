@@ -110,7 +110,7 @@ def start(name):
     return True
 
 def stop(name):
-    """ Stop a lxc container from name FIXME: sometimes call go in timeout"""
+    """ Stop a lxc container from name FIXME: timeout"""
     out = subprocess.check_output(['lxc-stop', '-n', name])
 
     if out != "":
@@ -202,7 +202,7 @@ def restore_create_snapshot(name, snapshot_name, new_name):
     return restore_process
 
 def setup_xsession(name, user_name, session):
-    """ setup container x session """
+    """ setup container x session : DEPRECATED """
     FNULL = open(os.devnull, 'w') # fix for session hang
 
     setup_process = subprocess.Popen(['lxc-attach', '-n', name, '/mnt/guest/setup_desktop.sh','%s' % user_name], stdout=FNULL, stderr=subprocess.STDOUT, shell=False)

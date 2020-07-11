@@ -6,6 +6,8 @@ Page {
 
     property var container // container object from dbus
     property var daemon    // sailfish-containers daemon object
+    property var icon      // qml icon object
+    property var db        // settings db
 
     function is_started(){
         // get Boolean for status: on = true, everything else = false
@@ -26,6 +28,12 @@ Page {
 
     SilicaFlickable {
         anchors.fill: parent
+        Rectangle {
+            anchors.fill: parent
+            color: Theme.backgroundGlowColor
+            opacity: 0.3
+            Image { source: icon.source; fillMode: Image.PreserveAspectFit; anchors.fill: parent;  opacity: 0.3 }
+        }
 
         PullDownMenu {
             id: pullDownMenu
@@ -33,7 +41,7 @@ Page {
             MenuItem {
                 text: "Settings"
                 onClicked: {
-                    pageStack.push(Qt.resolvedUrl("MachineSettings.qml"), {container : container, daemon: daemon} )
+                    pageStack.push(Qt.resolvedUrl("MachineSettings.qml"), {container : container, daemon: daemon, db:db, icon:icon} )
                 }
             }
             MenuItem {
@@ -95,6 +103,7 @@ Page {
                     color: Theme.highlightBackgroundColor
                     opacity: 0.15
                 }
+
             }
 
             SilicaGridView {
@@ -121,24 +130,13 @@ Page {
                     width: page.isLandscape ? parent.width/1.5 : parent.width - Theme.paddingLarge
                     spacing: Theme.paddingLarge
 
-                    IconButton {
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        width: icon.width //+ Theme.paddingLarge //GridView.view.width
-                        height: icon.height - Theme.paddingLarge - Theme.paddingLarge
-
-                        icon.source: "image://theme/icon-m-computer"
-                        icon.width: Theme.itemSizeExtraLarge + Theme.itemSizeSmall //GridView.view.width
-                        icon.height: Theme.itemSizeExtraLarge + Theme.itemSizeSmall
-
-                    }
-
 
                     SectionHeader{
                         text: qsTr("Details")
                     }
                     Row {
-
                         width: parent.width
+
 
                         Column {
                             Label {

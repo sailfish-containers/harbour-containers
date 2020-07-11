@@ -118,9 +118,11 @@ Dialog {
             id: desktopSwitch
             text: "Setup desktop"
             checked: true
-            description: qsTr("Setup container's desktop, may take long time. Currently only debian based systems are supported by the scripts. In addition Xwayland may need to be rebuilt based on guest's libc version. Read more: https://github.com/sailfish-containers/lxc-templates-desktop/wiki/Desktop")
+
+            description: qsTr("Setup container's xsession, depending on the device's spec it may require long time to complete. Be sure to have network access and enough battery charge. Currently only debian based systems are supported by the scripts. Read more: https://github.com/sailfish-containers/lxc-templates-desktop/wiki/Desktop")
         }
     }
+
 
     onDone: {
         if (result == DialogResult.Accepted) {
