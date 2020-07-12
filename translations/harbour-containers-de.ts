@@ -16,12 +16,22 @@
         <source>Settings: </source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../qml/pages/ContainerSettings.qml" line="55"/>
+        <source>Change icon</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ContainerSnapshots</name>
     <message>
         <location filename="../qml/pages/ContainerSnapshots.qml" line="30"/>
         <source>Snapshots: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/ContainerSnapshots.qml" line="74"/>
+        <source>Delete</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -130,7 +140,7 @@
 <context>
     <name>MainPage</name>
     <message>
-        <location filename="../qml/pages/MainPage.qml" line="110"/>
+        <location filename="../qml/pages/MainPage.qml" line="109"/>
         <source>Containers</source>
         <translation type="unfinished"></translation>
     </message>

@@ -68,8 +68,7 @@ Page {
         }
 
         // default container icon
-        return "../images/container-empty.png"
-
+        return "../images/container-default.png"
     }
 
     function container_create_in_progress(name){
@@ -160,7 +159,7 @@ Page {
                             // Go to container page
                             //if (daemon.new_container_pid == "0"){ // this lock the page until the creation is completed to avoid interferences
                                 // no container creation in progress
-                            pageStack.push(Qt.resolvedUrl("ContainerView.qml"), {container: model, daemon: daemon, icon: iconitem, db: db} )
+                            pageStack.push(Qt.resolvedUrl("ContainerView.qml"), {container: model, daemon: daemon, icon: icon_distro_logo, db: db} )
                             //}
 
                         }
@@ -174,9 +173,17 @@ Page {
 
                             Icon {
                                 id: iconitem
-                                source: get_container_icon(container_name)
+                                source: container_name != " " ? "../images/container-empty.png" : null
                                 width: Theme.itemSizeExtraLarge + Theme.itemSizeSmall
                                 height: Theme.itemSizeExtraLarge + Theme.itemSizeSmall
+
+                                Image {
+                                    id: icon_distro_logo
+                                    source: get_container_icon(container_name)
+                                    width: Theme.itemSizeExtraLarge + Theme.itemSizeSmall
+                                    height: Theme.itemSizeExtraLarge + Theme.itemSizeSmall
+
+                                }
                             }
 
                             BusyIndicator {

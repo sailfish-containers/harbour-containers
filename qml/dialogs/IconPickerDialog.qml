@@ -21,7 +21,7 @@ Dialog {
         VerticalScrollDecorator {}
 
         Grid {
-            columns: parent.width / (Theme.iconSizeExtraLarge*2)
+            columns: parent.width / (Theme.iconSizeExtraLarge + Theme.iconSizeMedium)
             spacing: 22
 
             Repeater {
@@ -34,21 +34,21 @@ Dialog {
                     ListElement { icon_source: "../images/container-alpine.png"; icon_name: "alpine" }
                     ListElement { icon_source: "../images/container-kali.png"; icon_name: "kali" }
                     ListElement { icon_source: "../images/container-manjaro.png"; icon_name: "manjaro" }
-                    ListElement { icon_source: "../images/container-empty.png"; icon_name: "empty" }
-                    //ListElement { icon_source: "../images/container-tux.png"; icon_name: "tux" }
-                    //ListElement { icon_source: "../images/container-default.png"; icon_name: "default" }
+                    ListElement { icon_source: "../images/container-tux.png"; icon_name: "tux" }
+                    ListElement { icon_source: "../images/container-default.png"; icon_name: "default" }
 
                 }
                 IconButton {
                     icon.source: icon_source
                     width: icon.width
                     height: icon.height
-                    icon.width:  Theme.iconSizeExtraLarge*2
-                    icon.height: Theme.iconSizeExtraLarge*2
+                    icon.width:  Theme.iconSizeExtraLarge + Theme.iconSizeSmall
+                    icon.height: Theme.iconSizeExtraLarge + Theme.iconSizeSmall
                     onClicked: {
                         new_icon=icon_source
                         selection_lbl.text="selected: "+icon_name
                     }
+
                 }
             }
         }
