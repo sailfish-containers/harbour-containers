@@ -70,18 +70,18 @@ Page {
                     }
                     ButtonLayout {
                         Button {
-                            text: "Destroy container"
+                            text: qsTr("Destroy container")
                             enabled: true
                             color: Theme.errorColor
                             onClicked: {
                                 var remorse = Remorse.popupAction(page, Remorse.deletedText, function() {
-
-                                    // delete container's config
-                                    db.delete_container(container.container_name)
-
                                     daemon.call('container_destroy',[container.container_name], function (result){
+
+                                        // delete container's config
+                                        db.delete_container(container.container_name)
+
                                         // return to home
-                                        pageStack.push(Qt.resolvedUrl("MainPage.qml"),{daemon: daemon})
+                                        pageStack.push(Qt.resolvedUrl("MainPage.qml"),{daemon: daemon, db:db})
                                     })
                                 })
                             }

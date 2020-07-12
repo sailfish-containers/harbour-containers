@@ -38,13 +38,13 @@ Page {
             id: pullDownMenu
 
             MenuItem {
-                text: "Settings"
+                text: qsTr("Settings")
                 onClicked: {
                     pageStack.push(Qt.resolvedUrl("ContainerSettings.qml"), {container : container, daemon: daemon, db:db, icon:icon} )
                 }
             }
             MenuItem {
-                text: "Snapshots"
+                text: qsTr("Snapshots")
                 onClicked: {
                     pageStack.push(Qt.resolvedUrl("ContainerSnapshots.qml"), {container : container, daemon: daemon} )
                 }
@@ -239,28 +239,31 @@ Page {
                                 width: section.width
 
                                 ButtonLayout {
+                                    Button {
+                                        text: qsTr("run onboard")
+                                        enabled: is_started() ? true : false
+                                        onClicked: {
+                                            daemon.call("container_xsession_onboard",[container.container_name], function (result){})
+                                        }
+                                    }
+
+                                }
+
+                                ButtonLayout {
 
                                     Button {
                                         text: qsTr("setup xsession")
                                         enabled: is_started() ? true : false
 
                                         onClicked: {
-                                            daemon.call("container_xsession_setup",[container.container_name,"xfce4"], function (result) {
-                                                if (result){
-                                                // shell started
-                                                }
-                                            });
+                                            daemon.call("container_xsession_setup",[container.container_name,"xfce4"], function (result) {});
                                         }
                                     }
                                     Button {
                                         text: qsTr("init container config")
                                         enabled: is_started() ? false : true
                                         onClicked: {
-                                            daemon.call("container_init_config",[container.container_name], function (result) {
-                                                if (result){
-                                                // init started
-                                                }
-                                            });
+                                            daemon.call("container_init_config",[container.container_name], function (result) {});
                                         }
                                     }
                                 }

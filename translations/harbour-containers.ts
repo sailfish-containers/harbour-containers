@@ -8,6 +8,16 @@
         <source>About</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../qml/pages/About.qml" line="34"/>
+        <source>&lt;i&gt; A Linux containers manager for SailfishOS &lt;/i&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/About.qml" line="53"/>
+        <source>donate</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ContainerSettings</name>
@@ -21,6 +31,11 @@
         <source>Change icon</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../qml/pages/ContainerSettings.qml" line="73"/>
+        <source>Destroy container</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ContainerSnapshots</name>
@@ -31,12 +46,27 @@
     </message>
     <message>
         <location filename="../qml/pages/ContainerSnapshots.qml" line="74"/>
+        <source>Restore</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/ContainerSnapshots.qml" line="78"/>
         <source>Delete</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>ContainerView</name>
+    <message>
+        <location filename="../qml/pages/ContainerView.qml" line="41"/>
+        <source>Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/ContainerView.qml" line="47"/>
+        <source>Snapshots</source>
+        <translation type="unfinished"></translation>
+    </message>
     <message>
         <location filename="../qml/pages/ContainerView.qml" line="134"/>
         <source>Details</source>
@@ -103,12 +133,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/ContainerView.qml" line="244"/>
+        <location filename="../qml/pages/ContainerView.qml" line="243"/>
+        <source>run onboard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/ContainerView.qml" line="255"/>
         <source>setup xsession</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/ContainerView.qml" line="256"/>
+        <location filename="../qml/pages/ContainerView.qml" line="263"/>
         <source>init container config</source>
         <translation type="unfinished"></translation>
     </message>
@@ -139,6 +174,21 @@
 </context>
 <context>
     <name>MainPage</name>
+    <message>
+        <location filename="../qml/pages/MainPage.qml" line="89"/>
+        <source>About</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/MainPage.qml" line="93"/>
+        <source>Stop all</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/MainPage.qml" line="97"/>
+        <source>Freeze all</source>
+        <translation type="unfinished"></translation>
+    </message>
     <message>
         <location filename="../qml/pages/MainPage.qml" line="109"/>
         <source>Containers</source>

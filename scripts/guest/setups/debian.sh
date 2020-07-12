@@ -83,7 +83,7 @@ apt update
 
 # install xfce-desktop
 echo "[+] installing xfce4"
-apt install -y sudo xfce4 # Xephyr
+apt install -y sudo xfce4 onboard # Xephyr
 
 # mask unused services
 systemctl mask lightdm

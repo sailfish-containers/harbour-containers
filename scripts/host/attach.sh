@@ -5,7 +5,7 @@
 if [ "$#" -ne 2 ]
 then
         # set default user
-        CMD="/bin/bash"
+        CMD=""
 else
         CMD=$2
 fi

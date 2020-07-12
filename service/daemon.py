@@ -168,29 +168,6 @@ class ContainersService(dbus.service.Object):
                 return True
         return False
 
-    @dbus.service.method(
-        dbus_interface=DBUS_IFACE,
-        in_signature="",
-        out_signature="b",
-        sender_keyword="sender",
-        connection_keyword="conn"
-    )
-    def container_xsession_start(self, name, sender=None, conn=None):
-        """ start xwayland desktop session on guest """
-        if(self._check_polkit_privilege(sender, conn, "%s.auth" % DBUS_IFACE)):
-            # user authenticated
-            self._refresh()
-
-            if self.containers[name]["container_status"] == "RUNNING":
-                # create a new qxcompositor display
-                display = self._create_display()
-
-                # start Xwayland on the new display
-                desktop = lxc.start_desktop(name, display)
-
-                return True
-        return False
-
     @dbus.service.method(DBUS_IFACE)
     def container_start(self, name):
         """ start lxc container """
@@ -259,18 +236,46 @@ class ContainersService(dbus.service.Object):
     @dbus.service.method(
         dbus_interface=DBUS_IFACE,
         in_signature="",
-        out_signature="b",
+        out_signature="a{sv}",
         sender_keyword="sender",
         connection_keyword="conn"
     )
-    def container_snapshot(self, name, snapshot_name, sender=None, conn=None):
+    def container_snapshot_new(self, name, sender=None, conn=None):
         """ take container's snapshot """
         if self._check_polkit_privilege(sender, conn, "%s.auth" % DBUS_IFACE):
             # user authenticated
             self._refresh()
 
             if self.containers[name]["container_status"] == "STOPPED":
-                lxc.snapshot(name, snaphost_name)
+                try:
+                    # get popen object
+                    proc = lxc.take_snapshot(name)
+
+                    # store popen on running processes
+                    self.processes[str(proc.pid)] = proc
+
+                    return dbus.Dictionary({ "result" : True, "pid": dbus.String(str(proc.pid)) }, signature="sv")
+                except:
+                    return dbus.Dictionary({ "result" : False, "err": dbus.String("snapshot failed")}, signature="sv")
+
+            return dbus.Dictionary({ "result" : False, "err": dbus.String("container running") }, signature="sv")
+        return dbus.Dictionary({ "result" : False, "err": "auth failed." }, signature="sv")
+
+    @dbus.service.method(
+        dbus_interface=DBUS_IFACE,
+        in_signature="",
+        out_signature="b",
+        sender_keyword="sender",
+        connection_keyword="conn"
+    )
+    def container_snapshot_delete(self, name, snapshot_name, sender=None, conn=None):
+        """ delete container's snapshot """
+        if self._check_polkit_privilege(sender, conn, "%s.auth" % DBUS_IFACE):
+            # user authenticated
+            self._refresh()
+
+            if self.containers[name]["container_status"] == "STOPPED":
+                lxc.delete_snapshot(name, snapshot_name)
 
                 return True
 
@@ -328,6 +333,29 @@ class ContainersService(dbus.service.Object):
         sender_keyword="sender",
         connection_keyword="conn"
     )
+    def container_xsession_start(self, name, sender=None, conn=None):
+        """ start xwayland desktop session on guest """
+        if(self._check_polkit_privilege(sender, conn, "%s.auth" % DBUS_IFACE)):
+            # user authenticated
+            self._refresh()
+
+            if self.containers[name]["container_status"] == "RUNNING":
+                # create a new qxcompositor display
+                display = self._create_display()
+
+                # start Xwayland on the new display
+                desktop = lxc.start_desktop(name, display)
+
+                return True
+        return False
+
+    @dbus.service.method(
+        dbus_interface=DBUS_IFACE,
+        in_signature="",
+        out_signature="b",
+        sender_keyword="sender",
+        connection_keyword="conn"
+    )
     def container_xsession_setup(self, name, environment, sender=None, conn=None):
         """ run setup scripts  """
 
@@ -340,6 +368,12 @@ class ContainersService(dbus.service.Object):
 
                 return True
         return False
+
+    @dbus.service.method(DBUS_IFACE)
+    def container_xsession_onboard(self, name):
+        """ Start onboard sw keyboard on container's xsession """
+
+        return lxc.start_onboard(name)
 
     @dbus.service.method(
         dbus_interface=DBUS_IFACE,
@@ -357,7 +391,7 @@ class ContainersService(dbus.service.Object):
             self._refresh()
 
             if self.containers[name]["container_status"] == "RUNNING":
-                lxc.start_shell(name, self.current_path, "/bin/bash")
+                lxc.start_shell(name, self.current_path, " ")
 
                 return True
         return False

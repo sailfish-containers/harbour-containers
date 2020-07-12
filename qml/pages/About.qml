@@ -22,8 +22,39 @@ Page {
                     opacity: 0.15
                 }
             }
+            Image {
+                source: "../images/harbour-containers.png"
+                anchors.horizontalCenter: parent.horizontalCenter
+            }
             Label {
-                text: "test"
+                text: "<b>harbour-containers</b>"
+                anchors.horizontalCenter: parent.horizontalCenter
+            }
+            Label {
+                text: qsTr("<i> A Linux containers manager for SailfishOS </i>")
+                anchors.horizontalCenter: parent.horizontalCenter
+
+            }
+            ButtonLayout {
+
+                Button {
+                    text: "github"
+                    onClicked: {
+                        Qt.openUrlExternally("https://github.com/sailfish-containers")
+                    }
+                }
+                Button {
+                    text: "wiki"
+                    onClicked: {
+                        Qt.openUrlExternally("https://github.com/sailfish-containers/lxc-templates-desktop/wiki")
+                    }
+                }
+                Button {
+                    text: qsTr("donate")
+                    onClicked: {
+                        Qt.openUrlExternally("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=MRYB9SATJKZ9N&source=url")
+                    }
+                }
             }
         }
     }

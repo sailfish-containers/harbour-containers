@@ -71,13 +71,24 @@ Page {
                         id: contextMenu
                         ContextMenu {
                             MenuItem {
+                                text: qsTr("Restore")
+                                enabled: false
+                            }
+                            MenuItem {
                                 text: qsTr("Delete")
-                                onClicked: view.model.remove(index)
+                                onClicked: {
+                                    var remorse = Remorse.popupAction(page, Remorse.deletedText, function() {
+                                        daemon.call('container_snapshot_delete',[container.container_name, snap_name], function (result){
+                                            if (result){
+                                              view.model.remove(index)
+                                            }
+                                        })
+                                    })
+                                }
                             }
                         }
                     }
                 }
-
             }
         }
     }

@@ -164,6 +164,19 @@ def destroy(name, rootfs=""):
 
     return True
 
+def delete_snapshot(name, snapshot_name):
+    """ delete a container's snapshot """
+
+    if name == "aliendalvik":
+        # preserve aliendalvik :)
+        return False
+    try:
+        subprocess.Popen(['lxc-snapshot', '-n', name, "-d", snapshot_name], stdout=FNULL, stderr=subprocess.STDOUT, shell=False)
+    except:
+        return False
+
+    return True
+
 def get_snapshots(name):
     """ Get snapshots of lxc container from name """
     out = subprocess.check_output(['lxc-snapshot', '-n', name, '-L']).decode()
@@ -180,11 +193,11 @@ def get_snapshots(name):
 
     return res
 
-def take_snapshot(name, snapshot_name):
+def take_snapshot(name):
     """ Take a snapshot of lxc container from name """
     FNULL = open(os.devnull, 'w') # fix for session hang
 
-    snap_process = subprocess.Popen(['lxc-snapshot', '-n', name, snapshot_name], stdout=FNULL, stderr=subprocess.STDOUT, shell=False)
+    snap_process = subprocess.Popen(['lxc-snapshot', '-n', name], stdout=FNULL, stderr=subprocess.STDOUT, shell=False)
     return snap_process
 
 def restore_snapshot(name, snapshot_name):
@@ -224,6 +237,20 @@ def start_shell(name, path, cmd):
 
     shell = subprocess.Popen(['%s/host/attach.sh' % scripts_path, name, cmd], stdout=FNULL, stderr=subprocess.STDOUT, shell=False)
     return shell
+
+
+def start_onboard(name):
+    """ start onboard keybaord """
+    FNULL = open(os.devnull, 'w') # fix for session hang
+
+    try:
+        desktop_session = subprocess.Popen(['lxc-attach', '-n', name, '/mnt/guest/start_onboard.sh'], stdout=FNULL, stderr=subprocess.STDOUT, shell=False)
+
+        # onboard started
+        return True
+    except:
+        return False
+
 
 def add_mountpoint(name, source, dest, rw=False):
     """ add a mountpoint to container """

@@ -86,15 +86,15 @@ Page {
             id: pullDownMenu
 
             MenuItem {
-                text: "About"
+                text: qsTr("About")
                 onClicked: pageStack.push(Qt.resolvedUrl("About.qml"), {})
             }
             MenuItem {
-                text: "Stop all"
+                text: qsTr("Stop all")
                 onClicked: stop_all()
             }
             MenuItem {
-                text: "Freeze all"
+                text: qsTr("Freeze all")
                 onClicked: freeze_all()
             }
         }
@@ -150,7 +150,7 @@ Page {
 
                                         //containersModel.remove(containersModel.count-1)
                                         containersModel.set(containersModel.count-1,{"container_status":"Creation in progress...","container_name":dialog.new_name})
-                                        containersModel.set(containersModel.count,{"container_status":"","container_name":"New container"})
+                                        containersModel.set(containersModel.count,{"container_status":"","container_name":" "})
 
                                     }
                                 })
@@ -173,7 +173,7 @@ Page {
 
                             Icon {
                                 id: iconitem
-                                source: container_name != " " ? "../images/container-empty.png" : null
+                                source: (container_name != " " && !container_create_in_progress(container_name) ) ? "../images/container-empty.png" : null
                                 width: Theme.itemSizeExtraLarge + Theme.itemSizeSmall
                                 height: Theme.itemSizeExtraLarge + Theme.itemSizeSmall
 
@@ -192,7 +192,7 @@ Page {
                                 anchors.horizontalCenter: parent.horizontalCenter
                                 running: container_create_in_progress(container_name)
                                 anchors.bottom: parent.bottom
-                                anchors.bottomMargin: Theme.paddingMedium
+                                anchors.bottomMargin: Theme.paddingLarge
 
                             }
                         }
