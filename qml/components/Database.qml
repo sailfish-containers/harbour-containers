@@ -4,7 +4,6 @@ import QtQuick.LocalStorage 2.0
 Item {
     property var db : LocalStorage.openDatabaseSync("QContainers_DB", "1.0", "containers settings", 1000000)
 
-
     Component.onCompleted: {
         try {
             db.transaction(function (tx) {
@@ -30,9 +29,6 @@ Item {
             }
         })
 
-        if (r == "image://theme/icon-m-computer"){
-            return ""
-        }
         return r
     }
 

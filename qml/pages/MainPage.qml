@@ -49,25 +49,26 @@ Page {
     }
 
     function get_container_icon(container){
-        var db_icon = db.get_icon(container)
-
-        if (db_icon !== ""){
-            return "../icons/"+db_icon
-        }
-
 
         if (container_create_in_progress(container)){
             // for container under creation
             return ""
         }
 
-        if (container === "New container"){
+        if (container === " "){
             // create container icon
-            return "image://theme/icon-m-add"
+            return "../images/icon-m-add.png"
+        } else {
+
+            var stored_icon = db.get_icon(container)
+
+            if (stored_icon !== ""){
+                return stored_icon
+            }
         }
 
         // default container icon
-        return "image://theme/icon-m-computer"
+        return "../images/container-empty.png"
 
     }
 
@@ -87,8 +88,7 @@ Page {
 
             MenuItem {
                 text: "About"
-                onClicked: {}
-                enabled: false
+                onClicked: pageStack.push(Qt.resolvedUrl("About.qml"), {})
             }
             MenuItem {
                 text: "Stop all"
@@ -122,7 +122,7 @@ Page {
                 height: parent.height - pageHeader.height - Theme.paddingLarge
                 clip: true
                 cellWidth: Theme.itemSizeExtraLarge + Theme.itemSizeSmall + Theme.paddingSmall
-                cellHeight: Theme.itemSizeExtraLarge*2
+                cellHeight: Theme.itemSizeExtraLarge*2 + Theme.paddingLarge
 
                 VerticalScrollDecorator {}
 
@@ -132,12 +132,12 @@ Page {
                 delegate: BackgroundItem {
                     //contentHeight: itemColumn.height
                     width:  Theme.itemSizeExtraLarge + Theme.itemSizeSmall + Theme.paddingSmall
-                    height:  Theme.itemSizeExtraLarge*2
+                    height:  Theme.itemSizeExtraLarge*2 + Theme.paddingLarge
                     onClicked: {
                         // Go to machineView
-                        if (container_name === "New container" && daemon.new_container_pid === "0"){
+                        if (container_name === " " && daemon.new_container_pid === "0"){
                             // create container dialog
-                            var dialog = pageStack.push(Qt.resolvedUrl("CreateDialog.qml"), {daemon : daemon})
+                            var dialog = pageStack.push(Qt.resolvedUrl("../dialogs/CreateDialog.qml"), {daemon : daemon})
 
                             dialog.accepted.connect(function() {
 
@@ -160,7 +160,7 @@ Page {
                             // Go to container page
                             //if (daemon.new_container_pid == "0"){ // this lock the page until the creation is completed to avoid interferences
                                 // no container creation in progress
-                            pageStack.push(Qt.resolvedUrl("MachineView.qml"), {container: model, daemon: daemon, icon: iconitem, db: db} )
+                            pageStack.push(Qt.resolvedUrl("ContainerView.qml"), {container: model, daemon: daemon, icon: iconitem, db: db} )
                             //}
 
                         }
@@ -170,7 +170,7 @@ Page {
 
                         Item{
                             width: iconitem.width
-                            height: iconitem.height - Theme.paddingLarge
+                            height: iconitem.height - Theme.paddingSmall
 
                             Icon {
                                 id: iconitem
@@ -251,7 +251,7 @@ Page {
                     }
 
                     // "Add new" icon
-                    containersModel.set(ind, {"container_status":"","container_name":"New container"})
+                    containersModel.set(ind, {"container_status":"","container_name":" "})
                 })
             }
         }

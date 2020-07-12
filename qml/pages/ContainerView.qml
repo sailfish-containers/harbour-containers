@@ -30,8 +30,7 @@ Page {
         anchors.fill: parent
         Rectangle {
             anchors.fill: parent
-            color: Theme.backgroundGlowColor
-            opacity: 0.3
+            color: "transparent"
             Image { source: icon.source; fillMode: Image.PreserveAspectFit; anchors.fill: parent;  opacity: 0.3 }
         }
 
@@ -41,13 +40,13 @@ Page {
             MenuItem {
                 text: "Settings"
                 onClicked: {
-                    pageStack.push(Qt.resolvedUrl("MachineSettings.qml"), {container : container, daemon: daemon, db:db, icon:icon} )
+                    pageStack.push(Qt.resolvedUrl("ContainerSettings.qml"), {container : container, daemon: daemon, db:db, icon:icon} )
                 }
             }
             MenuItem {
                 text: "Snapshots"
                 onClicked: {
-                    pageStack.push(Qt.resolvedUrl("MachineSnapshots.qml"), {container : container, daemon: daemon} )
+                    pageStack.push(Qt.resolvedUrl("ContainerSnapshots.qml"), {container : container, daemon: daemon} )
                 }
             }
             MenuItem {
@@ -96,7 +95,7 @@ Page {
 
             PageHeader {
                 id: pageHeader
-                title: qsTr("Container: ") + container.container_name
+                title: "Container: "+ container.container_name
 
                 Rectangle {
                     anchors.fill: parent

@@ -15,7 +15,7 @@ ApplicationWindow
     }
 
     initialPage: Component{
-        HomePage {
+        MainPage {
             daemon: dbus_daemon
             db: main_db
         }

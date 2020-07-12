@@ -37,15 +37,19 @@ Page {
             }
 
             SilicaListView {
+                id: view
                 width: page.isLandscape ? parent.width/1.5 : parent.width - Theme.paddingLarge
-                height: parent.height - pageHeader.height
+                height: parent.height - (pageHeader.height*2)
                 anchors.horizontalCenter: parent.horizontalCenter
+                anchors.bottom: parent.bottom
+                contentHeight: Theme.itemSizeSmall
+
                 Component.onCompleted: {
                     daemon.call('container_get_snapshots',[container.container_name], function (result){
                         if (result){
-                            for (var snap in result){
-                                snapshostsListModel.append(result)
-                            }
+                            snapshostsListModel.clear()
+                            snapshostsListModel.append(result)
+
                         }
                     })
                 }
@@ -54,14 +58,26 @@ Page {
                     id : snapshostsListModel
 
                 }
-                delegate: BackgroundItem {
+                delegate: ListItem {
                     width: ListView.view.width
                     height: Theme.itemSizeSmall
+                    menu: contextMenu
+                    ListView.onRemove: animateRemoval(listItem)
 
                     Label {
                         text: "<b>" + snap_name + "</b> " + snap_ts
                     }
+                    Component {
+                        id: contextMenu
+                        ContextMenu {
+                            MenuItem {
+                                text: qsTr("Delete")
+                                onClicked: view.model.remove(index)
+                            }
+                        }
+                    }
                 }
+
             }
         }
     }

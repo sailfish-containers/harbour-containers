@@ -36,7 +36,7 @@ Page {
                 cellWidth: page.isLandscape ? parent.width/1.5 : parent.width - Theme.paddingLarge
                 //cellHeight: auto
 
-                VerticalScrollDecorator {}
+                //VerticalScrollDecorator {}
 
                 model: ListModel {
                     id:listmodel
@@ -52,12 +52,12 @@ Page {
 
                     ButtonLayout {
                         Button {
-                            text: "Change icon"
+                            text: qsTr("Change icon")
                             onClicked: {
-                                var dialog = pageStack.push(Qt.resolvedUrl("IconPickerDialog.qml"), {daemon : daemon})
+                                var dialog = pageStack.push(Qt.resolvedUrl("../dialogs/IconPickerDialog.qml"), {daemon : daemon})
 
                                 dialog.accepted.connect(function() {
-                                    console.log(dialog.new_icon)
+                                    //console.log(dialog.new_icon)
                                     if (dialog.new_icon !== ""){
                                         db.set_icon(container.container_name, dialog.new_icon) // change icon in db
                                         icon.source = dialog.new_icon // change current icon
@@ -81,7 +81,7 @@ Page {
 
                                     daemon.call('container_destroy',[container.container_name], function (result){
                                         // return to home
-                                        pageStack.push(Qt.resolvedUrl("HomePage.qml"),{daemon: daemon})
+                                        pageStack.push(Qt.resolvedUrl("MainPage.qml"),{daemon: daemon})
                                     })
                                 })
                             }

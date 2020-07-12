@@ -63,13 +63,16 @@ INSTALLS += scripts-dir \
 DISTFILES += qml/harbour-containers.qml \
     qml/components/Database.qml \
     qml/cover/CoverPage.qml \
-    qml/icons/* \
+    qml/dialogs/CreateDialog.qml \
+    qml/dialogs/IconPickerDialog.qml \
+    qml/images/* \
+    qml/pages/About.qml \
+    qml/pages/ContainerSettings.qml \
+    qml/pages/ContainerSnapshots.qml \
+    qml/pages/ContainerView.qml \
     qml/pages/CreateDialog.qml \
-    qml/pages/HomePage.qml \
     qml/pages/IconPickerDialog.qml \
-    qml/pages/MachineSettings.qml \
-    qml/pages/MachineSnapshots.qml \
-    qml/pages/MachineView.qml \
+    qml/pages/MainPage.qml \
     rpm/harbour-containers.spec \
     rpm/harbour-containers.changes.in \
     rpm/harbour-containers.changes.run.in \
