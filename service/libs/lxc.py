@@ -230,6 +230,15 @@ def start_desktop(name, display_id, user_name="user"): #fixme
     # desktop started
     return True
 
+def kill_xwayland(name):
+    """ kill xwayland process """
+    FNULL = open(os.devnull, 'w') # fix for session hang
+
+    desktop_session = subprocess.Popen(['lxc-attach', '-n', name, '/mnt/guest/kill_xwayland.sh' ], stdout=FNULL, stderr=subprocess.STDOUT, shell=False)
+
+    # desktop started
+    return True
+
 def start_shell(name, path, cmd):
     """ start fingerterm bash session on container """
     scripts_path = "%s/scripts" % str(path)

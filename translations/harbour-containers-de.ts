@@ -18,21 +18,36 @@
         <source>donate</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../qml/pages/About.qml" line="64"/>
+        <source>&lt;i&gt;Inspired by Preflex&apos;s (TMO &quot;Xwayland victory!&quot;) and elros34&apos;s (Github &quot;sailfish_linux_chroot&quot;) awesome work&lt;/i&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/About.qml" line="68"/>
+        <source>This project is proudly licensed under &lt;b&gt;GNU GPLv3.&lt;/b&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ContainerSettings</name>
     <message>
-        <location filename="../qml/pages/ContainerSettings.qml" line="22"/>
+        <location filename="../qml/pages/ContainerSettings.qml" line="24"/>
         <source>Settings: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/ContainerSettings.qml" line="55"/>
+        <location filename="../qml/pages/ContainerSettings.qml" line="56"/>
+        <source>Container</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/ContainerSettings.qml" line="61"/>
         <source>Change icon</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/ContainerSettings.qml" line="73"/>
+        <location filename="../qml/pages/ContainerSettings.qml" line="80"/>
         <source>Destroy container</source>
         <translation type="unfinished"></translation>
     </message>
@@ -65,6 +80,16 @@
     <message>
         <location filename="../qml/pages/ContainerView.qml" line="47"/>
         <source>Snapshots</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/ContainerView.qml" line="53"/>
+        <source>Unfreeze</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/ContainerView.qml" line="53"/>
+        <source>Freeze</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -109,6 +134,7 @@
     </message>
     <message>
         <location filename="../qml/pages/ContainerView.qml" line="168"/>
+        <location filename="../qml/pages/ContainerView.qml" line="242"/>
         <source>Session</source>
         <translation type="unfinished"></translation>
     </message>
@@ -129,21 +155,31 @@
     </message>
     <message>
         <location filename="../qml/pages/ContainerView.qml" line="236"/>
-        <source>advanced options</source>
+        <source>advanced controls</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/ContainerView.qml" line="243"/>
+        <location filename="../qml/pages/ContainerView.qml" line="247"/>
         <source>run onboard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/ContainerView.qml" line="255"/>
+        <location filename="../qml/pages/ContainerView.qml" line="254"/>
+        <source>kill Xwayland</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/ContainerView.qml" line="262"/>
+        <source>Setup</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/ContainerView.qml" line="268"/>
         <source>setup xsession</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/ContainerView.qml" line="263"/>
+        <location filename="../qml/pages/ContainerView.qml" line="276"/>
         <source>init container config</source>
         <translation type="unfinished"></translation>
     </message>

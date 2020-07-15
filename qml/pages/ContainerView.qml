@@ -50,7 +50,7 @@ Page {
                 }
             }
             MenuItem {
-                text: is_frozen() ? "Unfreeze" : "Freeze"
+                text: is_frozen() ? qsTr("Unfreeze") : qsTr("Freeze")
                 enabled: is_frozen() ? true : is_started()
                 onClicked: {   
                     daemon.call("container_freeze",[container.container_name], function (result) {
@@ -186,7 +186,7 @@ Page {
                             text: qsTr("X session")
                             enabled: is_started() ? true : false
                             onClicked: {
-                                daemon.call("container_xsession_start",[container.container_name], function (result) {
+                                daemon.call("container_xsession_start",[container.container_name, db.get_orientation(container.container_name, false)], function (result) {
                                     if (result){
                                     // Desktop started
                                     }
@@ -233,10 +233,14 @@ Page {
                         ExpandingSection {
                             id: section
 
-                            title: qsTr("advanced options")
+                            title: qsTr("advanced controls")
 
                             content.sourceComponent: Column {
                                 width: section.width
+
+                                SectionHeader {
+                                    text: qsTr("Session")
+                                }
 
                                 ButtonLayout {
                                     Button {
@@ -246,7 +250,16 @@ Page {
                                             daemon.call("container_xsession_onboard",[container.container_name], function (result){})
                                         }
                                     }
-
+                                    Button {
+                                        text: qsTr("kill Xwayland")
+                                        enabled: is_started() ? true : false
+                                        onClicked: {
+                                            daemon.call("container_xsession_kill",[container.container_name], function (result){})
+                                        }
+                                    }
+                                }
+                                SectionHeader {
+                                    text: qsTr("Setup")
                                 }
 
                                 ButtonLayout {

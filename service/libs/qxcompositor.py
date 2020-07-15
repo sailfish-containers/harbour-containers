@@ -4,11 +4,11 @@
 import os
 import subprocess
 
-def new(user, display_id, user_uid, path):
+def new(user, display_id, user_uid, path, screen_orientation):
     """ Create qxcompositor's display """
     scripts_path = "%s/scripts" % str(path)
     FNULL = open(os.devnull, 'w') # fix for session hang
-    qxcompositor = subprocess.Popen(['su', user, '-c', '%s/host/new_display.sh %s %s' % (scripts_path, display_id, user_uid)], stdout=FNULL, stderr=subprocess.STDOUT, shell=False)
+    qxcompositor = subprocess.Popen(['su', user, '-c', '%s/host/new_display.sh %s %s %s' % (scripts_path, display_id, user_uid, screen_orientation)], stdout=FNULL, stderr=subprocess.STDOUT, shell=False)
 
     return True
 

@@ -56,6 +56,19 @@ Page {
                     }
                 }
             }
+            Label {
+                wrapMode: Label.WordWrap
+                //width: parent.width - Theme.paddingLarge
+                anchors.horizontalCenter: parent.horizontalCenter
+                font.pixelSize: Theme.fontSizeExtraSmall
+                text: qsTr("<i>Inspired by Preflex's (TMO \"Xwayland victory!\") and elros34's (Github \"sailfish_linux_chroot\") awesome work</i>")
+
+            }
+            Label {
+                text: qsTr("This project is proudly licensed under <b>GNU GPLv3.</b>")
+                anchors.horizontalCenter: parent.horizontalCenter
+
+            }
         }
     }
 }

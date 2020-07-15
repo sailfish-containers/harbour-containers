@@ -51,6 +51,31 @@ Item {
 
     }
 
+    function get_orientation(name,raw){
+        // get screen orientation
+        var r = ""
+
+        db.transaction(function(tx) {
+            // Show all added greetings
+            var rs = tx.executeSql('SELECT * FROM Containers WHERE name = ?', [name])
+
+            for (var i = 0; i < rs.rows.length; i++) {
+                r = rs.rows.item(i).portrait
+            }
+
+        })
+        if (raw){
+            return r
+        }
+
+        if (r){
+            return "portrait"
+        }
+
+        return "landscape"
+
+    }
+
     function set_portrait(name, value){
         // set screen orientation, portrait true/false
         db.transaction(function(tx) {

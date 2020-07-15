@@ -112,11 +112,11 @@ class ContainersService(dbus.service.Object):
         # get containers
         self.containers = lxc.get_containers()
 
-    def _create_display(self):
+    def _create_display(self, screen_orientation):
         """ create a qxcompositor display """
 
         self.display_counter +=1
-        display = qxcompositor.new(self.user_name, "%d" % self.display_counter, self.user_uid, self.current_path)
+        display = qxcompositor.new(self.user_name, "%d" % self.display_counter, self.user_uid, self.current_path, screen_orientation)
 
         return "%d" % self.display_counter
 
@@ -333,7 +333,7 @@ class ContainersService(dbus.service.Object):
         sender_keyword="sender",
         connection_keyword="conn"
     )
-    def container_xsession_start(self, name, sender=None, conn=None):
+    def container_xsession_start(self, name, screen_orientation, sender=None, conn=None):
         """ start xwayland desktop session on guest """
         if(self._check_polkit_privilege(sender, conn, "%s.auth" % DBUS_IFACE)):
             # user authenticated
@@ -341,10 +341,29 @@ class ContainersService(dbus.service.Object):
 
             if self.containers[name]["container_status"] == "RUNNING":
                 # create a new qxcompositor display
-                display = self._create_display()
+                display = self._create_display(screen_orientation)
 
                 # start Xwayland on the new display
                 desktop = lxc.start_desktop(name, display)
+
+                return True
+        return False
+
+    @dbus.service.method(
+        dbus_interface=DBUS_IFACE,
+        in_signature="",
+        out_signature="b",
+        sender_keyword="sender",
+        connection_keyword="conn"
+    )
+    def container_xsession_kill(self, name, sender=None, conn=None):
+        """ start xwayland desktop session on guest """
+        if(self._check_polkit_privilege(sender, conn, "%s.auth" % DBUS_IFACE)):
+            # user authenticated
+            self._refresh()
+
+            if self.containers[name]["container_status"] == "RUNNING":
+                lxc.kill_xwayland(name)
 
                 return True
         return False

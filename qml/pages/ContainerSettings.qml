@@ -9,6 +9,8 @@ Page {
     property var icon      // qml icon object
     property var db        // settings db
 
+
+
     SilicaFlickable {
         anchors.fill: parent
 
@@ -50,6 +52,10 @@ Page {
                     width: page.isLandscape ? parent.width/1.5 : parent.width - Theme.paddingLarge
                     spacing: Theme.paddingLarge
 
+                    SectionHeader {
+                        text: qsTr("Container")
+                    }
+
                     ButtonLayout {
                         Button {
                             text: qsTr("Change icon")
@@ -68,6 +74,7 @@ Page {
                             }
                         }
                     }
+
                     ButtonLayout {
                         Button {
                             text: qsTr("Destroy container")
@@ -84,6 +91,31 @@ Page {
                                         pageStack.push(Qt.resolvedUrl("MainPage.qml"),{daemon: daemon, db:db})
                                     })
                                 })
+                            }
+                        }
+                    }
+                    SectionHeader {
+                        text: "Xsession"
+                    }
+                    ComboBox {
+                        id: orientationBox
+                        width: parent.width
+                        label: "Screen orientation"
+
+                        menu: ContextMenu {
+                            MenuItem { text: "landscape" }
+                            MenuItem { text: "portrait" }
+
+                        }
+                        Component.onCompleted: {
+                            currentIndex = db.get_orientation(container.container_name, true)
+                        }
+
+                        onValueChanged: {
+                            if (value=="portrait"){
+                                db.set_portrait(container.container_name, true)
+                            } else {
+                                db.set_portrait(container.container_name, false)
                             }
                         }
                     }
