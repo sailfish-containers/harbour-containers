@@ -27,9 +27,7 @@ fi
 # update repos
 #echo "[+] updating debian repositories"
 #apt update
-
-echo "[+] XWAYLAND BUILD PROCESS"
-sleep 2
+echo "nameserver 8.8.8.8" > /etc/resolv.conf
 
 # build xwayland
 # add sources repository

@@ -311,7 +311,15 @@ class ContainersService(dbus.service.Object):
             # user authenticated
             self._refresh()
 
-            if not name in self.containers:
+            # check if selected template exist
+            ct_found = False
+
+            for tpl in self.templates:
+                if tpl["dist"] == dist and tpl["arch"] == arch and tpl["release"] == release:
+                    ct_found = True
+
+            # check if container exits
+            if not name in self.containers and ct_found:
                 try:
                     # get popen object
                     proc = lxc.create(name, dist, arch, release)

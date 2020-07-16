@@ -1,7 +1,7 @@
 Name: harbour-containers
 Summary: sailfish-containers LXC Silica UI
 Version: 0.3
-Release: 2
+Release: 4
 # The contents of the Group field should be one of the groups listed here:
 # https://github.com/mer-tools/spectacle/blob/master/data/GROUPS
 Group: Qt/Qt

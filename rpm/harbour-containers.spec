@@ -10,7 +10,7 @@ Name:       harbour-containers
 
 Summary:    sailfish-containers LXC Silica UI
 Version:    0.3
-Release:    2
+Release:    4
 Group:      Qt/Qt
 License:    LICENSE
 URL:        http://example.org/
