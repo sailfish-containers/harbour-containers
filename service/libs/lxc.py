@@ -218,14 +218,14 @@ def setup_xsession(name, user_name, session):
     """ setup container x session : DEPRECATED """
     FNULL = open(os.devnull, 'w') # fix for session hang
 
-    setup_process = subprocess.Popen(['lxc-attach', '-n', name, '/mnt/guest/setup_desktop.sh','%s' % user_name], stdout=FNULL, stderr=subprocess.STDOUT, shell=False)
+    setup_process = subprocess.Popen(['lxc-attach', '-n', name, '/mnt/guest/setup_desktop.sh','%s' % user_name], stdout=FNULL, stderr=subprocess.STDOUT, shell=False) # fixme script path
     return setup_process
 
 def start_desktop(name, display_id, user_name="user"): #fixme
     """ start desktop guestsscript """
     FNULL = open(os.devnull, 'w') # fix for session hang
 
-    desktop_session = subprocess.Popen(['lxc-attach', '-n', name, '/mnt/guest/start_desktop.sh', '%s' % display_id, '%s' % user_name ], stdout=FNULL, stderr=subprocess.STDOUT, shell=False)
+    desktop_session = subprocess.Popen(['lxc-attach', '-n', name, '/opt/bin/start_desktop.sh', '%s' % display_id, '%s' % user_name ], stdout=FNULL, stderr=subprocess.STDOUT, shell=False)
 
     # desktop started
     return True
@@ -234,7 +234,7 @@ def kill_xwayland(name):
     """ kill xwayland process """
     FNULL = open(os.devnull, 'w') # fix for session hang
 
-    desktop_session = subprocess.Popen(['lxc-attach', '-n', name, '/mnt/guest/kill_xwayland.sh' ], stdout=FNULL, stderr=subprocess.STDOUT, shell=False)
+    desktop_session = subprocess.Popen(['lxc-attach', '-n', name, '/opt/bin/kill_xwayland.sh' ], stdout=FNULL, stderr=subprocess.STDOUT, shell=False)
 
     # desktop started
     return True
@@ -253,7 +253,7 @@ def start_onboard(name):
     FNULL = open(os.devnull, 'w') # fix for session hang
 
     try:
-        desktop_session = subprocess.Popen(['lxc-attach', '-n', name, '/mnt/guest/start_onboard.sh'], stdout=FNULL, stderr=subprocess.STDOUT, shell=False)
+        desktop_session = subprocess.Popen(['lxc-attach', '-n', name, '/opt/bin/start_onboard.sh'], stdout=FNULL, stderr=subprocess.STDOUT, shell=False)
 
         # onboard started
         return True

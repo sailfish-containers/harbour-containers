@@ -9,8 +9,8 @@ Name:       harbour-containers
 # << macros
 
 Summary:    sailfish-containers LXC Silica UI
-Version:    0.3
-Release:    4
+Version:    0.4
+Release:    1
 Group:      Qt/Qt
 License:    LICENSE
 URL:        http://example.org/

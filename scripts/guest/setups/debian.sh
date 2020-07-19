@@ -24,10 +24,6 @@ then
 	sleep 1
 fi
 
-# update repos
-#echo "[+] updating debian repositories"
-#apt update
-
 # build xwayland
 # add sources repository
 echo "[+] adding sources repository"
@@ -74,13 +70,13 @@ apt autoremove -y
 apt clean
 
 rm /etc/apt/sources.list.d/deb-src.list
-rm -rf /usr/src/*
+rm -rf /usr/src/xorg-server-*
 
 apt update
 
 # install xfce-desktop
 echo "[+] installing xfce4"
-apt install -y sudo xfce4 onboard # Xephyr
+apt install -y sudo xfce4 onboard # Xephyr # Xephyr allow to run a display manager and rotate the screen from the container however it disable multitouch
 
 # mask unused services
 systemctl mask lightdm
@@ -88,6 +84,12 @@ systemctl mask upower
 
 # add user to sudoers
 adduser $USER_NAME sudo
+
+# link scripts
+ln -s /mnt/guest/start_desktop.sh /opt/bin/start_desktop.sh
+ln -s /mnt/guest/setup_desktop.sh /opt/bin/setup_desktop.sh
+ln -s /mnt/guest/start_onboard.sh /opt/bin/start_onboard.sh
+ln -s /mnt/guest/kill_xwayland.sh /opt/bin/kill_xwayland.sh
 
 echo "[+] xsession ready"
 sleep 4
