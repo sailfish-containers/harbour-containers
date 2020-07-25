@@ -31,7 +31,12 @@ Page {
         Rectangle {
             anchors.fill: parent
             color: "transparent"
-            Image { source: icon.source; fillMode: Image.PreserveAspectFit; anchors.fill: parent;  opacity: 0.3 }
+            Image {
+                source: icon.source
+                fillMode: Image.PreserveAspectFit
+                anchors.fill: parent
+                opacity: 0.3
+            }
         }
 
         PullDownMenu {

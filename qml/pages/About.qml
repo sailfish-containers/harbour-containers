@@ -58,10 +58,10 @@ Page {
             }
             Label {
                 wrapMode: Label.WordWrap
-                //width: parent.width - Theme.paddingLarge
+                width: page.isPortrait ? page.width - Theme.paddingMedium : page.width / 1.5
                 anchors.horizontalCenter: parent.horizontalCenter
                 font.pixelSize: Theme.fontSizeExtraSmall
-                text: qsTr("<i>Inspired by Preflex's (TMO \"Xwayland victory!\") and elros34's (Github \"sailfish_linux_chroot\") awesome work</i>")
+                text: "<i>" + qsTr("Inspired by Preflex's (TMO \"Xwayland victory!\") and elros34's (Github \"sailfish_linux_chroot\") awesome work") + "</i>"
 
             }
             Label {

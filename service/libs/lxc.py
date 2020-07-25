@@ -10,12 +10,17 @@ def _get_rootfs(name):
     out = subprocess.check_output(["lxc-info","--config","lxc.rootfs.path","-n",name])
     return out.decode().split()[2]
 
+
+def check_kernel():
+    """ Check if /dev/pts/ptmx exists """
+    return os.path.exists('/dev/pts/ptmx')
+
+
 def get_mounts(name):
     """ get container's mountpoint from config """
 
     out = subprocess.check_output(["lxc-info","--config","lxc.mount.entry","-n",name]).decode()
     res = {}
-
     mp  = out.replace("lxc.mount.entry = ","").split("\n")
 
     for line in mp:
@@ -50,9 +55,6 @@ def get_containers():
             container_mem    = ""
             container_kmem   = ""
 
-        # get mountpoints
-                #mp = _get_mounts(container)
-
         # get rootfs path
         rootfs = _get_rootfs(container)
 
@@ -64,29 +66,41 @@ def get_containers():
             "container_mem"       : container_mem,
             "container_kmem"      : container_kmem,
             "container_rootfs"    : rootfs,
-                        #"container_mounts"    : mp,
          }
 
     return res
 
-
 def get_templates(meta_index="https://images.linuxcontainers.org/meta/1.0/index-system"):
     """ Get available templates from sfos-download """
 
-    tpl = []
-    res = subprocess.check_output(["curl", meta_index, "-L"]).decode()
+    try:
+        tpl = []
+        res = subprocess.check_output(["curl", meta_index, "-L"]).decode()
 
-    for line in res.split('\n'):
+        for line in res.split('\n'):
 
-        # split line
-        cell = line.split(';')
+            # split line
+            cell = line.split(';')
 
-        # remove blank line
-        if not "default" in line: continue
-        if len(cell) < 3: continue
+            # remove blank line
+            if not "default" in line: continue
+            if len(cell) < 3: continue
 
-        # add line to templates dictionary
-        tpl.append( { "dist":cell[0] , "release" : cell[1], "arch" : cell[2] } )
+            # add line to templates dictionary
+            tpl.append({
+                        "dist"    : cell[0],
+                        "release" : cell[1],
+                        "arch"    : cell[2]
+            })
+
+    except:
+        # curl failed
+        err = "index download failed"
+        tpl.append({
+                    "dist"   : err,
+                    "release": err,
+                    "arch"   : err
+        })
 
     return tpl
 
@@ -214,13 +228,6 @@ def restore_create_snapshot(name, snapshot_name, new_name):
     restore_process = subprocess.Popen(['lxc-snapshot', '-n', name, '-r', snapshot_name, '-N', new_name], stdout=FNULL, stderr=subprocess.STDOUT, shell=False)
     return restore_process
 
-def setup_xsession(name, user_name, session):
-    """ setup container x session : DEPRECATED """
-    FNULL = open(os.devnull, 'w') # fix for session hang
-
-    setup_process = subprocess.Popen(['lxc-attach', '-n', name, '/mnt/guest/setup_desktop.sh','%s' % user_name], stdout=FNULL, stderr=subprocess.STDOUT, shell=False) # fixme script path
-    return setup_process
-
 def start_desktop(name, display_id, user_name="user"): #fixme
     """ start desktop guestsscript """
     FNULL = open(os.devnull, 'w') # fix for session hang
@@ -247,7 +254,6 @@ def start_shell(name, path, cmd):
     shell = subprocess.Popen(['%s/host/attach.sh' % scripts_path, name, cmd], stdout=FNULL, stderr=subprocess.STDOUT, shell=False)
     return shell
 
-
 def start_onboard(name):
     """ start onboard keybaord """
     FNULL = open(os.devnull, 'w') # fix for session hang
@@ -259,7 +265,6 @@ def start_onboard(name):
         return True
     except:
         return False
-
 
 def add_mountpoint(name, source, dest, rw=False):
     """ add a mountpoint to container """
@@ -273,7 +278,8 @@ def add_mountpoint(name, source, dest, rw=False):
     # check
     with open('/var/lib/lxc/%s/config' % name, 'r') as f:
         for line in f.readlines():
-            if line == mp_line:
+            if dest in line:
+                # abort if destination directory is already on mountpoints
                 return False
 
     # add mountpoint

@@ -7,6 +7,8 @@ import "components"
 
 ApplicationWindow
 {
+    allowedOrientations: defaultAllowedOrientations
+
     Daemon {
         id: dbus_daemon
     }
@@ -23,6 +25,4 @@ ApplicationWindow
     cover: CoverPage {
         daemon: dbus_daemon
     }
-
-    allowedOrientations: defaultAllowedOrientations
 }

@@ -73,113 +73,113 @@
 <context>
     <name>ContainerView</name>
     <message>
-        <location filename="../qml/pages/ContainerView.qml" line="41"/>
+        <location filename="../qml/pages/ContainerView.qml" line="46"/>
         <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/ContainerView.qml" line="47"/>
+        <location filename="../qml/pages/ContainerView.qml" line="52"/>
         <source>Snapshots</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/ContainerView.qml" line="53"/>
+        <location filename="../qml/pages/ContainerView.qml" line="58"/>
         <source>Unfreeze</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/ContainerView.qml" line="53"/>
+        <location filename="../qml/pages/ContainerView.qml" line="58"/>
         <source>Freeze</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/ContainerView.qml" line="134"/>
+        <location filename="../qml/pages/ContainerView.qml" line="139"/>
         <source>Details</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/ContainerView.qml" line="142"/>
+        <location filename="../qml/pages/ContainerView.qml" line="147"/>
         <source>name:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/ContainerView.qml" line="145"/>
+        <location filename="../qml/pages/ContainerView.qml" line="150"/>
         <source>state:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/ContainerView.qml" line="149"/>
+        <location filename="../qml/pages/ContainerView.qml" line="154"/>
         <source>rootfs:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/ContainerView.qml" line="153"/>
+        <location filename="../qml/pages/ContainerView.qml" line="158"/>
         <source>pid:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/ContainerView.qml" line="156"/>
+        <location filename="../qml/pages/ContainerView.qml" line="161"/>
         <source>cpu use:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/ContainerView.qml" line="159"/>
+        <location filename="../qml/pages/ContainerView.qml" line="164"/>
         <source>memory use:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/ContainerView.qml" line="162"/>
+        <location filename="../qml/pages/ContainerView.qml" line="167"/>
         <source>kmem use:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/ContainerView.qml" line="168"/>
-        <location filename="../qml/pages/ContainerView.qml" line="242"/>
+        <location filename="../qml/pages/ContainerView.qml" line="173"/>
+        <location filename="../qml/pages/ContainerView.qml" line="247"/>
         <source>Session</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/ContainerView.qml" line="175"/>
+        <location filename="../qml/pages/ContainerView.qml" line="180"/>
         <source>attach</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/ContainerView.qml" line="186"/>
+        <location filename="../qml/pages/ContainerView.qml" line="191"/>
         <source>X session</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/ContainerView.qml" line="203"/>
+        <location filename="../qml/pages/ContainerView.qml" line="208"/>
         <source>mountpoints</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/ContainerView.qml" line="236"/>
+        <location filename="../qml/pages/ContainerView.qml" line="241"/>
         <source>advanced controls</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/ContainerView.qml" line="247"/>
+        <location filename="../qml/pages/ContainerView.qml" line="252"/>
         <source>run onboard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/ContainerView.qml" line="254"/>
+        <location filename="../qml/pages/ContainerView.qml" line="259"/>
         <source>kill Xwayland</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/ContainerView.qml" line="262"/>
+        <location filename="../qml/pages/ContainerView.qml" line="267"/>
         <source>Setup</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/ContainerView.qml" line="268"/>
+        <location filename="../qml/pages/ContainerView.qml" line="273"/>
         <source>setup xsession</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/ContainerView.qml" line="276"/>
+        <location filename="../qml/pages/ContainerView.qml" line="281"/>
         <source>init container config</source>
         <translation type="unfinished"></translation>
     </message>
@@ -211,23 +211,41 @@
 <context>
     <name>MainPage</name>
     <message>
-        <location filename="../qml/pages/MainPage.qml" line="89"/>
+        <location filename="../qml/pages/MainPage.qml" line="98"/>
         <source>About</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainPage.qml" line="93"/>
+        <location filename="../qml/pages/MainPage.qml" line="102"/>
         <source>Stop all</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainPage.qml" line="97"/>
+        <location filename="../qml/pages/MainPage.qml" line="106"/>
         <source>Freeze all</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainPage.qml" line="109"/>
+        <location filename="../qml/pages/MainPage.qml" line="118"/>
         <source>Containers</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>MissingRequirements</name>
+    <message>
+        <location filename="../qml/pages/MissingRequirements.qml" line="11"/>
+        <source>error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/MissingRequirements.qml" line="21"/>
+        <source>Oh no! Your device doesn&apos;t seems to support LXC!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/MissingRequirements.qml" line="28"/>
+        <source>Read more</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

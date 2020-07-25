@@ -44,8 +44,6 @@ Item {
             } else {
                 tx.executeSql('INSERT INTO Containers VALUES(?, ?, ?)', [ name, icon, false ])
             }
-
-
         })
         return true
 
@@ -62,7 +60,6 @@ Item {
             for (var i = 0; i < rs.rows.length; i++) {
                 r = rs.rows.item(i).portrait
             }
-
         })
         if (raw){
             return r
@@ -73,7 +70,6 @@ Item {
         }
 
         return "landscape"
-
     }
 
     function set_portrait(name, value){
@@ -88,8 +84,6 @@ Item {
             } else {
                 tx.executeSql('INSERT INTO Containers VALUES(?, ?, ?)', [ name, "", value ])
             }
-
-
         })
         return true
     }
@@ -104,7 +98,6 @@ Item {
             if (check.rows.length > 0) {
                 tx.executeSql('DELETE FROM Containers WHERE name = ?', [name])
             }
-
         })
         return true
     }

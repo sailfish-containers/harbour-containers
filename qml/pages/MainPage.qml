@@ -79,6 +79,15 @@ Page {
         return true
     }
 
+    Component.onCompleted: {
+        dbus_daemon.call('check_lxc_support',[], function (result) {
+            // push error page if kernel's requirements aren't met
+            if (!result) {
+                pageStack.push(Qt.resolvedUrl("MissingRequirements.qml"), {})
+            }
+        })
+    }
+
     SilicaFlickable{
         anchors.fill:parent
 
@@ -173,7 +182,7 @@ Page {
 
                             Icon {
                                 id: iconitem
-                                source: (container_name != " " && !container_create_in_progress(container_name) ) ? "../images/container-empty.png" : null
+                                source: (container_name != " " && !container_create_in_progress(container_name)) ? "../images/container-empty.png" : null
                                 width: Theme.itemSizeExtraLarge + Theme.itemSizeSmall
                                 height: Theme.itemSizeExtraLarge + Theme.itemSizeSmall
 

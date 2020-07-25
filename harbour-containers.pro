@@ -73,6 +73,7 @@ DISTFILES += qml/harbour-containers.qml \
     qml/pages/CreateDialog.qml \
     qml/pages/IconPickerDialog.qml \
     qml/pages/MainPage.qml \
+    qml/pages/MissingRequirements.qml \
     rpm/harbour-containers.spec \
     rpm/harbour-containers.changes.in \
     rpm/harbour-containers.changes.run.in \

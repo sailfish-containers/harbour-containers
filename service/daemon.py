@@ -488,6 +488,11 @@ class ContainersService(dbus.service.Object):
             return True
         return False
 
+    @dbus.service.method(DBUS_IFACE)
+    def check_lxc_support(self):
+        """ check if CONFIG_DEVPTS_MULTIPLE_INSTANCES option is enabled in kernel """
+        return lxc.check_kernel()
+
 
 if __name__ == "__main__":
     DBusGMainLoop(set_as_default=True)
