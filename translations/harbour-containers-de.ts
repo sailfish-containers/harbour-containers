@@ -20,7 +20,7 @@
     </message>
     <message>
         <location filename="../qml/pages/About.qml" line="64"/>
-        <source>&lt;i&gt;Inspired by Preflex&apos;s (TMO &quot;Xwayland victory!&quot;) and elros34&apos;s (Github &quot;sailfish_linux_chroot&quot;) awesome work&lt;/i&gt;</source>
+        <source>Inspired by Preflex&apos;s (TMO &quot;Xwayland victory!&quot;) and elros34&apos;s (Github &quot;sailfish_linux_chroot&quot;) awesome work</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -134,7 +134,7 @@
     </message>
     <message>
         <location filename="../qml/pages/ContainerView.qml" line="173"/>
-        <location filename="../qml/pages/ContainerView.qml" line="247"/>
+        <location filename="../qml/pages/ContainerView.qml" line="249"/>
         <source>Session</source>
         <translation type="unfinished"></translation>
     </message>
@@ -159,27 +159,27 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/ContainerView.qml" line="252"/>
+        <location filename="../qml/pages/ContainerView.qml" line="254"/>
         <source>run onboard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/ContainerView.qml" line="259"/>
+        <location filename="../qml/pages/ContainerView.qml" line="261"/>
         <source>kill Xwayland</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/ContainerView.qml" line="267"/>
+        <location filename="../qml/pages/ContainerView.qml" line="269"/>
         <source>Setup</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/ContainerView.qml" line="273"/>
+        <location filename="../qml/pages/ContainerView.qml" line="275"/>
         <source>setup xsession</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/ContainerView.qml" line="281"/>
+        <location filename="../qml/pages/ContainerView.qml" line="283"/>
         <source>init container config</source>
         <translation type="unfinished"></translation>
     </message>

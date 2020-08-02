@@ -116,7 +116,7 @@ Page {
                 height: parent.height - pageHeader.height
                 clip: true
                 cellWidth: page.isLandscape ? parent.width/1.5 : parent.width - Theme.paddingLarge
-                cellHeight: contentHeight //column.height //page.height *2
+                cellHeight: contentHeight //+ Theme.paddingLarge*10 //column.height //page.height *2
                 onContentHeightChanged: cellHeight = contentHeight
 
                 VerticalScrollDecorator {}
@@ -222,14 +222,14 @@ Page {
                                                 ind++
 
                                             }
-                                            gridView.cellHeight += column.height
+                                            gridView.cellHeight += column.height + Theme.paddingLarge
                                         })
 
                                     }
 
                                     Label {
                                         text: mount_point
-                                        Component.onCompleted: gridView.cellHeight += Theme.paddingLarge*1.6
+                                        Component.onCompleted: gridView.cellHeight += this.height //*10
                                     }
                                 }
                             }
@@ -242,6 +242,8 @@ Page {
 
                             content.sourceComponent: Column {
                                 width: section.width
+
+                                Component.onCompleted: gridView.cellHeight += this.height
 
                                 SectionHeader {
                                     text: qsTr("Session")
