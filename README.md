@@ -36,7 +36,7 @@ devel-su pkcon install-local lxc-templates-dekstop-<VERSION>.rpm
 devel-su pkcon install-local qxdisplay-<VERSION>.rpm
 ```
 
-Then install the latest `harbour-containers` release using:
+Then install the latest `harbour-containers` release from your Sailfish file manager or using:
 
 ```
 devel-su pkcon install-local harbour-containers-<VERSION>.rpm`
