@@ -26,14 +26,17 @@ Before proceeding, it's important to take a look at LXC kernel requirements:
 The application also has dependencies that you can install this way:
 
 ```
-devel-su zypper in nemo-qml-plugin-dbus-qt5 sailfish-polkit-agent python3-base python3-gobject dbus-python3
+devel-su
+pkcon install zypper # If you don't have it installed already
+zypper in nemo-qml-plugin-dbus-qt5 sailfish-polkit-agent python3-base python3-gobject dbus-python3
 ```
 
 You will also need to manually download the latest releases of [`lxc-templates-desktop`](https://github.com/sailfish-containers/lxc-templates-desktop) and [`qxdisplay`](https://github.com/sailfish-containers/qxdisplay) and install them either from your Sailfish file manager or using:
 
 ```
-devel-su zypper in lxc-templates-dekstop-<VERSION>.rpm
-devel-su zypper in qxdisplay-<VERSION>.rpm
+devel-su
+zypper in lxc-templates-dekstop-<VERSION>.rpm
+zypper in qxdisplay-<VERSION>.rpm
 ```
 
 Then install the latest `harbour-containers` release from your Sailfish file manager or using:
