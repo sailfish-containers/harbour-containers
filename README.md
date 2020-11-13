@@ -29,11 +29,17 @@ The application also has dependencies that you can install this way:
 devel-su pkcon install nemo-qml-plugin-dbus-qt5 sailfish-polkit-agent python3-base python3-gobject dbus-python3
 ```
 
-You will also need to manually download the latest rpm releases of [`lxc-templates-desktop`](https://github.com/sailfish-containers/lxc-templates-desktop) and [`qxdisplay`](https://github.com/sailfish-containers/qxdisplay) and install them either from your Sailfish file manager or using:
+You will also need to manually download the latest releases of [`lxc-templates-desktop`](https://github.com/sailfish-containers/lxc-templates-desktop) and [`qxdisplay`](https://github.com/sailfish-containers/qxdisplay) and install them either from your Sailfish file manager or using:
 
 ```
 devel-su pkcon install-local lxc-templates-dekstop-<VERSION>.rpm
 devel-su pkcon install-local qxdisplay-<VERSION>.rpm
+```
+
+Then install the latest `harbour-containers` release using:
+
+```
+devel-su pkcon install-local harbour-containers-<VERSION>.rpm`
 ```
 
 ### License
