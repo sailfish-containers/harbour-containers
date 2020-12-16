@@ -76,7 +76,7 @@ apt update
 
 # install xfce-desktop
 echo "[+] installing xfce4"
-apt install -y sudo xfce4 onboard # Xephyr # Xephyr allow to run a display manager and rotate the screen from the container however it disable multitouch
+apt install -y sudo xfce4 onboard dbus-x11 # Xephyr # Xephyr allow to run a display manager and rotate the screen from the container however it disable multitouch
 
 # mask unused services
 systemctl mask lightdm
