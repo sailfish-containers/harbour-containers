@@ -45,6 +45,10 @@ Then install the latest `harbour-containers` release from your Sailfish file man
 devel-su zypper in harbour-containers-<VERSION>.rpm`
 ```
 
+### Discussion
+
+See the [TMO thread](https://talk.maemo.org/showthread.php?t=101080).
+
 ### License
 
 This project is proudly licensed under GNU GPLv3.
