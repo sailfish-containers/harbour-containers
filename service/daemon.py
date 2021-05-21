@@ -22,7 +22,7 @@ class ContainersService(dbus.service.Object):
         # daemon config
         import os
         self.user_name = os.environ.get('USER')
-        self.user_uid  = 100000
+        self.user_uid  = os.getuid()
         self.current_path = pathlib.Path(__file__).parent.parent.absolute()
 
         # daemon cache
