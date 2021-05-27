@@ -21,8 +21,8 @@ class ContainersService(dbus.service.Object):
         dbus.service.Object.__init__(self, conn, object_path, bus_name)
 
         # daemon config
-        self.user_name = os.getlogin()
-        self.user_uid  = 100000
+        self.user_name = os.environ.get('USER')
+        self.user_uid  = os.getuid()
         self.current_path = pathlib.Path(__file__).parent.parent.absolute()
 
         # daemon cache
