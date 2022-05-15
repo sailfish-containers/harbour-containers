@@ -10,3 +10,6 @@ Name=Containers
 # Remember to comment out the following line, if you do not want to use
 # a different app name in German locale (de).
 Name[de]=Containers
+
+[X-Sailjail]
+Sandboxing=Disabled
