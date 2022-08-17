@@ -56,6 +56,8 @@ zypper install harbour-containers-<VERSION>.rpm
 ==== How to use?
 The GUI of `harbour-containers` should be straightforward, but see https://github.com/sailfish-containers/lxc-templates-desktop/wiki[lxc-templates-desktop's wiki] for more details and CLI usage.
 
+If unfortunately you checked "Setup desktop" when creating a new container but just saw the new container icon appear and then stop witnout a terminal prompting your for a user password, then the desktop was not configured. Go into that container in the GUI, press "init container config", and then "setup xsession".
+
 === Discussion
 See the https://talk.maemo.org/showthread.php?t=101080[TMO thread].
 
