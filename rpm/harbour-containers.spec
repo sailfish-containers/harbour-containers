@@ -30,8 +30,29 @@ BuildRequires:  pkgconfig(Qt5Quick)
 BuildRequires:  desktop-file-utils
 
 %description
-Short description of my Sailfish OS Application
-
+Containers is an application to create, download, manage and run LXC containers. It relies on Xwayland to run the associated desktop environment inside a new Sailifsh window.
+# This description section includes metadata for SailfishOS:Chum, see
+# https://github.com/sailfishos-chum/main/blob/main/Metadata.md
+%if "%{?vendor}" == "chum"
+PackageName: Containers
+Type: desktop-application
+DeveloperName: r3vn
+Categories:
+ - Development
+ - Utilities
+ - Other
+Custom:
+  Repo: https://github.com/kabouik/harbour-containers
+Icon: https://raw.githubusercontent.com/Kabouik/harbour-containers/master/icons/harbour-containers.svg
+Screenshots:
+ - https://user-images.githubusercontent.com/7107523/99102454-feeae200-25d5-11eb-935f-b846233e8808.gif
+ - https://user-images.githubusercontent.com/7107523/99102434-fa262e00-25d5-11eb-853f-f203327f9a55.gif
+ - https://user-images.githubusercontent.com/7107523/99102422-f5fa1080-25d5-11eb-9d74-b7a09c1a9a22.gif
+Url:
+  Homepage: https://github.com/kabouik/harbour-containers
+  Help: https://github.com/sailfish-containers/lxc-templates-desktop/wiki
+  Bugtracker: https://github.com/sailfish-containers/harbour-containers/issues
+%endif
 
 %prep
 %setup -q -n %{name}-%{version}
