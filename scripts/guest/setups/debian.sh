@@ -64,7 +64,7 @@ meson install -C ../build
 
 # copy new binary
 mkdir -p /opt/bin
-ln -s /usr/local/bin/Xwayland /opt/bin/Xwayland
+mv /usr/local/bin/Xwayland /opt/bin/Xwayland
 
 echo "[+] Done."
 echo "[+] Cleaning container..."
@@ -108,5 +108,7 @@ ln -s /mnt/guest/kill_xwayland.sh /opt/bin/kill_xwayland.sh
 # load sensible onboard settings
 su $USER_NAME
 dbus-launch dconf load /org/onboard/ < /mnt/guest/configs/onboard-default.conf
+cp /mnt/guest/configs/xsettings.xml $HOME/.config/xfce4/xfconf/xfce-perchannel-xml/xsettings.xml
 
 echo "[+] xsession ready, you can close this terminal window."
+
