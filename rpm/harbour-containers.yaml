@@ -1,18 +1,19 @@
-Name: harbour-containers
+Name: Containers
 Summary: sailfish-containers LXC Silica UI
-Version: 0.4
+Version: 0.5
 Release: 1
 # The contents of the Group field should be one of the groups listed here:
 # https://github.com/mer-tools/spectacle/blob/master/data/GROUPS
 Group: Qt/Qt
-URL: http://example.org/
+URL: https://github.com/kabouik/harbour-containers
 License: LICENSE
 # This must be generated before uploading a package to a remote build service.
 # Usually this line does not need to be modified.
 Sources:
 - '%{name}-%{version}.tar.bz2'
 Description: |
-  Short description of my Sailfish OS Application
+  Containers is an application to create, download, manage and run LXC containers. It relies on Xwayland to run the associated desktop environment inside a new Sailifsh window.
+
 Configure: none
 Builder: qmake5
 

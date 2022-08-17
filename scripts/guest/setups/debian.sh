@@ -17,6 +17,9 @@ then
 	# add android group inet for _apt and user
 	echo "inet:x:3003:_apt,${USER_NAME}" >> /etc/group
 	echo "nameserver 8.8.8.8" >> /etc/resolv.conf
+	sleep 1
+
+	# make the dns change in resolv.conf permanent
 	apt update
 	apt install -y resolvconf
 	echo "nameserver 8.8.8.8" >> /etc/resolvconf/resolv.conf.d/tail
