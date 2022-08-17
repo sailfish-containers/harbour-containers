@@ -106,10 +106,13 @@ ln -s /mnt/guest/setup_desktop.sh /opt/bin/setup_desktop.sh
 ln -s /mnt/guest/start_onboard.sh /opt/bin/start_onboard.sh
 ln -s /mnt/guest/kill_xwayland.sh /opt/bin/kill_xwayland.sh
 
+# Keep polkit for bothering users at each boot
+cp /mnt/guest/configs/45-allow-colord.pkla /etc/polkit-1/localauthority/50-local.d/45-allow-colord.pkla
+
 # load sensible onboard settings
 sudo -u $USER_NAME bash -c "mkdir -p /home/$USER_NAME/.config/xfce4/xfconf/xfce-perchannel-xml"
 sudo -u $USER_NAME bash -c "dbus-launch dconf load /org/onboard/ < /mnt/guest/configs/onboard-default.conf"
 sudo -u $USER_NAME bash -c "cp /mnt/guest/configs/xsettings.xml /home/$USER_NAME/.config/xfce4/xfconf/xfce-perchannel-xml/xsettings.xml"
 
-echo "[+] xsession ready, press [Return] to close this terminal window."
+echo "[+] xsession ready, you can now start if from the GUI. Press [Return] to close this terminal window."
 read -r _ 
