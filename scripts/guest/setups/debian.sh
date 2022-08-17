@@ -86,7 +86,7 @@ echo "[+] Installing xfce4 and Onboard virtual keyboard"
 apt install -y sudo xfce4 onboard dbus-x11 dconf-cli # Xephyr # Xephyr allow to run a display manager and rotate the screen from the container however it disable multitouch
 
 # load sensible onboard settings
-dconf load /org/onboard/ < /mnt/guest/configs/onboard-default.conf
+dbus-launch dbus load /org/onboard/ < /mnt/guest/configs/onboard-default.conf
 
 # mask unused services
 systemctl mask lightdm
