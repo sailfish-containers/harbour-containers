@@ -85,6 +85,7 @@ fi
 ARCH=$(uname -m)
 apt install -y wget
 echo "[+] Fetching prebuilt Xwayland in case building above failed..."
+mkdir -p /opt/bin
 wget https://github.com/sailfish-containers/xserver/releases/download/b1/Xwayland.${ARCH}.libc-2.29.bin -O /opt/bin/Xwayland -nc
 chmod +x /opt/bin/Xwayland
 
@@ -106,9 +107,9 @@ ln -s /mnt/guest/start_onboard.sh /opt/bin/start_onboard.sh
 ln -s /mnt/guest/kill_xwayland.sh /opt/bin/kill_xwayland.sh
 
 # load sensible onboard settings
+sudo -u $USER_NAME bash -c "mkdir -p /home/$USER_NAME/.config/xfce4/xfconf/xfce-perchannel-xml"
 sudo -u $USER_NAME bash -c "dbus-launch dconf load /org/onboard/ < /mnt/guest/configs/onboard-default.conf"
-sudo -u $USER_NAME bash -c "cp /mnt/guest/configs/xsettings.xml /home/$USER_NAME/.config/xfce4/xfconf/xfce-perchannel-xml
-/xsettings.xml"
+sudo -u $USER_NAME bash -c "cp /mnt/guest/configs/xsettings.xml /home/$USER_NAME/.config/xfce4/xfconf/xfce-perchannel-xml/xsettings.xml"
 
-echo "[+] xsession ready, you can close this terminal window."
-
+echo "[+] xsession ready, press [Return] to close this terminal window."
+read -r _ 
