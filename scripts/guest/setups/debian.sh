@@ -17,6 +17,10 @@ then
 	# add android group inet for _apt and user
 	echo "inet:x:3003:_apt,${USER_NAME}" >> /etc/group
 	echo "nameserver 8.8.8.8" >> /etc/resolv.conf
+
+	# add _apt to 3003 group
+	usermod -g 3003 _apt
+
 	sleep 5
 
 	# make the dns change in resolv.conf permanent
@@ -25,11 +29,6 @@ then
 	echo "nameserver 8.8.8.8" >> /etc/resolvconf/resolv.conf.d/tail
 	resolvconf --enable-updates
 	resolvconf -u
-
-	# add _apt to 3003 group
-	usermod -g 3003 _apt
-
-	sleep 1
 fi
 
 # build xwayland
