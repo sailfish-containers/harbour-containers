@@ -21,7 +21,7 @@ Requires:   lxc-templates-desktop
 Requires:   python3-gobject
 Requires:   dbus-python3
 Requires:   nemo-qml-plugin-dbus-qt5
-Requires:   qxdisplay
+Requires:   qxcompositor
 Requires:   sailfish-polkit-agent
 BuildRequires:  pkgconfig(sailfishapp) >= 1.0.2
 BuildRequires:  pkgconfig(Qt5Core)

@@ -17,6 +17,11 @@ then
 	# add android group inet for _apt and user
 	echo "inet:x:3003:_apt,${USER_NAME}" >> /etc/group
 	echo "nameserver 8.8.8.8" >> /etc/resolv.conf
+	apt update
+	apt install -y resolvconf
+	echo "nameserver 8.8.8.8" >> /etc/resolvconf/resolv.conf.d/tail
+	resolvconf --enable-updates
+	resolvconf -u
 
 	# add _apt to 3003 group
 	usermod -g 3003 _apt
@@ -41,24 +46,23 @@ apt source -y xwayland
 
 # patch xwayland
 echo "[+] Patching Xwayland sources"
-cd /usr/src/xorg-server-1*
+cd /usr/src/xwayland-*
 
 patch -p1 hw/xwayland/xwayland-input.c < /mnt/guest/configs/wlseat.patch
 
 # make xwayland
 echo "[+] Running configure"
-./autogen.sh --prefix=$WLD --disable-docs --disable-devel-docs \
-  --enable-xwayland --disable-xorg --disable-xvfb --disable-xnest \
-  --disable-xquartz --disable-xwin
+meson -Ddocs=false -Ddevel-docs=false -Dxvfb=false ../build
 
 echo "[!!!] Xwayland build process starting in 3 seconds"
-sleep 3
-make -j$(nproc  --all)
+meson compile -C ../build
 
 echo "[+] Installing Xwayland binary..."
+meson install -C ../build
+
 # copy new binary
 mkdir -p /opt/bin
-cp hw/xwayland/Xwayland /opt/bin/Xwayland
+ln -s /usr/local/bin/Xwayland /opt/bin/Xwayland
 
 echo "[+] Done."
 echo "[+] Cleaning container..."
@@ -70,14 +74,15 @@ apt autoremove -y
 apt clean
 
 rm /etc/apt/sources.list.d/deb-src.list
-rm -rf /usr/src/xorg-server-*
+rm -rf /usr/src/*
 
 apt update
 
 # download latest xwayland binary from the repo if building from sources failed,
-# else keep the built one already in /opt/bin/Xwayland (wget won' overwritte it)
+# else keep the built one already in /opt/bin/Xwayland (wget won't overwritte it)
 ARCH=$(uname -m)
 echo "[+] Fetching prebuilt Xwayland in case building above failed..."
+apt install -y wget
 wget https://github.com/sailfish-containers/xserver/releases/download/b1/Xwayland.${ARCH}.libc-2.29.bin -O /opt/bin/Xwayland -nc
 chmod +x /opt/bin/Xwayland
 
