@@ -31,60 +31,60 @@ then
 	resolvconf -u
 fi
 
-# build xwayland
-# add sources repository
-echo "[+] Adding sources repository"
-cp /etc/apt/sources.list /etc/apt/sources.list.d/deb-src.list
-sed -i 's/deb http/deb-src http/g' /etc/apt/sources.list.d/deb-src.list
+# # build xwayland
+# # add sources repository
+# echo "[+] Adding sources repository"
+# cp /etc/apt/sources.list /etc/apt/sources.list.d/deb-src.list
+# sed -i 's/deb http/deb-src http/g' /etc/apt/sources.list.d/deb-src.list
 
-apt update
-cd /usr/src
+# apt update
+# cd /usr/src
 
-# get xwayland and build dependencies
-echo "[+] Get Xwayland sources and build dependencies"
-apt showsrc xwayland | sed -e '/Build-Depends/!d;s/Build-Depends: \|,\|([^)]*),*\|\[[^]]*\]//g' | grep -v "Build-Depends-Indep:" > /tmp/deplist
-apt build-dep -y xwayland
-apt source -y xwayland
+# # get xwayland and build dependencies
+# echo "[+] Get Xwayland sources and build dependencies"
+# apt showsrc xwayland | sed -e '/Build-Depends/!d;s/Build-Depends: \|,\|([^)]*),*\|\[[^]]*\]//g' | grep -v "Build-Depends-Indep:" > /tmp/deplist
+# apt build-dep -y xwayland
+# apt source -y xwayland
 
-# patch xwayland
-echo "[+] Patching Xwayland sources"
-cd /usr/src/xwayland-*
+# # patch xwayland
+# echo "[+] Patching Xwayland sources"
+# cd /usr/src/xwayland-*
 
-patch -p1 hw/xwayland/xwayland-input.c < /mnt/guest/configs/wlseat.patch
+# patch -p1 hw/xwayland/xwayland-input.c < /mnt/guest/configs/wlseat.patch
 
-# make xwayland
-echo "[+] Running configure"
-meson -Ddocs=false -Ddevel-docs=false -Dxvfb=false ../build
+# # make xwayland
+# echo "[+] Running configure"
+# meson -Ddocs=false -Ddevel-docs=false -Dxvfb=false ../build
 
-echo "[!!!] Xwayland build process starting in 3 seconds"
-meson compile -C ../build
+# echo "[!!!] Xwayland build process starting in 3 seconds"
+# meson compile -C ../build
 
-echo "[+] Installing Xwayland binary..."
-meson install -C ../build
+# echo "[+] Installing Xwayland binary..."
+# meson install -C ../build
 
-# copy new binary
-mkdir -p /opt/bin
-mv /usr/local/bin/Xwayland /opt/bin/Xwayland
+# # copy new binary
+# mkdir -p /opt/bin
+# mv /usr/local/bin/Xwayland /opt/bin/Xwayland
 
-echo "[+] Done."
-echo "[+] Cleaning container..."
-sleep 3
-# Clean system
-cd /
-apt purge -y `cat /tmp/deplist`
-apt autoremove -y
-apt clean
+# echo "[+] Done."
+# echo "[+] Cleaning container..."
+# sleep 3
+# # Clean system
+# cd /
+# apt purge -y `cat /tmp/deplist`
+# apt autoremove -y
+# apt clean
 
-rm /etc/apt/sources.list.d/deb-src.list
-rm -rf /usr/src/*
+# rm /etc/apt/sources.list.d/deb-src.list
+# rm -rf /usr/src/*
 
-apt update
+# apt update
 
 # download latest xwayland binary from the repo if building from sources failed,
 # else keep the built one already in /opt/bin/Xwayland (wget won't overwritte it)
 ARCH=$(uname -m)
-echo "[+] Fetching prebuilt Xwayland in case building above failed..."
 apt install -y wget
+echo "[+] Fetching prebuilt Xwayland in case building above failed..."
 wget https://github.com/sailfish-containers/xserver/releases/download/b1/Xwayland.${ARCH}.libc-2.29.bin -O /opt/bin/Xwayland -nc
 chmod +x /opt/bin/Xwayland
 
@@ -106,9 +106,9 @@ ln -s /mnt/guest/start_onboard.sh /opt/bin/start_onboard.sh
 ln -s /mnt/guest/kill_xwayland.sh /opt/bin/kill_xwayland.sh
 
 # load sensible onboard settings
-su $USER_NAME
-dbus-launch dconf load /org/onboard/ < /mnt/guest/configs/onboard-default.conf
-cp /mnt/guest/configs/xsettings.xml $HOME/.config/xfce4/xfconf/xfce-perchannel-xml/xsettings.xml
+sudo -u $USER_NAME bash -c "dbus-launch dconf load /org/onboard/ < /mnt/guest/configs/onboard-default.conf"
+sudo -u $USER_NAME bash -c "cp /mnt/guest/configs/xsettings.xml /home/$USER_NAME/.config/xfce4/xfconf/xfce-perchannel-xml
+/xsettings.xml"
 
 echo "[+] xsession ready, you can close this terminal window."
 
