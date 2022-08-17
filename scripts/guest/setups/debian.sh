@@ -107,6 +107,7 @@ ln -s /mnt/guest/start_onboard.sh /opt/bin/start_onboard.sh
 ln -s /mnt/guest/kill_xwayland.sh /opt/bin/kill_xwayland.sh
 
 # Keep polkit for bothering users at each boot
+mkdir -p /etc/polkit-1/localauthority/50-local.d
 cp /mnt/guest/configs/45-allow-colord.pkla /etc/polkit-1/localauthority/50-local.d/45-allow-colord.pkla
 
 # load sensible onboard settings
