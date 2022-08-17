@@ -100,15 +100,14 @@ systemctl mask upower
 # add user to sudoers
 adduser $USER_NAME sudo
 
-# load sensible onboard settings
-su $USER_NAME
-dbus-launch dconf load /org/onboard/ < /mnt/guest/configs/onboard-default.conf
-
 # link scripts
 ln -s /mnt/guest/start_desktop.sh /opt/bin/start_desktop.sh
 ln -s /mnt/guest/setup_desktop.sh /opt/bin/setup_desktop.sh
 ln -s /mnt/guest/start_onboard.sh /opt/bin/start_onboard.sh
 ln -s /mnt/guest/kill_xwayland.sh /opt/bin/kill_xwayland.sh
 
-echo "[+] xsession ready"
-sleep 4
+# load sensible onboard settings
+su $USER_NAME
+dbus-launch dconf load /org/onboard/ < /mnt/guest/configs/onboard-default.conf
+
+echo "[+] xsession ready, you can close this terminal window."
