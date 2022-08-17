@@ -22,4 +22,4 @@ export QMLSCENE_DEVICE="customcontext"
 export XDG_RUNTIME_DIR=/run/user/$USER_UID
 export WAYLAND_DISPLAY="../../display/wayland-0"
 
-/usr/bin/qxdisplay --wayland-socket-name "../../display/wayland-container-$DISPLAY_ID" -o $SCREEN_ORIENTATION
+/usr/bin/qxcompositor --wayland-socket-name "../../display/wayland-container-$DISPLAY_ID" -o $SCREEN_ORIENTATION

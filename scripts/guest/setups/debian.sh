@@ -26,7 +26,7 @@ fi
 
 # build xwayland
 # add sources repository
-echo "[+] adding sources repository"
+echo "[+] Adding sources repository"
 cp /etc/apt/sources.list /etc/apt/sources.list.d/deb-src.list
 sed -i 's/deb http/deb-src http/g' /etc/apt/sources.list.d/deb-src.list
 
@@ -34,13 +34,13 @@ apt update
 cd /usr/src
 
 # get xwayland and build dependencies
-echo "[+] Get Xwayland and build dependencies"
+echo "[+] Get Xwayland sources and build dependencies"
 apt showsrc xwayland | sed -e '/Build-Depends/!d;s/Build-Depends: \|,\|([^)]*),*\|\[[^]]*\]//g' | grep -v "Build-Depends-Indep:" > /tmp/deplist
 apt build-dep -y xwayland
 apt source -y xwayland
 
 # patch xwayland
-echo "[+] Patching xwayland sources"
+echo "[+] Patching Xwayland sources"
 cd /usr/src/xorg-server-1*
 
 patch -p1 hw/xwayland/xwayland-input.c < /mnt/guest/configs/wlseat.patch
@@ -55,13 +55,13 @@ echo "[!!!] Xwayland build process starting in 3 seconds"
 sleep 3
 make -j$(nproc  --all)
 
-echo "[+] installing xwayland binary..."
+echo "[+] Installing Xwayland binary..."
 # copy new binary
 mkdir -p /opt/bin
 cp hw/xwayland/Xwayland /opt/bin/Xwayland
 
 echo "[+] Done."
-echo "[+] cleaning container..."
+echo "[+] Cleaning container..."
 sleep 3
 # Clean system
 cd /
@@ -74,9 +74,19 @@ rm -rf /usr/src/xorg-server-*
 
 apt update
 
+# download latest xwayland binary from the repo if building from sources failed,
+# else keep the built one already in /opt/bin/Xwayland (wget won' overwritte it)
+ARCH=$(uname -m)
+echo "[+] Fetching prebuilt Xwayland in case building above failed..."
+wget https://github.com/sailfish-containers/xserver/releases/download/b1/Xwayland.${ARCH}.libc-2.29.bin -O /opt/bin/Xwayland -nc
+chmod +x /opt/bin/Xwayland
+
 # install xfce-desktop
-echo "[+] installing xfce4"
-apt install -y sudo xfce4 onboard dbus-x11 # Xephyr # Xephyr allow to run a display manager and rotate the screen from the container however it disable multitouch
+echo "[+] Installing xfce4 and Onboard virtual keyboard"
+apt install -y sudo xfce4 onboard dbus-x11 dconf-cli # Xephyr # Xephyr allow to run a display manager and rotate the screen from the container however it disable multitouch
+
+# load sensible onboard settings
+dconf load /org/onboard/ < /mnt/guest/configs/onboard-default.conf
 
 # mask unused services
 systemctl mask lightdm
