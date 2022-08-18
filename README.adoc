@@ -41,7 +41,7 @@ zypper install nemo-qml-plugin-dbus-qt5 sailfish-polkit-agent python3-base pytho
 ----
 +
 [start=2]
-2. Manually download https://repo.sailfishos.org/obs/home:/kabouik/[here] the latest version of `lxc-templates-desktop` ("noarch" folder), `qxcompositor` and `harbour-containers` in the folder that corresponds to your device architecture.
+2. Manually download https://repo.sailfishos.org/obs/home:/kabouik/[here] the latest version of `lxc-templates-desktop` ("noarch" folder), and `qxcompositor` and `harbour-containers` (in the folder that corresponds to your device architecture).
 
 3. Install them either from your Sailfish file manager or using:
 +
