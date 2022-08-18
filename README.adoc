@@ -101,13 +101,5 @@ This project is proudly licensed under GNU GPLv3.
 == Credits
 Many thanks to all contributors and testers: 
  
-* https://github.com/r3vn[r3vn (main dev)]  
-* https://github.com/g7[g7]  
-* https://github.com/Kabouik[kabouik]  
-* https://github.com/eLtMosen[eLtMosen]  
-* https://github.com/elros34[elros34]  
-* https://github.com/edp17[edp17]  
-* https://github.com/vaskas[vaskas]  
-* https://github.com/sashinfantry[dashinfantry]  
-* https://github.com/hengyedev[HengYeDev]  
+* https://github.com/r3vn[r3vn (main dev)] - https://github.com/g7[g7] - https://github.com/Kabouik[kabouik] - https://github.com/eLtMosen[eLtMosen] - https://github.com/elros34[elros34] - https://github.com/edp17[edp17] - https://github.com/vaskas[vaskas] - https://github.com/sashinfantry[dashinfantry] - https://github.com/hengyedev[HengYeDev]  
 * https://www.flaticon.com/free-icons/container-ship[Container ship icon modified from Freepik - Flaticon]
