@@ -5,27 +5,18 @@
 
 = harbour-containers
 
-image::https://raw.githubusercontent.com/Kabouik/harbour-containers/master/icons/172x172/harbour-containers.png[]  
 _A Linux containers (LXC) manager for SailfishOS_
+image::https://raw.githubusercontent.com/Kabouik/harbour-containers/master/icons/172x172/harbour-containers.png[]  
 
 toc::[]
 
 === Documentation
 
 ==== What is it?
-`harbour-containers` is a SailfishOS application to create, download, manage and run LXC containers. It relies on `Xwayland` to run the associated desktop environment inside a new Sailifsh window:
+`harbour-containers` is a SailfishOS application to create, download, manage and run LXC containers from a convenient GUI. It relies on `Xwayland` to run the associated desktop environment inside a new Sailifsh window:
 
-image::https://user-images.githubusercontent.com/7107523/99102454-feeae200-25d5-11eb-935f-b846233e8808.gif[]
-
-This makes it possible to run almost any Linux desktop application, as long as there is a version compiled for your architecture. See for instance `rofi` and `Darktable` below:
-
-image::https://user-images.githubusercontent.com/7107523/99102434-fa262e00-25d5-11eb-853f-f203327f9a55.gif[]
-
-While LXC containers of desktop Linux distributions are most convenient with a hardware keyboard, `Onboard` is also preinstalled for compatibility with smartphone with no hardware keyboard:
-
-image::https://user-images.githubusercontent.com/7107523/99102422-f5fa1080-25d5-11eb-9d74-b7a09c1a9a22.gif[]
-
-A video showcasing what LXC containers can do on SailfishOS is available https://youtu.be/-dgD5jci8Dk[here]. Moar videos https://movio.sauru.sh/mobilelinux[here].
+image::pics/Screenshot_20220817_004_800.png[]
+image::pics/Screenshot_20220817_005_800.png[]
 
 ==== Installation
 NOTE: Before proceeding, make sure  https://github.com/sailfish-containers/lxc-templates-desktop/wiki/Requirements[LXC kernel requirements] are satisfied.
@@ -40,7 +31,7 @@ zypper install nemo-qml-plugin-dbus-qt5 sailfish-polkit-agent python3-base pytho
 ----
 +
 [start=2]
-2. Manually download https://repo.sailfishos.org/obs/home:/kabouik/[here] the latest version of `lxc-templates-desktop`, `qxcompositor` and `harbour-containers` for your device architecture (choose the right folder).
+2. Manually download https://repo.sailfishos.org/obs/home:/kabouik/[here] the latest version of `lxc-templates-desktop` ("noarch" folder), `qxcompositor` and `harbour-containers` in the folder that corresponds to your device architecture.
 
 3. Install them either from your Sailfish file manager or using:
 +
@@ -61,12 +52,28 @@ If unfortunately you checked "Setup desktop" when creating a new container but j
 === Discussion
 See the https://talk.maemo.org/showthread.php?t=101080[TMO thread].
 
+=== Demos
+Kali with XFCE4 alongside SailfishOS:
+
+image::https://user-images.githubusercontent.com/7107523/99102454-feeae200-25d5-11eb-935f-b846233e8808.gif[]
+
+You can run any Linux desktop application that has been compiled for your architecture. See for instance `rofi` and `Darktable` below:
+
+image::https://user-images.githubusercontent.com/7107523/99102434-fa262e00-25d5-11eb-853f-f203327f9a55.gif[]
+
+While LXC containers of desktop Linux distributions are most convenient with a hardware keyboard phone like the F(x)tec Pro1 and Pro1x, `Onboard` is also preinstalled for compatibility with other smartphones:
+
+image::https://user-images.githubusercontent.com/7107523/99102422-f5fa1080-25d5-11eb-9d74-b7a09c1a9a22.gif[]
+
+A video showcasing what LXC containers can do on SailfishOS is available https://youtu.be/-dgD5jci8Dk[here]. Moar videos https://movio.sauru.sh/mobilelinux[here].
+
 === License
 This project is proudly licensed under GNU GPLv3.
 
 === Credits
 Many thanks to all testers and contributors: 
  
+* https://github.com/r3vn[r3vn (main dev)]  
 * https://github.com/g7[g7]  
 * https://github.com/eLtMosen[eLtMosen]  
 * https://github.com/Kabouik[Kabouik]  

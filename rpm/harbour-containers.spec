@@ -9,19 +9,19 @@ Name:       harbour-containers
 # << macros
 
 Summary:    sailfish-containers LXC Silica UI
-Version:    0.5
+Version:    0.6
 Release:    1
 Group:      Qt/Qt
-License:    LICENSE
-URL:        http://example.org/
+License:    GNU GPLv3
+URL:        http://github.com/kabouik/habour-containres
 Source0:    %{name}-%{version}.tar.bz2
 Source100:  harbour-containers.yaml
 Requires:   sailfishsilica-qt5 >= 0.10.9
-Requires:   lxc-templates-desktop
+Requires:   lxc-templates-desktop >= 1.3
 Requires:   python3-gobject
 Requires:   dbus-python3
 Requires:   nemo-qml-plugin-dbus-qt5
-Requires:   qxcompositor
+Requires:   qxcompositor >= 0.0.5
 Requires:   sailfish-polkit-agent
 BuildRequires:  pkgconfig(sailfishapp) >= 1.0.2
 BuildRequires:  pkgconfig(Qt5Core)
@@ -45,6 +45,8 @@ Custom:
   Repo: https://github.com/kabouik/harbour-containers
 Icon: https://raw.githubusercontent.com/Kabouik/harbour-containers/master/icons/harbour-containers.svg
 Screenshots:
+ - 
+ - 
  - https://user-images.githubusercontent.com/7107523/99102454-feeae200-25d5-11eb-935f-b846233e8808.gif
  - https://user-images.githubusercontent.com/7107523/99102434-fa262e00-25d5-11eb-853f-f203327f9a55.gif
  - https://user-images.githubusercontent.com/7107523/99102422-f5fa1080-25d5-11eb-9d74-b7a09c1a9a22.gif
@@ -103,3 +105,9 @@ desktop-file-install --delete-original       \
 /usr/share/polkit-1/actions/org.sailfishcontainers.daemon.policy
 # >> files
 # << files
+
+%changelog
+* Thu Aug 18 2022 sailfish containers
+- Updated description and license for Chum repository
+- Changed URLs to reflect the corresponding fork
+- Bumped version to avoid dep resolution issues
