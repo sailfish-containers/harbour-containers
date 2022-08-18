@@ -68,6 +68,12 @@ image::https://user-images.githubusercontent.com/7107523/99102422-f5fa1080-25d5-
 
 A video showcasing what LXC containers can do on SailfishOS is available https://youtu.be/-dgD5jci8Dk[here]. Moar videos https://movio.sauru.sh/mobilelinux[here].
 
+=== Known issues/limitations
+
+* No sound in aarch64 devices (or please tell us)
+* No hardware acceleration
+* Only prebuilt binaries of Xwayland can be used at the moment inside containers (this is automated when setting up xsession from the GUI), because latest sources don't support the XDG_WM_Base protocol that we need
+
 === License
 This project is proudly licensed under GNU GPLv3.
 
