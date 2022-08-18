@@ -45,8 +45,8 @@ Custom:
   Repo: https://github.com/kabouik/harbour-containers
 Icon: https://raw.githubusercontent.com/Kabouik/harbour-containers/master/icons/harbour-containers.svg
 Screenshots:
- - 
- - 
+ - https://github.com/Kabouik/harbour-containers/raw/master/pics/Screenshot_20220817_004_800.png
+ - https://github.com/Kabouik/harbour-containers/raw/master/pics/Screenshot_20220817_005_800.png
  - https://user-images.githubusercontent.com/7107523/99102454-feeae200-25d5-11eb-935f-b846233e8808.gif
  - https://user-images.githubusercontent.com/7107523/99102434-fa262e00-25d5-11eb-853f-f203327f9a55.gif
  - https://user-images.githubusercontent.com/7107523/99102422-f5fa1080-25d5-11eb-9d74-b7a09c1a9a22.gif
