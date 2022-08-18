@@ -8,7 +8,7 @@ Name:       harbour-containers
 # >> macros
 # << macros
 
-Summary:    sailfish-containers LXC Silica UI
+Summary:    LXC manager and runner with Silica UI
 Version:    0.6
 Release:    1
 Group:      Qt/Qt
@@ -21,6 +21,7 @@ Requires:   lxc-templates-desktop >= 1.3
 Requires:   python3-gobject
 Requires:   dbus-python3
 Requires:   nemo-qml-plugin-dbus-qt5
+Requires:   xz
 Requires:   qxcompositor >= 0.0.5
 Requires:   sailfish-polkit-agent
 BuildRequires:  pkgconfig(sailfishapp) >= 1.0.2
@@ -30,7 +31,7 @@ BuildRequires:  pkgconfig(Qt5Quick)
 BuildRequires:  desktop-file-utils
 
 %description
-Containers is an application to create, download, manage and run LXC containers. It relies on Xwayland to run the associated desktop environment inside a new Sailifsh window.
+Containers is an application to create, download, manage and run LXC containers. It relies on Xwayland to run the associated desktop environment inside a new SailifshOS window.
 # This description section includes metadata for SailfishOS:Chum, see
 # https://github.com/sailfishos-chum/main/blob/main/Metadata.md
 %if "%{?vendor}" == "chum"
@@ -42,16 +43,16 @@ Categories:
  - Utilities
  - Other
 Custom:
-  Repo: https://github.com/kabouik/harbour-containers
-Icon: https://raw.githubusercontent.com/Kabouik/harbour-containers/master/icons/harbour-containers.svg
+  Repo: https://github.com/sailfish-containers/harbour-containers
+Icon: https://raw.githubusercontent.com/sailfish-containers/harbour-containers/master/icons/harbour-containers.svg
 Screenshots:
- - https://github.com/Kabouik/harbour-containers/raw/master/pics/Screenshot_20220817_004_800.png
- - https://github.com/Kabouik/harbour-containers/raw/master/pics/Screenshot_20220817_005_800.png
+ - https://github.com/sailfish-containers/harbour-containers/raw/master/pics/Screenshot_20220817_004_800.png
+ - https://github.com/sailfish-containersharbour-containers/raw/master/pics/Screenshot_20220817_005_800.png
  - https://user-images.githubusercontent.com/7107523/99102454-feeae200-25d5-11eb-935f-b846233e8808.gif
  - https://user-images.githubusercontent.com/7107523/99102434-fa262e00-25d5-11eb-853f-f203327f9a55.gif
  - https://user-images.githubusercontent.com/7107523/99102422-f5fa1080-25d5-11eb-9d74-b7a09c1a9a22.gif
 Url:
-  Homepage: https://github.com/kabouik/harbour-containers
+  Homepage: https://github.com/sailfish-containers/harbour-containers
   Help: https://github.com/sailfish-containers/lxc-templates-desktop/wiki
   Bugtracker: https://github.com/sailfish-containers/harbour-containers/issues
 %endif
@@ -105,9 +106,3 @@ desktop-file-install --delete-original       \
 /usr/share/polkit-1/actions/org.sailfishcontainers.daemon.policy
 # >> files
 # << files
-
-%changelog
-* Thu Aug 18 2022 sailfish containers
-- Updated description and license for Chum repository
-- Changed URLs to reflect the corresponding fork
-- Bumped version to avoid dep resolution issues

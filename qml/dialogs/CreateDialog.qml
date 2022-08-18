@@ -119,7 +119,7 @@ Dialog {
             text: "Setup desktop"
             checked: true
 
-            description: qsTr("Setup container's xsession, depending on the device's spec it may require long time to complete. Be sure to have network access and enough battery charge. Currently only debian based systems are supported by the scripts. Read more: https://github.com/sailfish-containers/lxc-templates-desktop/wiki/Desktop")
+            description: qsTr("Setup container's xsession. Depending on your hardware, it may take a long time to complete. Be sure to have network access and enough battery charge. Currently only Debian-based systems are supported by the scripts. Read more: https://github.com/sailfish-containers/lxc-templates-desktop/wiki/Desktop")
         }
     }
 

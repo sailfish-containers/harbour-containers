@@ -27,7 +27,7 @@ Page {
                 anchors.horizontalCenter: parent.horizontalCenter
             }
             Label {
-                text: "<b>harbour-containers</b>"
+                text: "<b>Containers</b>"
                 anchors.horizontalCenter: parent.horizontalCenter
             }
             Label {
@@ -65,7 +65,7 @@ Page {
 
             }
             Label {
-                text: qsTr("This project is proudly licensed under <b>GNU GPLv3.</b>")
+                text: qsTr("This project is proudly licensed under <b>GNU GPLv3</b>")
                 anchors.horizontalCenter: parent.horizontalCenter
 
             }

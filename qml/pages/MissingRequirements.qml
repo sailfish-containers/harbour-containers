@@ -18,7 +18,7 @@ Page {
         }
 
         Label {
-            text: "<h2>" + qsTr("Oh no! Your device doesn't seems to support LXC!") + "</h2>"
+            text: "<h2>" + qsTr("Oh no! Your device does not meet requirements for LXC.") + "</h2>"
             anchors.horizontalCenter: parent.horizontalCenter
             width: page.isPortrait ? page.width - Theme.paddingMedium : page.width / 1.5
             wrapMode: Label.WordWrap
