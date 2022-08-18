@@ -9,6 +9,8 @@ from libs import lxc, qxcompositor
 import dbus
 import dbus.service
 import pathlib
+from pwd import getpwnam
+import getpass
 
 DBUS_IFACE="org.sailfishcontainers.daemon"
 
@@ -20,7 +22,7 @@ class ContainersService(dbus.service.Object):
         dbus.service.Object.__init__(self, conn, object_path, bus_name)
 
         # daemon config
-        self.user_name = "nemo"
+        self.user_name = "defaultuser"
         self.user_uid  = 100000
         self.current_path = pathlib.Path(__file__).parent.parent.absolute()
 

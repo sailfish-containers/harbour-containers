@@ -1,18 +1,19 @@
-Name: harbour-containers
-Summary: sailfish-containers LXC Silica UI
-Version: 0.4
+Name: Containers
+Summary: LXC manager and runner with Silica UI
+Version: 0.5
 Release: 1
 # The contents of the Group field should be one of the groups listed here:
 # https://github.com/mer-tools/spectacle/blob/master/data/GROUPS
 Group: Qt/Qt
-URL: http://example.org/
-License: LICENSE
+URL: https://github.com/sailfish-containers/harbour-containers
+License: GNU GPLv3
 # This must be generated before uploading a package to a remote build service.
 # Usually this line does not need to be modified.
 Sources:
 - '%{name}-%{version}.tar.bz2'
 Description: |
-  Short description of my Sailfish OS Application
+  Containers is an application to create, download, manage and run LXC containers. It relies on Xwayland to run the associated desktop environment inside a new SailifshOS window.
+
 Configure: none
 Builder: qmake5
 
@@ -31,12 +32,13 @@ PkgConfigBR:
 # Runtime dependencies which are not automatically detected
 Requires:
   - sailfishsilica-qt5 >= 0.10.9 
-  - lxc-templates-desktop
+  - lxc-templates-desktop >= 1.3
   - python3-gobject
   - dbus-python3
   - nemo-qml-plugin-dbus-qt5
-  - qxdisplay
+  - qxcompositor >= 0.0.5
   - sailfish-polkit-agent
+  - xz
 
 # All installed files
 Files:

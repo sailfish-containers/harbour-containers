@@ -12,7 +12,12 @@
 # * date Author's Name <author's email> version-release
 # - Summary of changes
 
-* Sun Apr 13 2014 Jack Tar <jack.tar@example.com> 0.0.1-1
-- Scrubbed the deck
-- Hoisted the sails
-
+* Thu Aug 19 2022 kabouik
+- Updated description and license for Chum repository
+- Bumped version to avoid dep resolution issues
+- README overhaul
+- Fixing debian.sh
+- Fixing GUI typos
+- Sane xsession defaults for xfce4 and onboard
+- New icon
+- Back to qxcompositor instead of qxdisplay (autorotation)
