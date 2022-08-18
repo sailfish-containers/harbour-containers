@@ -6,6 +6,7 @@
 = harbour-containers
 
 _A Linux containers (LXC) manager for SailfishOS_
+
 image::https://raw.githubusercontent.com/Kabouik/harbour-containers/master/icons/172x172/harbour-containers.png[]  
 
 toc::[]
