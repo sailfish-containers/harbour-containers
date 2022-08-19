@@ -355,7 +355,7 @@ class ContainersService(dbus.service.Object):
                 display = self._create_display(screen_orientation)
 
                 # start Xwayland on the new display
-                desktop = lxc.start_desktop(name, display)
+                desktop = lxc.start_desktop(name, display, self.user_name)
 
                 return True
         return False
@@ -394,7 +394,9 @@ class ContainersService(dbus.service.Object):
             self._refresh()
 
             if self.containers[name]["container_status"] == "RUNNING":
-                lxc.start_shell(name, self.current_path, "/mnt/guest/setup_desktop.sh")
+                lxc.start_shell(name,
+                                self.current_path,
+                                "/mnt/guest/setup_desktop.sh %s %s" % (self.user_name, self.user_uid) )
 
                 return True
         return False
@@ -491,6 +493,7 @@ class ContainersService(dbus.service.Object):
         try:
             self.user_uid  = getpwnam(user_name)[2]
             self.user_name = user_name
+
             return True
         except:
             return False
