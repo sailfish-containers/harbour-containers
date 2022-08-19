@@ -13,7 +13,7 @@ Version:    0.6
 Release:    1
 Group:      Qt/Qt
 License:    GNU GPLv3
-URL:        http://github.com/kabouik/habour-containres
+URL:        http://github.com/sailfish-containers/harbour-containers
 Source0:    %{name}-%{version}.tar.bz2
 Source100:  harbour-containers.yaml
 Requires:   sailfishsilica-qt5 >= 0.10.9
@@ -22,7 +22,7 @@ Requires:   python3-gobject
 Requires:   dbus-python3
 Requires:   nemo-qml-plugin-dbus-qt5
 Requires:   xz
-Requires:   qxcompositor >= 0.0.5
+Requires:   qxcompositor >= 0.0.6
 Requires:   sailfish-polkit-agent
 BuildRequires:  pkgconfig(sailfishapp) >= 1.0.2
 BuildRequires:  pkgconfig(Qt5Core)
@@ -46,6 +46,12 @@ Custom:
   Repo: https://github.com/sailfish-containers/harbour-containers
 Icon: https://raw.githubusercontent.com/sailfish-containers/harbour-containers/master/icons/harbour-containers.svg
 Screenshots:
+ - https://github.com/Kabouik/harbour-containers/raw/chum-pr/pics/Screenshot_20220817_004_800.png
+ - https://github.com/Kabouik/harbour-containers/raw/chum-pr/pics/Screenshot_20220817_005_800.png
+ - https://github.com/Kabouik/harbour-containers/raw/chum-pr/pics/E5vInvOWQAMcxLg_800.jpeg
+ - https://github.com/Kabouik/harbour-containers/raw/chum-pr/pics/EmdbYnRXIAEZlLb_800.jpeg
+ - https://github.com/Kabouik/harbour-containers/raw/chum-pr/pics/EmdbYpVXYAA9Ou6_800.jpeg
+ - https://github.com/Kabouik/harbour-containers/raw/chum-pr/pics/Eo_d7waW4AI17FB_800.jpeg
  - https://github.com/sailfish-containers/harbour-containers/raw/master/pics/Screenshot_20220817_004_800.png
  - https://github.com/sailfish-containersharbour-containers/raw/master/pics/Screenshot_20220817_005_800.png
  - https://user-images.githubusercontent.com/7107523/99102454-feeae200-25d5-11eb-935f-b846233e8808.gif
