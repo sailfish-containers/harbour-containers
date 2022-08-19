@@ -5,11 +5,11 @@ from gi.repository import GLib
 from dbus.mainloop.glib import DBusGMainLoop
 
 from libs import lxc, qxcompositor
+from pwd import getpwnam
 
 import dbus
 import dbus.service
 import pathlib
-from pwd import getpwnam
 import getpass
 
 DBUS_IFACE="org.sailfishcontainers.daemon"
@@ -24,6 +24,7 @@ class ContainersService(dbus.service.Object):
         # daemon config
         self.user_name = "defaultuser"
         self.user_uid  = 100000
+
         self.current_path = pathlib.Path(__file__).parent.parent.absolute()
 
         # daemon cache
@@ -476,6 +477,23 @@ class ContainersService(dbus.service.Object):
 
         self._refresh()
         return self._dbus_dict()
+
+    @dbus.service.method(
+        dbus_interface=DBUS_IFACE,
+        in_signature="",
+        out_signature="b",
+        sender_keyword="sender",
+        connection_keyword="conn"
+    )
+    def set_user(self, user_name, sender=None, conn=None):
+        """ set uid and user name dynamically at run-time."""
+
+        try:
+            self.user_uid  = getpwnam(user_name)[2]
+            self.user_name = user_name
+            return True
+        except:
+            return False
 
     @dbus.service.method(
         dbus_interface=DBUS_IFACE,
