@@ -25,12 +25,22 @@ image::pics/E5vInvOWQAMcxLg_800.jpeg[]
 === Installation
 NOTE: Before proceeding, make sure  https://github.com/sailfish-containers/lxc-templates-desktop/wiki/Requirements[LXC kernel requirements] are satisfied.
 
-===== From Chum community repository
-Install Chum from https://chumrpm.netlify.app/[here], then search for "Containers" in its app list.
+===== From Chum community repository (stable)
+Install Chum from https://chumrpm.netlify.app/[here], then search for "Containers" in its app list. You're done.
 
 image::pics/Screenshot_20220818_001_480.png[]
 
-===== From command line
+However, if you had a version of `harbour-containers`, `lxc-templates-desktop` or `qxcompositor` installed from a source other than Chum, then you will need to uninstall them first because Chum will not overwrite older packages if they don't match vendor (presumably installed manually):
+
+[source,bash]
+----
+devel-su
+zypper remove lxc-templates-dekstop
+zypper remove qxcompositor
+zypper remove harbour-containers
+----
+
+===== From command line (devel builds)
 1. Install dependencies:
 +
 [source,bash]
@@ -41,9 +51,12 @@ zypper install nemo-qml-plugin-dbus-qt5 sailfish-polkit-agent python3-base pytho
 ----
 +
 [start=2]
-2. Manually download https://repo.sailfishos.org/obs/home:/kabouik/[here] the latest version of `lxc-templates-desktop` ("noarch" folder), and `qxcompositor` and `harbour-containers` (in the folder that corresponds to your device architecture).
+2. https://repo.sailfishos.org/obs/home:/kabouik/[From the folder matching your SFOS version and device architecture], manually download the following packages:
+ * `lxc-templates-desktop` ("noarch" subfolder),
+ * `qxcompositor` (your architecture subfolder),
+ * `harbour-containers` (your architecture subfolder too).
 
-3. Install them either from your Sailfish file manager or using:
+3. Install them either from your SailfishOS file manager or using:
 +
 [source,bash]
 ----
@@ -54,10 +67,43 @@ zypper install qxcompositor-<VERSION>.rpm
 zypper install harbour-containers-<VERSION>.rpm
 ----
 
-=== How to use?
-The GUI of `harbour-containers` should be straightforward, but see https://github.com/sailfish-containers/lxc-templates-desktop/wiki[lxc-templates-desktop's wiki] for more details and CLI usage.
+Those three packages will have to be uninstalled manually before stable builds can be installed from Chum again, see above section.
 
-If unfortunately you checked "Setup desktop" when creating a new container but just saw the new container icon appear and then stop witnout a terminal prompting your for a user password, then the desktop was not configured. Go into that container in the GUI, press "init container config", and then "setup xsession".
+=== How to use?
+The GUI of `harbour-containers` should be relatively straightforward:
+
+.Click to expand the description of each GUI element
+[%collapsible]
+====
+`▶ Main page`
+
+    ⨁  icon:: Create a new container (you will need to set a device lock code in SailfishOS settings first), **only Debian-based distributions are supported at the moment**
+
+`*▶ Container creation page*`
+
+    Setup desktop:: Execute a script after container creation to install a basic desktop environment (this can be done later too)
+
+`*▶ Existing container page*`
+
+    attach:: Open a terminal window as `root` within the contained distribution
+    X session::  Open a new SailfishOS window showing the X desktop of the distribution, if the desktop was set up first
+    mountpoints::  List of the default mount points for the container (you can edit it in `/var/lib/lxc/<container-name>/config`)
+    run onboard::  Show a floating icon in the X session that allows opening a virtual keyboard (long press on Return to close it)
+    kill Xwayland::  May be necessary to close and reopen (with the "X session" button above" the window showing the desktop environment
+    setup xsession::  Run a script to set up your user and password, as well as default settings for your desktop environment (same as "Setup desktop" above in the container creation page)
+    init container config::  Run this first after container creation if you didn't check "Setup desktop" in the first place; can only be ran on a stopped container
+
+`*▶ Pulley menus*`
+
+    Settings::  Change container icon, destroy container (this cannot be undone), or set fixed orientation (obsolete)
+    Snapshots::  View LXC snapshots created using `lxc-snapshot` (see https://github.com/sailfish-containers/lxc-templates-desktop/wiki[lxc-templates-desktop's wiki])
+    Freeze/Unfreeze (all)::  Freeze/Unfreeze container to save resources
+    Start/Stop (all)::  Start/stop container
+====
+
+If unfortunately you checked "Setup desktop" when creating a new container but just saw the new container icon appear and then stop witnout a new terminal window prompting your for a user password, then the user and desktop have not been configured. Go into that container page in the GUI, press "init container config", and then "setup xsession".
+
+See https://github.com/sailfish-containers/lxc-templates-desktop/wiki[lxc-templates-desktop's wiki] for more details and CLI usage (with extra features). 
 
 == Discussion
 See the https://talk.maemo.org/showthread.php?t=101080[TMO thread].
