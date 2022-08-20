@@ -26,19 +26,19 @@ image::pics/E5vInvOWQAMcxLg_800.jpeg[]
 NOTE: Before proceeding, make sure  https://github.com/sailfish-containers/lxc-templates-desktop/wiki/Requirements[LXC kernel requirements] are satisfied.
 
 ===== From Chum community repository (stable)
-Install Chum from https://chumrpm.netlify.app/[here], then search for "Containers" in its app list. You're done.
-
-image::pics/Screenshot_20220818_001_480.png[]
-
-However, if you had a version of `harbour-containers`, `lxc-templates-desktop` or `qxcompositor` installed from a source other than Chum, then you will need to uninstall them first because Chum will not overwrite older packages if they don't match vendor (presumably installed manually):
+If you had a version of `harbour-containers` installed from a source other than Chum (from example an older version or a devel build), then you need to uninstall it first because Chum is designed to *not* overwrite packages if they don't match vendor (presumably installed manually):
 
 [source,bash]
 ----
 devel-su
-zypper remove lxc-templates-dekstop
-zypper remove qxcompositor
-zypper remove harbour-containers
+ps aux | grep -ie daemon.py | awk '{print $2}' | xargs kill -9 2> /dev/null # Kill the daemon
+zypper remove harbour-containers qxcompositor lxc-templates-dekstop # Uninstall packages
+zypper remove qxdisplay # Just in case you have it too as it is obsolete now
 ----
+
+Install Chum from https://chumrpm.netlify.app/[here], then search for "Containers" in its app list. You're done.
+
+image::pics/Screenshot_20220818_001_480.png[]
 
 ===== From command line (devel builds)
 1. Install dependencies:
@@ -62,6 +62,7 @@ zypper install nemo-qml-plugin-dbus-qt5 sailfish-polkit-agent python3-base pytho
 ----
 cd /path/to/directory/where/you/downloaded/the/three/rpms
 devel-su
+ps aux | grep -ie daemon.py | awk '{print $2}' | xargs kill -9 2> /dev/null # Kill the daemon in case an older version was running
 zypper install lxc-templates-dekstop-<VERSION>.rpm
 zypper install qxcompositor-<VERSION>.rpm
 zypper install harbour-containers-<VERSION>.rpm
@@ -70,7 +71,7 @@ zypper install harbour-containers-<VERSION>.rpm
 Those three packages will have to be uninstalled manually before stable builds can be installed from Chum again, see above section.
 
 === How to use?
-The GUI of `harbour-containers` should be relatively straightforward:
+The GUI of `harbour-containers` should be relatively straightforward, see a brief description of GUI elements below:
 
 .Click to expand the description of each GUI element
 [%collapsible]
