@@ -26,8 +26,10 @@ image::pics/E5vInvOWQAMcxLg_800.jpeg[]
 NOTE: Before proceeding, make sure  https://github.com/sailfish-containers/lxc-templates-desktop/wiki/Requirements[LXC kernel requirements] are satisfied.
 
 ===== From Chum community repository (stable)
-If you had a version of `harbour-containers` installed from a source other than Chum (from example an older version or a devel build), then you need to uninstall it first because Chum is designed to *not* overwrite packages if they don't match vendor (presumably installed manually):
-
+1. Uninstall manually installed version, if any
++
+If you never used `harbour-containers` before, jump to step 2. Else, if you had a version of `harbour-containers` installed from a source other than Chum (*e.g.*, an older version or a devel build), then you need to uninstall it first because Chum is designed to *not* overwrite packages if they don't match vendor (presumably installed manually):
++
 [source,bash]
 ----
 devel-su
@@ -35,9 +37,10 @@ ps aux | grep -ie daemon.py | awk '{print $2}' | xargs kill -9 2> /dev/null # Ki
 zypper remove harbour-containers qxcompositor lxc-templates-dekstop # Uninstall packages
 zypper remove qxdisplay # Just in case you have it too as it is obsolete now
 ----
-
-Install Chum from https://chumrpm.netlify.app/[here], then search for "Containers" in its app list. You're done.
-
++
+[start=2]
+2. Install Chum from https://chumrpm.netlify.app/[here], then search for "Containers" in its app list. You're done.
++
 image::pics/Screenshot_20220818_001_480.png[]
 
 ===== From command line (devel builds)
