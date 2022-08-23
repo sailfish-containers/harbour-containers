@@ -2,7 +2,10 @@
 # lxc setup desktop 
 # run as root inside a container
 
-# get username and uid
+# get architecture
+ARCH=$(uname -m)
+
+# # get username and uid
 if [ "$#" -lt 1 ]
 then
 	# set default user
@@ -18,19 +21,19 @@ else
     USER_UID=$2
 fi
 
-ARCH=`arch`
+ARCH=$(uname -m)
 
 # get distro name
-DISTRO_FILE=`cat /etc/os-release | grep ^ID=`
+DISTRO_FILE=$(cat /etc/os-release | grep ^ID=)
 DISTRO_VER=${DISTRO_FILE#"ID="}
 
 case $DISTRO_VER in
-	"kali"|"ubuntu"|"mint"|"devuan")
-                DISTRO_VER="debian"
+	"debian" | "kali" | "ubuntu" | "mint" | "devuan")
+                DISTRO_VER=debian
 	;;
 
-	"archarm"|"archlinux")
-		DISTRO_VER="arch"
+	 "archarm" | "archlinux")
+		DISTRO_VER=arch
 	;;
 esac
 

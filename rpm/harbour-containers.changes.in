@@ -12,6 +12,13 @@
 # * date Author's Name <author's email> version-release
 # - Summary of changes
 
+* Tue Aug 23 2022 kabouik
+- Add a script to install Arch-based distributions
+- WM choice when installing (xfce4 or i3), only supported for Arch for now
+- Better default configs for both WMs
+- Possibility to run the script multiple times on a script without breaking things
+- Prompts at important steps (in case of overwriting, or long compilations)
+
 * Thu Aug 19 2022 kabouik
 - Updated description and license for Chum repository
 - Bumped version to avoid dep resolution issues

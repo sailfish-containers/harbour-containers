@@ -15,7 +15,7 @@ SCREEN_ORIENTATION=$3
 export EGL_PLATFORM="wayland"
 export QT_QPA_PLATFORM="wayland"
 export QT_WAYLAND_DISABLE_WINDOWDECORATION="1"
-export PATH="/sbin:/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/home/nemo/bin"
+export PATH="/sbin:/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/home/defaultuser/bin"
 export PWD="/usr/share/sailfish-containers/guest"
 export QMLSCENE_DEVICE="customcontext"
 
