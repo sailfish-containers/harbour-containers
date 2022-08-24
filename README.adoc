@@ -16,16 +16,16 @@ toc::[]
 == Documentation
 
 === What is it?
-_Containers_ (`harbour-containers`) is a SailfishOS application to create, download, manage and run Linux containers (LXC) from a convenient GUI. It currently supports both Arch- and Debian-based distributions, and Xfce4 and i3 as window managers. It relies on `Xwayland` to run the associated desktop environment inside a new SailifshOS window:
+_Containers_ (`harbour-containers`) is a SailfishOS application to create, download, manage and run Linux containers (LXC) from a convenient GUI. It currently supports Arch- and Debian-based distributions, and can configure them with Xfce4 or i3 as default DE/WM. It relies on `Xwayland` to run the associated desktop environment inside a new SailifshOS window:
 
-image::pics/Screenshot_20220824_003_800.png[]
-image::pics/Screenshot_20220817_005_800.png[]
 [cols="a,a", frame=none, grid=none]
 |===
-| image::pics/Screenshot_20220817_004_800.png[]
-| image::pics/Screenshot_20220824_004_800.png[]
+2+|image::pics/debian-i3_800.jpg[Debian i3]
+2+|image::pics/arch-i3_800.jpg[Arch i3]
+|image::pics/kali-xfce4_800.jpg[Kali xfce4]
+|image::pics/arch-xfce4_800.jpg[Arch xfce4]
+2+|image::pics/kali-i3_800.jpg[kali i3]
 |===
-image::pics/E5vInvOWQAMcxLg_800.jpeg[]
 
 === Installation
 NOTE: Before proceeding, make sure  https://github.com/sailfish-containers/lxc-templates-desktop/wiki/Requirements[LXC kernel requirements] are satisfied.
@@ -46,7 +46,11 @@ zypper remove qxdisplay # Just in case you have it too as it is obsolete now
 [start=2]
 2. Install Chum from https://chumrpm.netlify.app/[here], then search for "Containers" in its app list. You're done.
 +
-image::pics/Screenshot_20220818_001_480.png[]
+[cols="a,a", frame=none, grid=none]
+|===
+|image::pics/Screenshot_20220818_001_480.png[]
+|image::pics/sfos-covers_480.jpg[] 
+|===
 
 ===== From command line (devel builds)
 1. Install dependencies:
@@ -110,7 +114,7 @@ The GUI of `harbour-containers` should be relatively straightforward, see a brie
     Start/Stop (all)::  Start/stop container
 ====
 
-If unfortunately you checked "Setup desktop" when creating a new container but just saw the new container icon appear and then stop witnout a new terminal window prompting your for a user password, then the user and desktop have not been configured. Go into that container page in the GUI, press "init container config", and then "setup xsession".
+NOTE: If unfortunately a terminal window did not appear after you created a new container, despite checking "Setup desktop", then you will have to go into the page of that new container, hit "init container config" at the bottom, start the container from the pulley menu, and then hit "setup xsession". The installation and configuration should then proceed.
 
 See https://github.com/sailfish-containers/lxc-templates-desktop/wiki[lxc-templates-desktop's wiki] for more details and CLI usage (with extra features). 
 
@@ -130,7 +134,7 @@ See the https://talk.maemo.org/showthread.php?t=101080[TMO thread].
 +
 image::pics/dynamicorientation.gif[]
 
-* Kali with XFCE4 alongside SailfishOS:
+* The containers run in their own window alongside SailfishOS:
 +
 image::pics/99102454-feeae200-25d5-11eb-935f-b846233e8808.gif[]  
 

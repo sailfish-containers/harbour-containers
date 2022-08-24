@@ -10,7 +10,7 @@ source /mnt/guest/setups/configure_desktop.sh
 
 # Choose default WM
 sleep 3
-printf "\033[1;32m[?] Choose default window manager for the container: [x]fce4, [i]3-gaps (default=x): \033[0m" && read -r REPLY
+printf '\033[1;32m[?] Choose default window manager for the %s container: [x]fce4, [i]3 (default=x): \033[0m' "${3^}" && read -r REPLY
 
 # Check if user setup is required
 if [ ! -d "/home/${USER_NAME}" ]
@@ -48,15 +48,17 @@ apt install -y sudo xfce4 onboard dbus-x11 dconf-cli
 # Install base utilities for selected WM and X setup
 printf "\033[0;36m[+] Installing selected WM and base utilities…\033[0m\n"
 case "$REPLY" in
-    "i" | "i3" | "i3gaps" | "i3-gaps")
+    "i" | "i3")
         LAUNCHCMD="exec i3"
+        apt install -y i3-gaps 2> /dev/null # i3-gaps is available in some debian-based distros, but not all
+        if type i3 > /dev/null; then
+            apt install -y i3               # Install base i3 only if i3-gaps didn't install above
+        fi
         apt install -y \
             dbus-x11 \
             dconf-cli \
             dmenu \
-            firefox \
             i3blocks \
-            i3 \
             i3lock \
             i3status \
             mousetweaks \
@@ -70,6 +72,8 @@ case "$REPLY" in
             wget \
             xdg-user-dirs \
             xfce4-terminal
+        apt install -y firefox 2> /dev/null # Firefox is not available in Kali and would prevent installing
+        		       		    # the other packages if it was inclided in the same list
         ;;
     "x" | "xfce" | "xfce4" | "" | *)
         LAUNCHCMD="exec startxfce4"
@@ -77,7 +81,6 @@ case "$REPLY" in
             dbus-x11 \
             dconf-cli \
             dmenu \
-            firefox \
             mousetweaks \
             onboard \
             sudo \
@@ -89,6 +92,8 @@ case "$REPLY" in
             xdg-user-dirs \
             xfce4 \
             xfce4-terminal
+        apt install -y firefox 2> /dev/null # Firefox is not available in Kali and would prevent installing
+        		       		    # the other packages if it was inclided in the same list
         ;;
 esac
 
@@ -117,14 +122,7 @@ if [ -e "/home/$USER_NAME/.config/i3/config" ] || [ -e "/home/$USER_NAME/.config
     printf "\033[0;33m[!] This container seems to have been configured already (possibly manually). Overwrite with defaults? [y/N] \033[0m" && read -r ANSWER
     case "$ANSWER" in
         "y" | "yes" | "Y" | "Yes" | "Yes")
-            configure_desktop
-
-            # Distro-specific post-configuration (wallpaper and no gaps in i3)
-            sed -i "s/PLACEHOLDER/debian/g" /home/$USER_NAME/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml 2> /dev/null
-            sed -i "s/PLACEHOLDER/debian/g" /home/$USER_NAME/.config/nitrogen/bg-saved.cfg 2> /dev/null
-            head -n -6 /home/$USER_NAME/.config/i3/config > /tmp/config 2> /dev/null 
-            mv /tmp/config /home/$USER_NAME/.config/i3/config 2> /dev/null
-            
+            configure_desktop $3
             printf "\033[0;32mDefault configuration re-applied.\033[0m\n"
         ;;
         "n" | "no" | "N" | "No" | "NO" | "" | *)
@@ -132,14 +130,7 @@ if [ -e "/home/$USER_NAME/.config/i3/config" ] || [ -e "/home/$USER_NAME/.config
         ;;
     esac
 else
-    configure_desktop
-
-    # Distro-specific post-configuration (wallpaper and no gaps in i3)
-    sed -i "s/PLACEHOLDER/debian/g" /home/$USER_NAME/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml 2> /dev/null
-    sed -i "s/PLACEHOLDER/debian/g" /home/$USER_NAME/.config/nitrogen/bg-saved.cfg 2> /dev/null
-    head -n -6 /home/$USER_NAME/.config/i3/config > /tmp/config 2> /dev/null
-    mv /tmp/config /home/$USER_NAME/.config/i3/config 2> /dev/null
-
+    configure_desktop $3
     printf "\033[0;32mDone.\033[0m\n"
 fi
 

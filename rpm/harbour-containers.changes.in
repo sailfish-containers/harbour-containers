@@ -12,13 +12,14 @@
 # * date Author's Name <author's email> version-release
 # - Summary of changes
 
-* Tue Aug 23 2022 kabouik
+* Tue Aug 24 2022 kabouik
 - Add a script to install Arch-based distributions
-- WM choice when installing (xfce4 or i3), should work for all supported distro (arch, debian)
-- Better default configs for both WMs (scaling, right click, touch scrolling in Firefox)
-- Possibility to run the script multiple times on a script without breaking things
+- WM choice when installing (xfce4 or i3), should work for all supported types of distros (Arch, Debian)
+- Better default configs for both WMs (scaling, right click (only in Arch), touch scrolling in Firefox)
+- Possibility to run the script multiple times on a container without breaking things, with failsafes (to some extent)
 - Prompts at important steps during install scripts (in case of overwriting config, or long compilations)
-- Nea icon, better for small screens
+- New icon, better for small screens
+- Custom wallpapers for Debian, Arch and Kali
 
 * Thu Aug 19 2022 kabouik
 - Updated description and license for Chum repository

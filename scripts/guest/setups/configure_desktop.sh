@@ -3,13 +3,13 @@
 # (not meant to be run directly, it will miss arguments)
 function configure_desktop() {
     case "$REPLY" in
-        "i" | "i3" | "i3gaps" | "i3-gaps")
-           # onboard
+        "i" | "i3")
+           # Onboard
             sed 's/dock-height=200/dock-height=480/g' /mnt/guest/configs/onboard-default.conf > /tmp/onboard-i3.conf
             sed -i 's/dock-height=240/dock-height=500/g' /tmp/onboard-i3.conf
             runuser -l $USER_NAME -c "dbus-launch dconf load /org/onboard/ < /tmp/onboard-i3.conf" 2> /dev/null
 
-           # nitrogen
+           # Nitrogen
             mkdir -p /home/$USER_NAME/.config/nitrogen
             printf '[geometry]
 posx=-1
@@ -25,13 +25,18 @@ icon_caps=false
 dirs=/home/%s/Pictures/Wallpapers;
 ' "$USER_NAME" > /home/$USER_NAME/.config/nitrogen/nitrogen.cfg
             printf '[xin_-1]
-file=/home/%s/Pictures/Wallpapers/PLACEHOLDER1.jpg
+file=/home/%s/Pictures/Wallpapers/PLACEHOLDER-1.jpg
 mode=5
 bgcolor=#000000
 ' "$USER_NAME" > /home/$USER_NAME/.config/nitrogen/bg-saved.cfg
+            if [ "$1" = "debian" ] || [ "$1" = "archarm" ] || [ "$1" = "archlinux" ] || [ "$1" = "kali" ]; then
+                sed -i "s/PLACEHOLDER/$1/g" /home/$USER_NAME/.config/nitrogen/bg-saved.cfg
+            else
+                sed -i "s/PLACEHOLDER-1/mountains/g" /home/$USER_NAME/.config/nitrogen/bg-saved.cfg
+            fi
             chown -R $USER_NAME:$USER_NAME /home/$USER_NAME/.config
 
-           # i3-gaps
+           # i3
            mkdir -p /home/$USER_NAME/.config/i3/
            head -n -11 /etc/i3/config > /home/$USER_NAME/.config/i3/config
            sed -i "11a\set \$mod Mod1\n" /home/$USER_NAME/.config/i3/config
@@ -57,22 +62,30 @@ gaps inner 10
 set $gaps_inner 10
 set $gaps_variation 4
 ' >> /home/$USER_NAME/.config/i3/config
-	    chown -R $USER_NAME:$USER_NAME /home/$USER_NAME/.config/i3
+            if [ "$1" = "debian" ]; then
+                head -n -6 /home/$USER_NAME/.config/i3/config > /tmp/config 2> /dev/null
+                mv /tmp/config /home/$USER_NAME/.config/i3/config 2> /dev/null
+            fi
+            chown -R $USER_NAME:$USER_NAME /home/$USER_NAME/.config/i3
             ;;
         "x" | "xfce" | "xfce4" | "" | *)
-            # xfce4 settings
+            # Xfce4 settings
             mkdir -p /home/$USER_NAME/.config/xfce4/xfconf/xfce-perchannel-xml
             cp -a /mnt/guest/configs/xfce4/xfconf/xfce-perchannel-xml/. /home/$USER_NAME/.config/xfce4/xfconf/xfce-perchannel-xml/
-            sed -i "s/\/usr\/share\/backgrounds\/xfce\/xfce-verticals.png/\/home\/$USER_NAME\/Pictures\/Wallpapers\/PLACEHOLDER2.jpg/g" \
-            	/home/$USER_NAME/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml
-	    chown -R $USER_NAME:$USER_NAME /home/$USER_NAME/.config/xfce4
 
-            # onboard
+            # Wallpaper
+            if [ "$1" = "debian" ] || [ "$1" = "archarm" ] || [ "$1" = "archlinux" ] || [ "$1" = "kali" ]; then
+                sed -i "s/\/usr\/share\/backgrounds\/xfce\/xfce-verticals.png/\/home\/$USER_NAME\/Pictures\/Wallpapers\/$1-2.jpg/g" \
+                	/home/$USER_NAME/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml
+            fi
+	    chown -R $USER_NAME:$USER_NAME /home/$USER_NAME/.config
+
+            # Onboard
             runuser -l $USER_NAME -c "dbus-launch dconf load /org/onboard/ < /mnt/guest/configs/onboard-default.conf" 2> /dev/null
 
-            # mousetweaks (right click emulation)
+            # Mousetweaks (right click emulation)
             # Skip on Debian where it is not installed because it complains about Wayland; somehow works in Arch
-            if type mousetweaks 2> /dev/null; then
+            if type mousetweaks > /dev/null; then
                 mkdir -p /home/$USER_NAME/.config/autostart
                 printf '[Desktop Entry]
 Encoding=UTF-8

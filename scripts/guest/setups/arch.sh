@@ -10,7 +10,7 @@ source /mnt/guest/setups/configure_desktop.sh
 
 # Choose default WM
 sleep 3
-printf "\033[1;32m[?] Choose default window manager for the container: [x]fce4, [i]3-gaps (default=x): \033[0m" && read -r REPLY
+printf '\033[1;32m[?] Choose default window manager for the %s container: [x]fce4, [i]3 (default=x): \033[0m' "${3^}" && read -r REPLY
 
 # Check if user setup is required
 if [ ! -d "/home/${USER_NAME}" ]
@@ -37,7 +37,7 @@ fi
 # Install base utilities for selected WM and X setup
 printf "\033[0;36m[+] Installing selected WM and base utilities…\033[0m\n"
 case "$REPLY" in
-    "i" | "i3" | "i3gaps" | "i3-gaps")
+    "i" | "i3")
         LAUNCHCMD="exec i3"
         pacman -Syu --noconfirm --needed \
             dconf \
@@ -124,13 +124,7 @@ if [ -e "/home/$USER_NAME/.config/i3/config" ] || [ -e "/home/$USER_NAME/.config
     printf "\033[0;33m[!] This container seems to have been configured already (possibly manually). Overwrite with defaults? [y/N] \033[0m" && read -r ANSWER
     case "$ANSWER" in
         "y" | "yes" | "Y" | "Yes" | "Yes")
-            configure_desktop
-
-            # Distro-specific post-configuration (wallpaper and path to terminal)
-            sed -i "s/PLACEHOLDER/arch/g" /home/$USER_NAME/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml 2> /dev/null
-            sed -i "s/PLACEHOLDER/arch/g" /home/$USER_NAME/.config/nitrogen/bg-saved.cfg 2> /dev/null
-            sed -i "s/sbin/usr\/bin/g" /home/$USER_NAME/.local/bin/xfce4-terminal
-
+            configure_desktop $3
             printf "\033[0;32mDefault configuration re-applied.\033[0m\n"
         ;;
         "n" | "no" | "N" | "No" | "NO" | "" | *)
@@ -138,13 +132,7 @@ if [ -e "/home/$USER_NAME/.config/i3/config" ] || [ -e "/home/$USER_NAME/.config
         ;;
     esac
 else
-    configure_desktop
-    
-    # Distro-specific post-configuration (wallpaper and path to terminal)
-    sed -i "s/PLACEHOLDER/arch/g" /home/$USER_NAME/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml 2> /dev/null
-    sed -i "s/PLACEHOLDER/arch/g" /home/$USER_NAME/.config/nitrogen/bg-saved.cfg 2> /dev/null
-    sed -i "s/sbin/usr\/bin/g" /home/$USER_NAME/.local/bin/xfce4-terminal
-
+    configure_desktop $3
     printf "\033[0;32mDone.\033[0m\n"
 fi
 

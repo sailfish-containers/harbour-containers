@@ -46,7 +46,12 @@ Custom:
   Repo: https://github.com/sailfish-containers/harbour-containers
 Icon:  %{url}/raw/master/icons/harbour-containers.svg
 Screenshots:
- - %{url}/raw/master/pics/Screenshot_20220817_004_800.png
+ - %{url}/raw/master/pics/debian-i3_800.jpg
+ - %{url}/raw/master/pics/arch-i3_800.jpg
+ - %{url}/raw/master/pics/kali-xfce4_800.jpg
+ - %{url}/raw/master/pics/arch-xfce4_800.jpg
+ - %{url}/raw/master/pics/debian-xfce4_800.jpg
+ - %{url}/raw/master/pics/kali-i3_800.jpg
  - %{url}/raw/master/pics/Screenshot_20220817_005_800.png
  - %{url}/raw/master/pics/E5vInvOWQAMcxLg_800.jpeg
  - %{url}/raw/master/pics/EmdbYnRXIAEZlLb_800.jpeg

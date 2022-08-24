@@ -1,17 +1,17 @@
 #!/bin/bash
-# lxc setup desktop 
-# run as root inside a container
+# LXC setup desktop
+# Run as root inside a container
 
-# get architecture
+# Get architecture
 ARCH=$(uname -m)
 
-# # get username and uid
+# Get username and uid
 if [ "$#" -lt 1 ]
 then
-	# set default user
-	USER_NAME="user"
+    	# set default user
+        USER_NAME="user"
 else
-        USER_NAME=$1
+    	USER_NAME=$1
 fi
 if [ "$#" -ne 2 ]
 then
@@ -21,29 +21,27 @@ else
     USER_UID=$2
 fi
 
-ARCH=$(uname -m)
-
-# get distro name
+# Get distro name
 DISTRO_FILE=$(cat /etc/os-release | grep ^ID=)
-DISTRO_VER=${DISTRO_FILE#"ID="}
+DISTRO=${DISTRO_FILE#"ID="}
 
-case $DISTRO_VER in
-	"debian" | "kali" | "ubuntu" | "mint" | "devuan")
+case $DISTRO in
+        "debian" | "kali" | "ubuntu" | "mint" | "devuan")
                 DISTRO_VER=debian
-	;;
+        ;;
 
-	 "archarm" | "archlinux")
-		DISTRO_VER=arch
-	;;
+         "archarm" | "archlinux")
+	        DISTRO_VER=arch
+    	;;
 esac
 
-# run distro setup script
+# Run distro setup script
 if [ -f "/mnt/guest/setups/${DISTRO_VER}.sh" ]
 then
-	echo "[*] Starting ${DISTRO_VER} setup script..."
-        bash -c ". /mnt/guest/setups/$DISTRO_VER.sh $USER_NAME $USER_UID"
+    	echo "[*] Starting ${DISTRO_VER} setup script..."
+        bash -c ". /mnt/guest/setups/$DISTRO_VER.sh $USER_NAME $USER_UID $DISTRO"
 else
-	echo "[!] ${DISTRO_VER} currently not supported by setup scripts."
+    	echo "[!] ${DISTRO} currently not supported by setup scripts."
 fi
 
-echo "[+] container is ready!"
+echo "[+] Container is ready!"
