@@ -8,9 +8,9 @@
    version="1.1"
    inkscape:version="1.2.1 (9c6d41e410, 2022-07-14)"
    sodipodi:docname="harbour-containers.svg"
-   inkscape:export-filename="../qml/images/harbour-containers.png"
-   inkscape:export-xdpi="193.34895"
-   inkscape:export-ydpi="193.34895"
+   inkscape:export-filename="86x86/harbour-containers.png"
+   inkscape:export-xdpi="96.674477"
+   inkscape:export-ydpi="96.674477"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -109,9 +109,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="4.4004774"
-     inkscape:cx="-56.812018"
-     inkscape:cy="41.018277"
+     inkscape:zoom="7.0608622"
+     inkscape:cx="48.436011"
+     inkscape:cy="23.014187"
      inkscape:document-units="px"
      inkscape:current-layer="layer2"
      showgrid="true"
@@ -268,12 +268,12 @@
          ry="0.030123852" />
     </g>
     <path
-       style="display:inline;opacity:1;fill:#d0e2ec;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="display:inline;opacity:1;fill:#9ec6db;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="M 25.412806,78.122466 14.65429,44.500109 43.086247,24.728255 l -0.0258,53.465916 z"
        id="path12947"
        sodipodi:nodetypes="ccccc" />
     <path
-       style="display:inline;opacity:1;fill:#9ec6db;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="display:inline;opacity:1;fill:#d0e2ec;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="M 60.694519,78.122466 71.453035,44.500109 43.00826,24.734623 42.967308,78.195977 Z"
        id="path12947-7"
        sodipodi:nodetypes="ccccc" />
@@ -288,12 +288,12 @@
        ry="0.03421234"
        clip-path="url(#clipPath17732)" />
     <path
-       style="display:inline;opacity:1;fill:#c3404a;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="display:inline;opacity:1;fill:#e9666a;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 60.645065,78.122466 2.741162,-8.555047 c -8.505933,-1.06386 -16.384322,-5.295831 -20.45628,-5.514053 l -0.0121,14.142611 z"
        id="path12947-7-9"
        sodipodi:nodetypes="ccccc" />
     <path
-       style="display:inline;opacity:1;fill:#e9666a;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="display:inline;opacity:1;fill:#c3404a;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 25.403447,78.122466 -2.741162,-8.555047 c 8.505933,-1.06386 16.384322,-5.295831 20.45628,-5.514053 l 0.0121,14.142611 z"
        id="path12947-7-9-0"
        sodipodi:nodetypes="ccccc" />
@@ -310,7 +310,7 @@
        cy="37.987926"
        r="2.8257551" />
     <circle
-       style="display:inline;fill:#d0e2ec;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2.79058;stroke-dasharray:11.1623, 2.79058;stroke-opacity:0.447059;paint-order:stroke markers fill;stop-color:#000000"
+       style="display:inline;fill:#9ec6db;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2.79058;stroke-dasharray:11.1623, 2.79058;stroke-opacity:0.447059;paint-order:stroke markers fill;stop-color:#000000"
        id="path13849-3"
        cx="49.942486"
        cy="37.987926"

@@ -29,7 +29,7 @@ file=/home/%s/Pictures/Wallpapers/PLACEHOLDER1.jpg
 mode=5
 bgcolor=#000000
 ' "$USER_NAME" > /home/$USER_NAME/.config/nitrogen/bg-saved.cfg
-            chown -R $USER_NAME:$USER_NAME /home/$USER_NAME/.config/nitrogen
+            chown -R $USER_NAME:$USER_NAME /home/$USER_NAME/.config
 
            # i3-gaps
            mkdir -p /home/$USER_NAME/.config/i3/
@@ -71,8 +71,10 @@ set $gaps_variation 4
             runuser -l $USER_NAME -c "dbus-launch dconf load /org/onboard/ < /mnt/guest/configs/onboard-default.conf" 2> /dev/null
 
             # mousetweaks (right click emulation)
-            mkdir -p /home/$USER_NAME/.config/autostart
-            printf '[Desktop Entry]
+            # Skip on Debian where it is not installed because it complains about Wayland; somehow works in Arch
+            if type mousetweaks 2> /dev/null; then
+                mkdir -p /home/$USER_NAME/.config/autostart
+                printf '[Desktop Entry]
 Encoding=UTF-8
 Version=0.9.4
 Type=Application
@@ -85,7 +87,8 @@ StartupNotify=false
 Terminal=false
 Hidden=false
 ' > /home/$USER_NAME/.config/autostart/mousetweaks.desktop
-	    chown -R $USER_NAME:$USER_NAME /home/$USER_NAME/.config/autostart
+                chown -R $USER_NAME:$USER_NAME /home/$USER_NAME/.config/autostart
+            fi
         ;;
     esac
 
@@ -120,10 +123,12 @@ Sxiv.font: mono-10;
     cp -r /mnt/guest/configs/Wallpapers /home/$USER_NAME/Pictures/
     chown -R $USER_NAME:$USER_NAME /home/$USER_NAME/Pictures/Wallpapers
 
-    # Beautify xfce4-terminaĺ and make it use less spaxe
+    # Beautify xfce4-terminaĺ and make it use less space
     runuser -l $USER_NAME -c "mkdir -p /home/$USER_NAME/.local/bin/"
     printf '#!/bin/env bash
-/sbin/xfce4-terminal --hide-scrollbar --hide-menubar\n' > /home/$USER_NAME/.local/bin/xfce4-terminal
+TERMBIN --hide-scrollbar --hide-menubar --color-bg=#222222 --zoom=-1 $@\n' > /home/$USER_NAME/.local/bin/xfce4-terminal
+    TERMBIN=$(which xfce4-terminal)
+    sed -i "s#TERMBIN#$TERMBIN#g" /home/$USER_NAME/.local/bin/xfce4-terminal
     chown $USER_NAME:$USERNAME /home/$USER_NAME/.local/bin/xfce4-terminal
     chmod +x /home/$USER_NAME/.local/bin/xfce4-terminal
 }

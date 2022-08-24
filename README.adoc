@@ -6,7 +6,7 @@
 
 _A LXC manager and runner for SailfishOS_
 
-image::https://raw.githubusercontent.com/sailfish-containers/harbour-containers/master/icons/172x172/harbour-containers.png[]  
+image::https://raw.githubusercontent.com/sailfish-containers/harbour-containers/devel-k/icons/172x172/harbour-containers.png[]  
 
 :toc: macro
 
@@ -16,10 +16,15 @@ toc::[]
 == Documentation
 
 === What is it?
-_Containers_ (`harbour-containers`) is a SailfishOS application to create, download, manage and run Linux containers (LXC) from a convenient GUI. It relies on `Xwayland` to run the associated desktop environment inside a new SailifshOS window:
+_Containers_ (`harbour-containers`) is a SailfishOS application to create, download, manage and run Linux containers (LXC) from a convenient GUI. It currently supports both Arch- and Debian-based distributions, and Xfce4 and i3 as window managers. It relies on `Xwayland` to run the associated desktop environment inside a new SailifshOS window:
 
+image::pics/Screenshot_20220824_003_800.png[]
 image::pics/Screenshot_20220817_005_800.png[]
-image::pics/Screenshot_20220817_004_800.png[]
+[cols="a,a", frame=none, grid=none]
+|===
+| image::pics/Screenshot_20220817_004_800.png[]
+| image::pics/Screenshot_20220824_004_800.png[]
+|===
 image::pics/E5vInvOWQAMcxLg_800.jpeg[]
 
 === Installation
@@ -153,4 +158,4 @@ This project is proudly licensed under GNU GPLv3.
 Many thanks to all contributors and testers: 
  
 * https://github.com/r3vn[r3vn (main dev)] - https://github.com/g7[g7] - https://github.com/Kabouik[kabouik] - https://github.com/eLtMosen[eLtMosen] - https://github.com/elros34[elros34] - https://github.com/edp17[edp17] - https://github.com/vaskas[vaskas] - https://github.com/sashinfantry[dashinfantry] - https://github.com/hengyedev[HengYeDev]  
-* https://www.flaticon.com/free-icons/container-ship[Container ship icon modified from Freepik - Flaticon]
+* https://www.flaticon.com/free-icons/ship[Container ship icon modified from pongsakornRed's, Flaticon]

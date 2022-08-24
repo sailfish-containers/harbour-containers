@@ -9,6 +9,7 @@ USER_UID=$2
 source /mnt/guest/setups/configure_desktop.sh
 
 # Choose default WM
+sleep 3
 printf "\033[1;32m[?] Choose default window manager for the container: [x]fce4, [i]3-gaps (default=x): \033[0m" && read -r REPLY
 
 # Check if user setup is required
@@ -50,7 +51,6 @@ case "$REPLY" in
             mousetweaks \
             nitrogen \
             onboard \
-            rofi \
             sudo \
             thunar \
             thunar-volman \
@@ -75,7 +75,6 @@ case "$REPLY" in
             libbsd \
             mousetweaks \
             onboard \
-            rofi \
             sudo \
             thunar \
             thunar-volman \

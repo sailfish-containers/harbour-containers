@@ -9,6 +9,7 @@ USER_UID=$2
 source /mnt/guest/setups/configure_desktop.sh
 
 # Choose default WM
+sleep 3
 printf "\033[1;32m[?] Choose default window manager for the container: [x]fce4, [i]3-gaps (default=x): \033[0m" && read -r REPLY
 
 # Check if user setup is required
@@ -61,7 +62,6 @@ case "$REPLY" in
             mousetweaks \
             nitrogen \
             onboard \
-            rofi \
             sudo \
             thunar \
             thunar-volman \
@@ -73,14 +73,13 @@ case "$REPLY" in
         ;;
     "x" | "xfce" | "xfce4" | "" | *)
         LAUNCHCMD="exec startxfce4"
-        apt install -y
+        apt install -y \
             dbus-x11 \
             dconf-cli \
             dmenu \
             firefox \
             mousetweaks \
             onboard \
-            rofi \
             sudo \
             thunar \
             thunar-volman \
@@ -120,12 +119,12 @@ if [ -e "/home/$USER_NAME/.config/i3/config" ] || [ -e "/home/$USER_NAME/.config
         "y" | "yes" | "Y" | "Yes" | "Yes")
             configure_desktop
 
-            # Distro-specific post-configuration (wallpaper, path to terminal and no gaps in i3)
+            # Distro-specific post-configuration (wallpaper and no gaps in i3)
             sed -i "s/PLACEHOLDER/debian/g" /home/$USER_NAME/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml 2> /dev/null
             sed -i "s/PLACEHOLDER/debian/g" /home/$USER_NAME/.config/nitrogen/bg-saved.cfg 2> /dev/null
-            sed -i "s/sbin/usr\/bin/g" /home/$USER_NAME/.local/bin/xfce4-terminal
-            head -n -6 /home/$USER_NAME/.config/i3/config > /tmp/config
-            mv /tmp/config /home/$USER_NAME/.config/i3/config
+            head -n -6 /home/$USER_NAME/.config/i3/config > /tmp/config 2> /dev/null 
+            mv /tmp/config /home/$USER_NAME/.config/i3/config 2> /dev/null
+            
             printf "\033[0;32mDefault configuration re-applied.\033[0m\n"
         ;;
         "n" | "no" | "N" | "No" | "NO" | "" | *)
@@ -135,12 +134,11 @@ if [ -e "/home/$USER_NAME/.config/i3/config" ] || [ -e "/home/$USER_NAME/.config
 else
     configure_desktop
 
-    # Distro-specific post-configuration (wallpaper and path to terminal and no gaps in i3)
+    # Distro-specific post-configuration (wallpaper and no gaps in i3)
     sed -i "s/PLACEHOLDER/debian/g" /home/$USER_NAME/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml 2> /dev/null
     sed -i "s/PLACEHOLDER/debian/g" /home/$USER_NAME/.config/nitrogen/bg-saved.cfg 2> /dev/null
-    sed -i "s/sbin/usr\/bin/g" /home/$USER_NAME/.local/bin/xfce4-terminal
-    head -n -6 /home/$USER_NAME/.config/i3/config > /tmp/config
-    mv /tmp/config /home/$USER_NAME/.config/i3/config
+    head -n -6 /home/$USER_NAME/.config/i3/config > /tmp/config 2> /dev/null
+    mv /tmp/config /home/$USER_NAME/.config/i3/config 2> /dev/null
 
     printf "\033[0;32mDone.\033[0m\n"
 fi
