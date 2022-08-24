@@ -1,20 +1,26 @@
 #!/bin/bash
-# lxc setup xfce4 desktop on debian/ubuntu
-# run as root inside a container
+# LXC setup xfce4 or i3-gaps in Debian-based distributions
+# run as root inside a Debian container, or use harbour-containers' xsession setup button
 
 USER_NAME=$1
 USER_UID=$2
 
-# check if user setup is required
+# Source the configure_desktop function
+source /mnt/guest/setups/configure_desktop.sh
+
+# Choose default WM
+printf "\033[1;32m[?] Choose default window manager for the container: [x]fce4, [i]3-gaps (default=x): \033[0m" && read -r REPLY
+
+# Check if user setup is required
 if [ ! -d "/home/${USER_NAME}" ]
 then
-	# add user without interaction
+	# Add user without interaction
         echo "[+] creating new user '$USER_NAME', please enter user password."
         adduser --disabled-password --gecos "" --uid $USER_UID $USER_NAME
 	sleep 1
         passwd $USER_NAME
 
-	# add android group inet for _apt and user
+	# Add android group inet for _apt and user
 	echo "inet:x:3003:_apt,${USER_NAME}" >> /etc/group
 	echo "nameserver 8.8.8.8" >> /etc/resolv.conf
 
@@ -22,8 +28,11 @@ then
 	usermod -g 3003 _apt
 
 	sleep 5
+	
+        # Add user to sudoers
+        adduser $USER_NAME sudo
 
-	# make the dns change in resolv.conf permanent
+	# Make the dns change in resolv.conf permanent
 	apt update
 	apt install -y resolvconf
 	echo "nameserver 8.8.8.8" >> /etc/resolvconf/resolv.conf.d/tail
@@ -31,89 +40,153 @@ then
 	resolvconf -u
 fi
 
-# # build xwayland
-# # add sources repository
+# Install base utilities for selected WM and X setup
+printf "\033[0;36m[+] Installing selected WM and base utilities…\033[0m\n"
+apt install -y sudo xfce4 onboard dbus-x11 dconf-cli
+
+# Install base utilities for selected WM and X setup
+printf "\033[0;36m[+] Installing selected WM and base utilities…\033[0m\n"
+case "$REPLY" in
+    "i" | "i3" | "i3gaps" | "i3-gaps")
+        LAUNCHCMD="exec i3"
+        apt install -y \
+            dbus-x11 \
+            dconf-cli \
+            dmenu \
+            firefox \
+            i3blocks \
+            i3 \
+            i3lock \
+            i3status \
+            mousetweaks \
+            nitrogen \
+            onboard \
+            rofi \
+            sudo \
+            thunar \
+            thunar-volman \
+            tumbler \
+            viewnior \
+            wget \
+            xdg-user-dirs \
+            xfce4-terminal
+        ;;
+    "x" | "xfce" | "xfce4" | "" | *)
+        LAUNCHCMD="exec startxfce4"
+        apt install -y
+            dbus-x11 \
+            dconf-cli \
+            dmenu \
+            firefox \
+            mousetweaks \
+            onboard \
+            rofi \
+            sudo \
+            thunar \
+            thunar-volman \
+            tumbler \
+            viewnior \
+            wget \
+            xdg-user-dirs \
+            xfce4 \
+            xfce4-terminal
+        ;;
+esac
+
+# Mask unused services
+systemctl mask lightdm
+systemctl mask upower
+
+# Download latest Xwayland binary from the sailfish-containers/xserver repo,
+# since current Xwayland does not support XDG_WM_BASE
+ARCH=$(uname -m)
+printf "\033[0;36m[+] Fetching prebuilt Xwayland…\033[0m\n"
+mkdir -p /opt/bin
+wget https://github.com/sailfish-containers/xserver/releases/download/b1/Xwayland.${ARCH}.libc-2.29.bin \
+	-O /opt/bin/Xwayland -nc -q --show-progress
+chmod +x /opt/bin/Xwayland
+
+# Link harbour-containers scripts
+ln -s /mnt/guest/start_desktop.sh /opt/bin/start_desktop.sh
+ln -s /mnt/guest/setup_desktop.sh /opt/bin/setup_desktop.sh
+ln -s /mnt/guest/start_onboard.sh /opt/bin/start_onboard.sh
+ln -s /mnt/guest/kill_xwayland.sh /opt/bin/kill_xwayland.sh
+
+# Desktop configuration prompt
+printf "\033[0;36m[+] Preconfiguring desktop with sane default settings…\033[0m\n"
+if [ -e "/home/$USER_NAME/.config/i3/config" ] || [ -e "/home/$USER_NAME/.config/xfce4/xfconf/xfce-perchannel-xml" ]; then
+    printf "\033[0;33m[!] This container seems to have been configured already (possibly manually). Overwrite with defaults? [y/N] \033[0m" && read -r ANSWER
+    case "$ANSWER" in
+        "y" | "yes" | "Y" | "Yes" | "Yes")
+            configure_desktop
+
+            # Distro-specific post-configuration (wallpaper, path to terminal and no gaps in i3)
+            sed -i "s/PLACEHOLDER/debian/g" /home/$USER_NAME/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml 2> /dev/null
+            sed -i "s/PLACEHOLDER/debian/g" /home/$USER_NAME/.config/nitrogen/bg-saved.cfg 2> /dev/null
+            sed -i "s/sbin/usr\/bin/g" /home/$USER_NAME/.local/bin/xfce4-terminal
+            head -n -6 /home/$USER_NAME/.config/i3/config > /tmp/config
+            mv /tmp/config /home/$USER_NAME/.config/i3/config
+            printf "\033[0;32mDefault configuration re-applied.\033[0m\n"
+        ;;
+        "n" | "no" | "N" | "No" | "NO" | "" | *)
+            printf "Aborting desktop reconfiguration…\n"
+        ;;
+    esac
+else
+    configure_desktop
+
+    # Distro-specific post-configuration (wallpaper and path to terminal and no gaps in i3)
+    sed -i "s/PLACEHOLDER/debian/g" /home/$USER_NAME/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml 2> /dev/null
+    sed -i "s/PLACEHOLDER/debian/g" /home/$USER_NAME/.config/nitrogen/bg-saved.cfg 2> /dev/null
+    sed -i "s/sbin/usr\/bin/g" /home/$USER_NAME/.local/bin/xfce4-terminal
+    head -n -6 /home/$USER_NAME/.config/i3/config > /tmp/config
+    mv /tmp/config /home/$USER_NAME/.config/i3/config
+
+    printf "\033[0;32mDone.\033[0m\n"
+fi
+
+# # Compile Xwayland from sources - disabled for now because sources no longer support required XDG_WM_BASE
+# # Add sources repository
 # echo "[+] Adding sources repository"
 # cp /etc/apt/sources.list /etc/apt/sources.list.d/deb-src.list
 # sed -i 's/deb http/deb-src http/g' /etc/apt/sources.list.d/deb-src.list
-
 # apt update
 # cd /usr/src
-
-# # get xwayland and build dependencies
+# # Get Xwayland and build dependencies
 # echo "[+] Get Xwayland sources and build dependencies"
 # apt showsrc xwayland | sed -e '/Build-Depends/!d;s/Build-Depends: \|,\|([^)]*),*\|\[[^]]*\]//g' | grep -v "Build-Depends-Indep:" > /tmp/deplist
 # apt build-dep -y xwayland
 # apt source -y xwayland
-
-# # patch xwayland
+# # Patch Xwayland
 # echo "[+] Patching Xwayland sources"
 # cd /usr/src/xwayland-*
-
 # patch -p1 hw/xwayland/xwayland-input.c < /mnt/guest/configs/wlseat.patch
-
-# # make xwayland
+# # Make Xwayland
 # echo "[+] Running configure"
 # meson -Ddocs=false -Ddevel-docs=false -Dxvfb=false ../build
-
-# echo "[!!!] Xwayland build process starting in 3 seconds"
+# echo "[!] Xwayland build process starting in 3 seconds"
 # meson compile -C ../build
-
-# echo "[+] Installing Xwayland binary..."
+# echo "[+] Installing Xwayland binary…"
 # meson install -C ../build
-
-# # copy new binary
+# # Copy new binary
 # mkdir -p /opt/bin
 # mv /usr/local/bin/Xwayland /opt/bin/Xwayland
-
 # echo "[+] Done."
-# echo "[+] Cleaning container..."
+# echo "[+] Cleaning container…"
 # sleep 3
 # # Clean system
 # cd /
 # apt purge -y `cat /tmp/deplist`
 # apt autoremove -y
 # apt clean
-
 # rm /etc/apt/sources.list.d/deb-src.list
 # rm -rf /usr/src/*
-
 # apt update
 
-# download latest xwayland binary from the repo if building from sources failed,
-# else keep the built one already in /opt/bin/Xwayland (wget won't overwritte it)
-ARCH=$(uname -m)
-apt install -y wget
-echo "[+] Fetching prebuilt Xwayland in case building above failed..."
-mkdir -p /opt/bin
-wget https://github.com/sailfish-containers/xserver/releases/download/b1/Xwayland.${ARCH}.libc-2.29.bin -O /opt/bin/Xwayland -nc
-chmod +x /opt/bin/Xwayland
+# Wrap up
+printf "\033[1;32m[Success] Xsession ready. Press [Return] to close this terminal window.
+          You will then be able to start X from the GUI.\033[0m\n"
+read -r _
 
-# install xfce-desktop
-echo "[+] Installing xfce4 and Onboard virtual keyboard"
-apt install -y sudo xfce4 onboard dbus-x11 dconf-cli # Xephyr # Xephyr allow to run a display manager and rotate the screen from the container however it disable multitouch
-
-# mask unused services
-systemctl mask lightdm
-systemctl mask upower
-
-# add user to sudoers
-adduser $USER_NAME sudo
-
-# link scripts
-ln -s /mnt/guest/start_desktop.sh /opt/bin/start_desktop.sh
-ln -s /mnt/guest/setup_desktop.sh /opt/bin/setup_desktop.sh
-ln -s /mnt/guest/start_onboard.sh /opt/bin/start_onboard.sh
-ln -s /mnt/guest/kill_xwayland.sh /opt/bin/kill_xwayland.sh
-
-# Keep polkit for bothering users at each boot
-mkdir -p /etc/polkit-1/localauthority/50-local.d
-cp /mnt/guest/configs/45-allow-colord.pkla /etc/polkit-1/localauthority/50-local.d/45-allow-colord.pkla
-
-# load sensible onboard settings
-sudo -u $USER_NAME bash -c "mkdir -p /home/$USER_NAME/.config/xfce4/xfconf/xfce-perchannel-xml"
-sudo -u $USER_NAME bash -c "dbus-launch dconf load /org/onboard/ < /mnt/guest/configs/onboard-default.conf"
-sudo -u $USER_NAME bash -c "cp /mnt/guest/configs/xsettings.xml /home/$USER_NAME/.config/xfce4/xfconf/xfce-perchannel-xml/xsettings.xml"
-
-echo "[+] xsession ready, you can now start if from the GUI. Press [Return] to close this terminal window."
-read -r _ 
+# Reboot the container
+shutdown -h now

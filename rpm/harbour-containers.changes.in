@@ -14,10 +14,11 @@
 
 * Tue Aug 23 2022 kabouik
 - Add a script to install Arch-based distributions
-- WM choice when installing (xfce4 or i3), only supported for Arch for now
-- Better default configs for both WMs
+- WM choice when installing (xfce4 or i3), should work for all supported distro (arch, debian)
+- Better default configs for both WMs (scaling, right click, touch scrolling in Firefox)
 - Possibility to run the script multiple times on a script without breaking things
-- Prompts at important steps (in case of overwriting, or long compilations)
+- Prompts at important steps during install scripts (in case of overwriting config, or long compilations)
+- Nea icon, better for small screens
 
 * Thu Aug 19 2022 kabouik
 - Updated description and license for Chum repository
