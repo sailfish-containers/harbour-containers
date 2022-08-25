@@ -1,0 +1,119 @@
+#!/bin/bash
+# lxc setup xfce4 or i3 in Arch
+# run as root inside a container
+
+USER_NAME=$1
+USER_UID=$2
+
+# check if user setup is required
+if [ ! -d "/home/${USER_NAME}" ]
+then
+	# add user without interaction
+        echo "[+] creating new user '$USER_NAME', please enter user password."
+        useradd -m -u $USER_UID $USER_NAME
+	sleep 1
+        passwd $USER_NAME
+
+	# add android group inet for user
+	echo "inet:x:3003:root,${USER_NAME}" >> /etc/group
+	echo "net_raw:x:3004:root,${USER_NAME}" >> /etc/group
+	echo "nameserver 8.8.8.8" >> /etc/resolv.conf
+	sleep 5
+
+	# make the dns change in resolv.conf permanent
+	pacman -Syu --noconfirm resolvconf
+	echo "nameserver 8.8.8.8" >> /etc/resolvconf/resolv.conf.d/tail
+	resolvconf --enable-updates
+	resolvconf -u
+fi
+
+echo "keyserver hkp://pgp.mit.edu:11371" >> /etc/pacman.d/gnupg/gpg.conf
+
+# Chose default WM
+echo -e "\033[1;32mChoose default window manager for the container: [x]fce4, [i]3-gaps (default=x): \033[0m"
+read -r REPLY
+
+# download latest xwayland binary from the repo if building from sources failed,
+# else keep the built one already in /opt/bin/Xwayland (wget won't overwritte it)
+ARCH=$(uname -m)
+pacman -Syu --noconfirm wget
+echo -e "\033[0;34m[+] Fetching prebuilt Xwayland…\033[0m"
+mkdir -p /opt/bin
+wget https://github.com/sailfish-containers/xserver/releases/download/b1/Xwayland.${ARCH}.libc-2.29.bin -O /opt/bin/Xwayland -nc
+chmod +x /opt/bin/Xwayland
+
+# Install required packages for X and the selected WM
+echo -e "\033[0;34m[+] Installing the selected WM…\033[0m"
+case "$REPLY" in
+    i | i3 | i3gaps | i3-gaps)
+        pacman -Syu --noconfirm sudo onboard dconf libbsd i3-gaps dmenu \
+        	xorg-server xorg-apps xorg-xinit rofi i3blocks i3lock i3status firefox pam pambase &&
+        WM=i3 ;;
+    x | xfce | xfce4 | "" | *)
+        pacman -Syu --noconfirm sudo exo garcon thunar thunar-volman tumbler xfce4-appfinder \
+    	xfce4-panel xfce4-power-manager xfce4-session xfce4-settings xfce4-terminal \
+    	xfconf xfdesktop xfwm4 xfwm4-themes onboard dconf libbsd dmenu \
+    	xorg-server xorg-apps xorg-xinit rofi firefox pam pambase &&
+        WM=startxfce4 ;;
+esac
+
+echo "allowed_users=anybody" > /etc/X11/Xwrapper.config
+
+# Set up X
+case "$REPLY" in
+    i | i3 | i3gaps | i3-gaps)
+        runuser -l $USER_NAME -c "dbus-launch dconf load /org/onboard/ < /mnt/guest/configs/onboard-default.conf" ;;
+    x | xfce | xfce4 | "" | *)
+        runuser -l $USER_NAME -c "mkdir -p /home/$USER_NAME/.config/xfce4/xfconf/xfce-perchannel-xml" &&
+        runuser -l $USER_NAME -c "dbus-launch dconf load /org/onboard/ < /mnt/guest/configs/onboard-default.conf" &&
+        runuser -l $USER_NAME -c "cp /mnt/guest/configs/xsettings.xml /home/$USER_NAME/.config/xfce4/xfconf/xfce-perchannel-xml/xsettings.xml" &&
+        runuser -l $USER_NAME -c "cp /mnt/guest/configs/xfce4-panel.xml /home/$USER_NAME/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-panel.xml" ;;
+esac
+
+runuser -l $USER_NAME -c "cp /etc/X11/xinit/xinitrc /home/$USER_NAME/"
+runuser -l $USER_NAME -c "echo "exec $WM" >> /home/$USER_NAME/.xinitrc"
+
+cat << 'EOF' >> /home/$USER_NAME/.Xdefaults
+Xft.dpi: 180
+xterm*font:     *-fixed-*-*-*-20-*
+Sxiv.background: #222222
+Sxiv.foreground: #ffffff
+Sxiv.font: mono-10;
+EOF
+chown $USER_NAME:$USER_NAME /home/$USER_NAME/.Xdefaults
+
+# Allow touch scrolling in Firefox
+echo "MOZ_ENABLE_XINPUT2 DEFAULT=1" > /etc/security/pam_env.conf
+
+# add user to sudoers, temporarily with no password to ease scripted installation of AUR packages below
+usermod -aG wheel $USER_NAME
+sed -i 's/# %wheel ALL=(ALL:ALL) NOPASSWD: ALL/%wheel ALL=(ALL:ALL) NOPASSWD: ALL/g' /etc/sudoers
+
+# install yay to get libselinux form AUR
+pacman -Syu --needed --noconfirm git autoconf automake binutils make pkgconf bison fakeroot gcc flex patch
+runuser -l $USER_NAME -c "git clone https://aur.archlinux.org/yay-bin.git /tmp/yay-bin"
+runuser -l $USER_NAME -c "cd /tmp/yay-bin && makepkg -si --noconfirm"
+runuser -l $USER_NAME -c "yay -Y --gendb"
+runuser	-l $USER_NAME -c "echo y | LANG=C yay -Syu --noprovides --answerdiff None --answerclean None --mflags '--noconfirm' aur/dbus-x11"
+runuser	-l $USER_NAME -c "echo y | LANG=C yay -Syu --noprovides --answerdiff None --answerclean None --mflags '--noconfirm' aur/libselinux"
+
+# mask unused services
+systemctl mask lightdm
+systemctl mask upower
+
+# link scripts
+ln -s /mnt/guest/start_desktop.sh /opt/bin/start_desktop.sh
+ln -s /mnt/guest/setup_desktop.sh /opt/bin/setup_desktop.sh
+ln -s /mnt/guest/start_onboard.sh /opt/bin/start_onboard.sh
+ln -s /mnt/guest/kill_xwayland.sh /opt/bin/kill_xwayland.sh
+
+# Keep polkit for bothering users at each boot
+mkdir -p /etc/polkit-1/localauthority/50-local.d
+cp /mnt/guest/configs/45-allow-colord.pkla /etc/polkit-1/localauthority/50-local.d/45-allow-colord.pkla
+
+# Change /etc/sudoers to prompt user for password on sudo again
+sed -i 's/%wheel ALL=(ALL:ALL) NOPASSWD: ALL/# %wheel ALL=(ALL:ALL) NOPASSWD: ALL/g' /etc/sudoers
+sed -i 's/# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/g' /etc/sudoers
+
+echo -e "\033[0;32m[+] xsession ready, you can now start if from the GUI. Press [Return] to close this terminal window.\033[0m"
+read -r _ 

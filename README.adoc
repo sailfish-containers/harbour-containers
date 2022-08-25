@@ -83,6 +83,10 @@ zypper install harbour-containers-<VERSION>.rpm
 Those three packages will have to be uninstalled manually before stable builds can be installed from Chum again, see above section.
 
 === How to use?
+
+==== SailfishOS side
+NOTE: For now, the application requires that your SailfishOS user name is `defaultuser`. For `nemo` users from older SailfishOS versions, or custom user names, a symbolic link won't be enough to start X from the GUI (but you can still create and manage containers from it, and launch X from CLI). See https://github.com/sailfish-containers/harbour-containers#known-issueslimitations[known issues].
+
 The GUI of `harbour-containers` should be relatively straightforward, see a brief description of GUI elements below:
 
 .Click to expand the description of each GUI element
@@ -117,6 +121,9 @@ The GUI of `harbour-containers` should be relatively straightforward, see a brie
 NOTE: If unfortunately a terminal window did not appear after you created a new container, despite checking "Setup desktop", then you will have to go into the page of that new container, hit "init container config" at the bottom, start the container from the pulley menu, and then hit "setup xsession". The installation and configuration should then proceed.
 
 See https://github.com/sailfish-containers/lxc-templates-desktop/wiki[lxc-templates-desktop's wiki] for more details and CLI usage (with extra features). 
+
+==== Container side
+If you picked i3 as your window manager, `Alt` is your `$mod`, so `Alt`+`Return` to open a terminal, and `Alt`+`d` for `dmenu`. Your i3 configuration can be changed in `~/.config/i3/config`.
 
 == Known issues/limitations
 

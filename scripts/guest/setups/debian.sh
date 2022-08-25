@@ -51,7 +51,7 @@ case "$REPLY" in
     "i" | "i3")
         LAUNCHCMD="exec i3"
         apt install -y i3-gaps 2> /dev/null # i3-gaps is available in some debian-based distros, but not all
-        if type i3 > /dev/null; then
+        if ! type i3 > /dev/null; then
             apt install -y i3               # Install base i3 only if i3-gaps didn't install above
         fi
         apt install -y \
@@ -61,7 +61,6 @@ case "$REPLY" in
             i3blocks \
             i3lock \
             i3status \
-            mousetweaks \
             nitrogen \
             onboard \
             sudo \
@@ -74,6 +73,9 @@ case "$REPLY" in
             xfce4-terminal
         apt install -y firefox 2> /dev/null # Firefox is not available in Kali and would prevent installing
         		       		    # the other packages if it was inclided in the same list
+        if ! type firefox > /dev/null; then
+            apt install -y firefox-esr      # Install firefox-esr only if firefox didn't install above
+        fi
         ;;
     "x" | "xfce" | "xfce4" | "" | *)
         LAUNCHCMD="exec startxfce4"
@@ -94,6 +96,9 @@ case "$REPLY" in
             xfce4-terminal
         apt install -y firefox 2> /dev/null # Firefox is not available in Kali and would prevent installing
         		       		    # the other packages if it was inclided in the same list
+        if ! type firefox > /dev/null; then
+            apt install -y firefox-esr      # Install firefox-esr only if firefox didn't install above
+        fi
         ;;
 esac
 
