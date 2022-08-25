@@ -39,7 +39,7 @@ If you never used `harbour-containers` before, jump to step 2. Else, if you had 
 ----
 devel-su
 ps aux | grep -ie daemon.py | awk '{print $2}' | xargs kill -9 2> /dev/null # Kill the daemon
-zypper remove harbour-containers qxcompositor lxc-templates-dekstop # Uninstall packages
+zypper remove harbour-containers qxcompositor lxc-templates-desktop # Uninstall packages
 zypper remove qxdisplay # Just in case you have it too as it is obsolete now
 ----
 +
@@ -75,7 +75,7 @@ zypper install nemo-qml-plugin-dbus-qt5 sailfish-polkit-agent python3-base pytho
 cd /path/to/directory/where/you/downloaded/the/three/rpms
 devel-su
 ps aux | grep -ie daemon.py | awk '{print $2}' | xargs kill -9 2> /dev/null # Kill the daemon in case an older version was running
-zypper install lxc-templates-dekstop-<VERSION>.rpm
+zypper install lxc-templates-desktop-<VERSION>.rpm
 zypper install qxcompositor-<VERSION>.rpm
 zypper install harbour-containers-<VERSION>.rpm
 ----
@@ -128,7 +128,7 @@ If you picked i3 as your window manager, `Alt` is your `$mod`, so `Alt`+`Return`
 == Known issues/limitations
 
 * If your SailfishOS username is not `defaultuser`, then the GUI cannot start an X session; this is being worked on and in the mean time, you can try https://github.com/sailfish-containers/lxc-templates-desktop/wiki/Desktop#start-desktop[opening the X session from CLI]
-* No sound in aarch64 devices, and it may silence SFOS sounds as well (else, please tell us)
+* No sound in some devices, and it may silence some SFOS sounds (alarms, media) as well (else, please tell us)
 * No hardware acceleration
 * Only prebuilt binaries of Xwayland can be used at the moment inside containers (this is automated when setting up xsession from the GUI), because latest sources don't support the XDG_WM_Base protocol that we need
 
