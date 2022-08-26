@@ -28,11 +28,16 @@ xrdb ~/.Xresources
     cp -r /mnt/guest/configs/Wallpapers /home/$USER_NAME/Pictures/
     chown -R $USER_NAME:$USER_NAME /home/$USER_NAME/Pictures/Wallpapers
 
+    # Reload font cache
+    cp -r /mnt/guest/configs/.fonts /home/$USER_NAME/
+    chown -R $USER_NAME:$USER_NAME /home/$USER_NAME/.fonts
+    fc-cache -fv
+
     # Beautify urxvt
     cp -r /mnt/guest/configs/.urxvt /home/$USER_NAME/
     cp /mnt/guest/configs/.Xresources /home/$USER_NAME/
-    chown $USER_NAME:$USER_NAME /home/$USER_NAME/.Xresources
     chown -R $USER_NAME:$USER_NAME /home/$USER_NAME/.urxvt
+    chown $USER_NAME:$USER_NAME /home/$USER_NAME/.Xresources
 
     # Beautify xfce4-terminaĺ and make it use less space
     runuser -l $USER_NAME -c "mkdir -p /home/$USER_NAME/.local/bin/"
