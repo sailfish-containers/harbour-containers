@@ -31,7 +31,7 @@ BuildRequires:  pkgconfig(Qt5Quick)
 BuildRequires:  desktop-file-utils
 
 %description
-Containers is an application to create, download, manage and run LXC containers. It relies on Xwayland to run the associated desktop environment inside a new SailifshOS window.
+Containers is an application to create, download, manage and run LXC containers. It relies on Xwayland to run the associated desktop environment inside a new SailifshOS window. For now, the application requires that your SailfishOS user name is "defaultuser". See known issues and limitations in the project page.
 # This description section includes metadata for SailfishOS:Chum, see
 # https://github.com/sailfishos-chum/main/blob/main/Metadata.md
 %if "%{?vendor}" == "chum"
@@ -101,7 +101,7 @@ chmod +x  %{buildroot}/usr/share/%{name}/scripts/guest/setups/*.sh
 # << install post
 
 desktop-file-install --delete-original       \
-  --dir %{buildroot}%{_datadir}/applications             \
+  --dir %{buildroot}%{_datadir}/applications \
    %{buildroot}%{_datadir}/applications/*.desktop
 
 %files

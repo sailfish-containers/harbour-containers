@@ -52,7 +52,7 @@ case "$REPLY" in
         LAUNCHCMD="exec i3"
         apt install -y i3-gaps 2> /dev/null # i3-gaps is available in some debian-based distros, but not all
         if ! type i3 > /dev/null; then
-            apt install -y i3               # Install base i3 only if i3-gaps didn't install above
+            apt install -y i3 || err=1      # Install base i3 only if i3-gaps didn't install above
         fi
         apt install -y \
             dbus-x11 \
@@ -78,12 +78,12 @@ case "$REPLY" in
             xdg-user-dirs \
             xfce4-terminal \
             xsel \
-            xsettingsd
-        apt install -y firefox 2> /dev/null # Firefox is not available in Kali and would prevent installing
-        		       		    # the other packages if it was inclided in the same list
+            xsettingsd || err=1
+        apt install -y firefox 2> /dev/null || err=1 # Firefox is not available in Kali and would prevent installing
+        		       		             # the other packages if it was inclided in the same list
         if ! type firefox > /dev/null; then
-            apt install -y firefox-esr      # Install firefox-esr only if firefox didn't install above
-        fi
+            apt install -y firefox-esr || err=1      # Install firefox-esr only if firefox didn't install above
+            fi
         ;;
     "x" | "xfce" | "xfce4" | "" | *)
         LAUNCHCMD="exec startxfce4"
@@ -101,14 +101,19 @@ case "$REPLY" in
             wget \
             xdg-user-dirs \
             xfce4 \
-            xfce4-terminal
-        apt install -y firefox 2> /dev/null # Firefox is not available in Kali and would prevent installing
-        		       		    # the other packages if it was inclided in the same list
+            xfce4-terminal || err=1
+        apt install -y firefox 2> /dev/null || err=1 # Firefox is not available in Kali and would prevent installing
+        		       		             # the other packages if it was inclided in the same list
         if ! type firefox > /dev/null; then
-            apt install -y firefox-esr      # Install firefox-esr only if firefox didn't install above
-        fi
+            apt install -y firefox-esr || err=1     # Install firefox-esr only if firefox didn't install above
+            fi
         ;;
 esac
+
+if [ "$err" -eq "1" ]; then
+    sep="\n---\n"
+    printf "\033[0;31m[!] Failed to install some packages, check your connection and retry. Alternatively, if those packages are no longer available, please open an issue at https://github.com/sailfish-containers/harbour-containers. Press [Return] to quit. \033[0m" && read -r _ && exit
+fi
 
 # Mask unused services
 systemctl mask lightdm
@@ -186,8 +191,7 @@ fi
 # apt update
 
 # Wrap up
-printf "\033[1;32m[Success] Xsession ready. Press [Return] to close this terminal window.
-          You will then be able to start X from the GUI.\033[0m\n"
+printf "\033[1;32m[Success] Xsession ready. Press [Return] to close this terminal window. You will then be able to start X from the GUI.\033[0m\n"
 read -r _
 
 # Reboot the container

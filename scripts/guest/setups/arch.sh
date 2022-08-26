@@ -44,7 +44,6 @@ case "$REPLY" in
             dmenu \
             dunst \
             firefox \
-            fonts-noto \
             hsetroot \
             i3blocks \
             i3-gaps \
@@ -53,10 +52,10 @@ case "$REPLY" in
             libbsd \
             mpv \
             mousetweaks \
+            noto-fonts \
             onboard \
             rofi \
             rxvt-unicode \
-            suckless-tools \
             sudo \
             thunar \
             thunar-volman \
@@ -69,9 +68,9 @@ case "$REPLY" in
             xsel \
             xsettingsd \
             xorg-server \
-            xorg-xinit
-        pacman -Syu --noconfirm xorg-apps # --needed has to be dropped for xorg-apps due to a package conflict
-        				  # that would break the script when run more than once on a container
+            xorg-xinit || err=1
+        pacman -Syu --noconfirm xorg-apps || err=1 # --needed has to be dropped for xorg-apps due to a package conflict
+        				           # that would break the script when run more than once on a container
         ;;
     "x" | "xfce" | "xfce4" | "" | *)
         LAUNCHCMD="exec startxfce4"
@@ -104,11 +103,16 @@ case "$REPLY" in
             xfwm4 \
             xfwm4-themes \
             xorg-server \
-            xorg-xinit
-        pacman -Syu --noconfirm xorg-apps # --needed has to be dropped for xorg-apps due to a package conflict
-        				  # that would break the script when run more than once on a container
+            xorg-xinit || err=1
+        pacman -Syu --noconfirm xorg-apps || err=1 # --needed has to be dropped for xorg-apps due to a package conflict
+        				           # that would break the script when run more than once on a container
         ;;
 esac
+
+if [ "$err" -eq "1" ]; then
+    sep="\n---\n"
+    printf "\033[0;31m[!] Failed to install some packages, check your connection and retry. Alternatively, if those packages are no longer available, please open an issue at https://github.com/sailfish-containers/harbour-containers. Press [Return] to quit. \033[0m" && read -r _ && exit
+fi
 
 # Mask unused services
 systemctl mask lightdm
@@ -120,7 +124,7 @@ ARCH=$(uname -m)
 printf "\033[0;36m[+] Fetching prebuilt Xwayland…\033[0m\n"
 mkdir -p /opt/bin
 wget https://github.com/sailfish-containers/xserver/releases/download/b1/Xwayland.${ARCH}.libc-2.29.bin \
-	-O /opt/bin/Xwayland -nc -q --show-progress
+	-O /opt/bin/Xwayland -nc -q --show-progress || err=xwayland
 chmod +x /opt/bin/Xwayland
 
 # Link harbour-containers scripts
@@ -165,11 +169,16 @@ printf "\033[1;32m[?] Extra packages Xwayland depends on have to be compiled. Th
             # Compile and install dbus-x11, libsepol and libselinux from AUR
             pacman -Syu --needed --noconfirm git autoconf automake binutils make pkgconf bison fakeroot gcc flex patch
             runuser -l $USER_NAME -c "git clone https://aur.archlinux.org/dbus-x11.git /tmp/dbus-x11"
-            runuser -l $USER_NAME -c "cd /tmp/dbus-x11 && yes | makepkg -AsiL --skippgpcheck --needed"
+            runuser -l $USER_NAME -c "cd /tmp/dbus-x11 && yes | makepkg -AsiL --skippgpcheck --needed" || err=2
             runuser -l $USER_NAME -c "git clone https://aur.archlinux.org/libsepol.git /tmp/libsepol"
-            runuser -l $USER_NAME -c "cd /tmp/libsepol && makepkg -siL --noconfirm --skippgpcheck --needed"
+            runuser -l $USER_NAME -c "cd /tmp/libsepol && makepkg -siL --noconfirm --skippgpcheck --needed" || err=2
             runuser -l $USER_NAME -c "git clone https://aur.archlinux.org/libselinux.git /tmp/libselinux"
-            runuser -l $USER_NAME -c "cd /tmp/libselinux && makepkg -siL --noconfirm --skippgpcheck --needed"
+            runuser -l $USER_NAME -c "cd /tmp/libselinux && makepkg -siL --noconfirm --skippgpcheck --needed" || err=2
+
+            if [ "$err" -eq "2" ]; then
+                sep="\n---\n"
+                printf "\033[0;31m[!] Failed to compile and install dependencies for Xwayland, check your connection and retry. If the error persits, please open an issue at https://github.com/sailfish-containers/harbour-containers. Press [Return] to quit. \033[0m" && read -r _ && exit
+            fi
         ;;
     esac
 
@@ -178,8 +187,7 @@ printf "\033[1;32m[?] Extra packages Xwayland depends on have to be compiled. Th
     sed -i 's/# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/g' /etc/sudoers
 
 # Wrap up
-printf "\033[1;32m[Success] Xsession ready. Press [Return] to close this terminal window.
-          You will then be able to start X from the GUI.\033[0m\n"
+printf "\033[1;32m[Success] Xsession ready. Press [Return] to close this terminal window. You will then be able to start X from the GUI.\033[0m\n"
 read -r _
 
 # Reboot the container
