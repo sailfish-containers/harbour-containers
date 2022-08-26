@@ -42,15 +42,20 @@ case "$REPLY" in
         pacman -Syu --noconfirm --needed \
             dconf \
             dmenu \
+            dunst \
             firefox \
+            fonts-noto \
+            hsetroot \
             i3blocks \
             i3-gaps \
             i3lock \
             i3status \
             libbsd \
             mousetweaks \
-            nitrogen \
             onboard \
+            rofi \
+            rxvt-unicode \
+            suckless-tools \
             sudo \
             thunar \
             thunar-volman \
@@ -59,6 +64,8 @@ case "$REPLY" in
             wget \
             xdg-user-dirs \
             xfce4-terminal \
+            xsel \
+            xsettingsd \
             xorg-server \
             xorg-xinit
         pacman -Syu --noconfirm xorg-apps # --needed has to be dropped for xorg-apps due to a package conflict
@@ -75,6 +82,7 @@ case "$REPLY" in
             libbsd \
             mousetweaks \
             onboard \
+            rxvt-unicode \
             sudo \
             thunar \
             thunar-volman \

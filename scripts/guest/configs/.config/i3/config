@@ -1,0 +1,191 @@
+# set modifier
+#set $mod Mod4
+set $mod Mod1
+
+# Set font
+font pango: Noto Sans 9
+
+# Use Mouse+$mod to drag floating windows to their wanted position
+floating_modifier $mod
+
+# Autostart
+exec --no-startup-id xsettingsd &
+exec_always --no-startup-id dunst
+exec_always --no-startup-id hsetroot -cover ~/Pictures/Wallpapers/PLACEHOLDER-1.jpg
+exec_always --no-startup-id "mousetweaks --ssc --ssc-time=0.5 --threshold=30 --daemonize"
+
+# Start a terminal
+bindsym $mod+Return exec urxvt
+
+# Start dmenu (a program launcher)
+bindsym $mod+d exec i3-dmenu-desktop --dmenu="dmenu -i -fn 'Noto Sans:size=9'"
+bindsym Ctrl+Tab exec "rofi -lines 12 -padding 18 -width 60 -location 0 -show drun -sidebar-mode -columns 3 -font 'Noto Sans 20' -modi 'drun,windowcd,run,ssh' -kb-mode-next 'Shift+Right,Ctrl+Tab' -kb-mode-previous 'Shift+Left' -cycle -theme /usr/share/rofi/themes/glue_pro_blue.rasi"
+
+# Kill focused window
+bindsym $mod+backspace kill
+bindsym $alt+F4 kill
+bindsym $mod+Shift+q kill
+
+# Change focus
+bindsym $mod+Left focus left
+bindsym $mod+Down focus down
+bindsym $mod+Up focus up
+bindsym $mod+Right focus right
+
+# Move focused window
+bindsym $mod+Shift+Left move left
+bindsym $mod+Shift+Down move down
+bindsym $mod+Shift+Up move up
+bindsym $mod+Shift+Right move right
+
+# Split in horizontal orientation
+bindsym $mod+h split h
+
+# Split in vertical orientation
+bindsym $mod+v split v
+
+# Enter fullscreen mode for the focused container
+bindsym $mod+f fullscreen toggle
+
+# Change container layout (stacked, tabbed, toggle split)
+bindsym $mod+s layout stacking
+bindsym $mod+w layout tabbed
+bindsym $mod+e layout toggle split
+
+# Toggle tiling/floating
+bindsym $mod+Shift+space floating toggle
+
+# Toggle sticky
+bindsym $mod+Shift+s sticky toggle
+
+# Change focus between tiling and floating windows
+bindsym $mod+m focus mode_toggle
+
+# Focus the parent container
+bindsym $mod+Shift+a focus parent
+
+# Focus the child container
+bindsym $mod+Shift+d focus child
+
+# Switch to workspace
+bindsym $alt+Control+Right workspace next
+bindsym $alt+Control+Left workspace prev
+bindsym $mod+1 workspace 1
+bindsym $mod+2 workspace 2
+bindsym $mod+3 workspace 3
+bindsym $mod+4 workspace 4
+bindsym $mod+5 workspace 5
+bindsym $mod+6 workspace 6
+bindsym $mod+7 workspace 7
+bindsym $mod+8 workspace 8
+bindsym $mod+9 workspace 9
+bindsym $mod+0 workspace i10
+
+# Move focused container to workspace
+bindsym $mod+Shift+1 move container to workspace 1
+bindsym $mod+Shift+2 move container to workspace 2
+bindsym $mod+Shift+3 move container to workspace 3
+bindsym $mod+Shift+4 move container to workspace 4
+bindsym $mod+Shift+5 move container to workspace 5
+bindsym $mod+Shift+6 move container to workspace 6
+bindsym $mod+Shift+7 move container to workspace 7
+bindsym $mod+Shift+8 move container to workspace 8
+bindsym $mod+Shift+9 move container to workspace 9
+bindsym $mod+Shift+10 move container to workspace 10
+
+# Move currently focused window to the scratchpad (minimise)
+# and give it a mark to be able to recall it individually without
+# cycling through all scratchpad windows (which would be the default behavior)
+bindsym $mod+Ctrl+1 mark "scratch1", move scratchpad
+bindsym $mod+mod4+1 [con_mark="scratch1"] scratchpad show
+bindsym $mod+Ctrl+2 mark "scratch2", move scratchpad
+bindsym $mod+mod4+2 [con_mark="scratch2"] scratchpad show
+bindsym $mod+Ctrl+3 mark "scratch3", move scratchpad
+bindsym $mod+mod4+3 [con_mark="scratch3"] scratchpad show
+bindsym $mod+Ctrl+4 mark "scratch4", move scratchpad
+bindsym $mod+mod4+4 [con_mark="scratch4"] scratchpad show
+bindsym $mod+Ctrl+5 mark "scratch5", move scratchpad
+bindsym $mod+mod4+5 [con_mark="scratch5"] scratchpad show
+bindsym $mod+Ctrl+6 mark "scratch6", move scratchpad
+bindsym $mod+mod4+6 [con_mark="scratch6"] scratchpad show
+bindsym $mod+Ctrl+7 mark "scratch7", move scratchpad
+bindsym $mod+mod4+7 [con_mark="scratch7"] scratchpad show
+bindsym $mod+Ctrl+8 mark "scratch8", move scratchpad
+bindsym $mod+mod4+8 [con_mark="scratch8"] scratchpad show
+bindsym $mod+Ctrl+9 mark "scratch19", move scratchpad
+bindsym $mod+mod4+9 [con_mark="scratch9"] scratchpad show
+bindsym $mod+Ctrl+0 mark "scratch10", move scratchpad
+bindsym $mod+mod4+0 [con_mark="scratch10"] scratchpad show
+
+# Restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
+bindsym $mod+Shift+r restart
+
+# Resize window (you can also use the mouse for that)
+mode "resize" {
+        bindsym Left resize shrink width 5 px or 5 ppt
+        bindsym Down resize grow height 5 px or 5 ppt
+        bindsym Up resize shrink height 5 px or 5 ppt
+        bindsym Right resize grow width 5 px or 5 ppt
+        bindsym Return mode "default"
+}
+bindsym $mod+r mode "resize"
+
+# Panel
+bar {
+        colors {
+        background #2f343f
+        statusline #2f343f
+        separator #4b5262
+
+        # colour of border, background, and text
+        focused_workspace       #2f343f #bf616a #d8dee8
+        active_workspace        #2f343f #2f343f #d8dee8
+        inactive_workspace      #2f343f #2f343f #d8dee8
+        urgent_workspacei       #2f343f #ebcb8b #2f343f
+    }
+        status_command i3status
+}
+
+# Toggle i3-bar visibility
+bindsym $mod+b bar mode toggle
+
+# Window rules, you can find the window class using xprop
+for_window [class=".*"] border pixel 2
+assign [class=xfce4-terminal] 1
+assign [class=Firefox|Transmission-gtk] 2
+assign [class=Thunar|File-roller] 3
+assign [class=Geany|Evince|Gucharmap|Soffice|libreoffice*] 4
+assign [class=Audacity|Vlc|mpv|Ghb|Xfburn|Gimp*|Inkscape] 5
+assign [class=Lxappearance|System-config-printer.py|Lxtask|GParted|Pavucontrol|Exo-helper*|Lxrandr|Arandr] 6
+for_window [class=Viewnior|feh|Audacious|File-roller|Lxappearance|Lxtask|Pavucontrol] floating enable
+for_window [class=URxvt|Firefox|Geany|Evince|Soffice|libreoffice*|mpv|Ghb|Xfburn|Gimp*|Inkscape|Vlc|Lxappearance|Audacity] focus
+for_window [class=Xfburn|GParted|System-config-printer.py|Lxtask|Pavucontrol|Exo-helper*|Lxrandr|Arandr] focus
+
+# Colour of border, background, text, indicator, and child_border
+client.focused              #bf616a #2f343f #d8dee8 #bf616a #d8dee8
+client.focused_inactive     #2f343f #2f343f #d8dee8 #2f343f #2f343f
+client.unfocused            #2f343f #2f343f #d8dee8 #2f343f #2f343f
+client.urgent               #2f343f #2f343f #d8dee8 #2f343f #2f343f
+client.placeholder          #2f343f #2f343f #d8dee8 #2f343f #2f343f
+client.background           #2f343f
+
+# Windows
+# Class                 border  backgr. text    indicator child_border
+client.focused          #404552 #404552 #fafafa #ff5757 #5294E2
+client.focused_inactive #666666 #404552 #eeeeee #666666 #262626
+client.unfocused        #404552 #484b52 #eeeeee #ff5757 #262626
+client.urgent           #ff5757 #404552 #ffffff #555757 #EFEDEC
+client.background       #404552
+
+# i3-gaps only
+# Gap control
+bindsym $mod+Shift+g gaps inner current plus $gaps_variation
+bindsym $mod+Ctrl+g  gaps inner current minus $gaps_variation
+bindsym $mod+g       gaps inner current set $gaps_inner
+new_window 1pixel
+smart_borders no_gaps
+smart_gaps on
+gaps outer 0
+gaps inner 10
+set $gaps_inner 10
+set $gaps_variation 4

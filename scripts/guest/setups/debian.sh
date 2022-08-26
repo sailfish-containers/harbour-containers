@@ -58,11 +58,15 @@ case "$REPLY" in
             dbus-x11 \
             dconf-cli \
             dmenu \
+            dunst \
+            fonts-noto \
+            hsetroot \
             i3blocks \
             i3lock \
             i3status \
-            nitrogen \
             onboard \
+            rofi \
+            rxvt-unicode \
             sudo \
             thunar \
             thunar-volman \
@@ -70,7 +74,9 @@ case "$REPLY" in
             viewnior \
             wget \
             xdg-user-dirs \
-            xfce4-terminal
+            xfce4-terminal \
+            xsel \
+            xsettingsd
         apt install -y firefox 2> /dev/null # Firefox is not available in Kali and would prevent installing
         		       		    # the other packages if it was inclided in the same list
         if ! type firefox > /dev/null; then

@@ -1,0 +1,139 @@
+! ------------------------------------------------------------------------------
+! Colour Configuration
+! ------------------------------------------------------------------------------
+
+! special
+*.cursorColor:  #b48ead
+
+! black
+*.color0  : #4b5262
+*.color8  : #434a5a
+
+! red
+*.color1  : #bf616a
+*.color9  : #b3555e
+
+! green
+*.color2  : #a3be8c
+*.color10 : #93ae7c
+
+! yellow
+*.color3  : #ebcb8b
+*.color11 : #dbbb7b
+
+! blue
+*.color4  : #81a1c1
+*.color12 : #7191b1
+
+! magenta
+*.color5  : #b48ead
+*.color13 : #a6809f
+
+! cyan
+*.color6  : #89d0bA
+*.color14 : #7dbba8
+
+! white
+*.color7  : #e5e9f0
+*.color15 : #d1d5dc
+
+! ------------------------------------------------------------------------------
+! Font configuration
+! ------------------------------------------------------------------------------
+
+xterm*font:   		*-fixed-*-*-*-20-*
+URxvt*font:		xft:DejaVu Sans Mono:regular:size=11:antialias=true
+URxvt*boldFont:		xft:DejaVu Sans Mono:bold:size=11:antialias=true
+URxvt*italicFont:	xft:DejaVu Sans Mono:italic:size=11:antialias=true
+URxvt*boldItalicFont:	xft:DejaVu Sans Mono:bold italic:size=11:antialias=true
+
+! ------------------------------------------------------------------------------
+! Xft Font Configuration
+! ------------------------------------------------------------------------------
+
+Xft.autohint: 	9
+Xft.lcdfilter: 	lcddefault
+Xft.hintstyle: 	hintslight
+Xft.hinting: 	1
+Xft.antialias: 	1
+Xft.rgba: 	rgb
+Xft.dpi: 	180
+
+! ------------------------------------------------------------------------------
+! URxvt configs
+! ------------------------------------------------------------------------------
+
+! font spacing
+URxvt*letterSpace:	0
+URxvt.lineSpace:	0
+
+! general settings
+URxvt*saveLines:	15000
+URxvt*termName:		rxvt-256color
+URxvt*iso14755:		false
+URxvt*urgentOnBell:	true
+URxvt*hold:		false
+
+! appearance
+URxvt*depth:		24
+URxvt*scrollBar:	false
+URxvt*scrollBar_right:	false
+URxvt*internalBorder:	24
+URxvt*externalBorder:	0
+URxvt.geometry:		84x22
+URxvt.transparent:	true
+URxvt.shading:		40
+URxvt.blurRadius:	0
+URxvt.background:	#1a1c1e
+URxvt.foreground:	#dddddd
+URxvt.fading:		55
+URxvt.fadeColor:	#555555
+
+! perl extensins
+URxvt.perl-ext-common:	default,clipboard,url-select,keyboard-select,resize-font
+
+! macros for clipboard and selection
+URxvt.keysym.C-Escape:	perl:keyboard-select:activate
+URxvt.keysym.C-f:	perl:keyboard-select:search
+URxvt.keysym.C-u:	perl:url-select:select_next
+URxvt.urlLauncher:	firefox
+URxvt.underlineURLs:	true
+URxvt.urlButton:	1     
+
+! font-resize
+URxvt.keysym.C-minus:    resize-font:smaller
+URxvt.keysym.C-plus:     resize-font:bigger
+URxvt.keysym.C-equal:    resize-font:reset
+URxvt.keysym.C-question: resize-font:show
+URxvt.resize-font.step:  1
+
+! Normal copy-paste keybindings  (Ctrl-Shift c/v)
+urxvt.iso14755:                   false
+urxvt.keysym.Shift-Control-V:     eval:paste_clipboard
+urxvt.keysym.Shift-Control-C:     eval:selection_to_clipboard
+
+! scroll one line
+URxvt.keysym.Shift-Up:		  command:\033]720;1\007
+URxvt.keysym.Shift-Down:	  command:\033]721;1\007
+
+! control arrow
+URxvt.keysym.Control-Up:		\033[1;5A
+URxvt.keysym.Control-Down:		\033[1;5B
+URxvt.keysym.Control-Right:		\033[1;5C
+URxvt.keysym.Control-Left:		\033[1;5D
+urxvt.keysym.Shift-Control-Left:	\033[1;6D
+urxvt.keysym.Shift-Control-Right:	\033[1;6C
+urxvt.keysym.Shift-Control-Up: 	 	\033[1;6A
+urxvt.keysym.Shift-Control-Down: 	\033[1;6B
+
+! clear buffer
+URxvt.keysym.C-l:			echo -ne '\\033c'\n
+
+! ------------------------------------------------------------------------------
+! Dmenu configs
+! ------------------------------------------------------------------------------
+
+dmenu.selforeground:	   #d8dee9
+dmenu.background:	   #2e3440
+dmenu.selbackground:	   #bf616a
+dmenu.foreground:	   #d8dee9
