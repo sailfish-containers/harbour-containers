@@ -60,6 +60,7 @@ case "$REPLY" in
             dmenu \
             dunst \
             fonts-noto \
+            fzf \
             hsetroot \
             i3blocks \
             i3lock \
@@ -67,6 +68,7 @@ case "$REPLY" in
             mpv \
             onboard \
             rofi \
+            rsync \
             rxvt-unicode \
             sudo \
             thunar \
@@ -93,6 +95,7 @@ case "$REPLY" in
             dmenu \
             mpv \
             onboard \
+            rsync \
             sudo \
             thunar \
             thunar-volman \
@@ -110,7 +113,7 @@ case "$REPLY" in
         ;;
 esac
 
-if [ "$err" -eq "1" ]; then
+if [[ "$err" -eq "1" ]]; then
     sep="\n---\n"
     printf "\033[0;31m[!] Failed to install some packages, check your connection and retry. Alternatively, if those packages are no longer available, please open an issue at https://github.com/sailfish-containers/harbour-containers. Press [Return] to quit. \033[0m" && read -r _ && exit
 fi

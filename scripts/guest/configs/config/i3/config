@@ -16,18 +16,21 @@ exec_always --no-startup-id "mousetweaks --ssc --ssc-time=0.5 --threshold=30 --d
 # Start a terminal
 bindsym $mod+Return exec urxvt
 
+# Sway menu
+for_window [instance="^launcher$"] floating enable, sticky enable, resize set 40 ppt 60 ppt, border pixel 10
+bindsym $mnod+m exec TERMINAL_COMMAND=urxvt urxvt -name launcher -e env GLYPH_COMMAND="" GLYPH_DESKTOP="" GLYPH_PROMPT="? " ~/.config/sway-launcher-desktop/sway-launcher-desktop.sh -hold
+
 # Start dmenu (program launcher) 
 bindsym $mod+d exec i3-dmenu-desktop --dmenu="dmenu -i -fn 'Noto Sans:size=9'"
 
-# Start rofi (program launcher and window switcher)
+# Start rofi (program launcher and window switcher), you may need a hardware keyboard
 bindsym Ctrl+Tab exec "rofi -lines 12 -padding 18 -width 60 -location 0 -show drun -sidebar-mode -columns 3 -font 'Noto Sans 20' -modi 'drun,windowcd,run,ssh' -kb-mode-next 'Shift+Right,Ctrl+Tab' -kb-mode-previous 'Shift+Left' -cycle -theme /usr/share/rofi/themes/glue_pro_blue.rasi"
 
 # Open video URL stored in the clipboard in a floating mpv window
 bindsym $mod+y exec mpv "$(xclip -selection c -out)"
 
 # Kill focused window
-bindsym $mod+backspace kill
-bindsym $alt+F4 kill
+bindsym $mod+BackSpace kill
 bindsym $mod+Shift+q kill
 
 # Change focus
@@ -63,7 +66,7 @@ bindsym $mod+Shift+space floating toggle
 bindsym $mod+Shift+s sticky toggle
 
 # Change focus between tiling and floating windows
-bindsym $mod+m focus mode_toggle
+bindsym $mod+k focus mode_toggle
 
 # Focus the parent container
 bindsym $mod+Shift+a focus parent
@@ -72,8 +75,8 @@ bindsym $mod+Shift+a focus parent
 bindsym $mod+Shift+d focus child
 
 # Switch to workspace
-bindsym $alt+Control+Right workspace next
-bindsym $alt+Control+Left workspace prev
+bindsym $mod+Control+Right workspace next
+bindsym $mod+Control+Left workspace prev
 bindsym $mod+1 workspace 1
 bindsym $mod+2 workspace 2
 bindsym $mod+3 workspace 3
@@ -83,7 +86,7 @@ bindsym $mod+6 workspace 6
 bindsym $mod+7 workspace 7
 bindsym $mod+8 workspace 8
 bindsym $mod+9 workspace 9
-bindsym $mod+0 workspace i10
+bindsym $mod+0 workspace 0
 
 # Move focused container to workspace
 bindsym $mod+Shift+1 move container to workspace 1
@@ -95,7 +98,7 @@ bindsym $mod+Shift+6 move container to workspace 6
 bindsym $mod+Shift+7 move container to workspace 7
 bindsym $mod+Shift+8 move container to workspace 8
 bindsym $mod+Shift+9 move container to workspace 9
-bindsym $mod+Shift+10 move container to workspace 10
+bindsym $mod+Shift+0 move container to workspace 0
 
 # Move currently focused window to the scratchpad (minimise)
 # and give it a mark to be able to recall it individually without

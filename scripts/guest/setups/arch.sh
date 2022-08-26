@@ -44,6 +44,7 @@ case "$REPLY" in
             dmenu \
             dunst \
             firefox \
+            fzf \
             hsetroot \
             i3blocks \
             i3-gaps \
@@ -55,6 +56,7 @@ case "$REPLY" in
             noto-fonts \
             onboard \
             rofi \
+            rsync \
             rxvt-unicode \
             sudo \
             thunar \
@@ -84,6 +86,7 @@ case "$REPLY" in
             mpv \
             mousetweaks \
             onboard \
+            rsync \
             rxvt-unicode \
             sudo \
             thunar \
@@ -109,7 +112,7 @@ case "$REPLY" in
         ;;
 esac
 
-if [ "$err" -eq "1" ]; then
+if [[ "$err" -eq "1" ]]; then
     sep="\n---\n"
     printf "\033[0;31m[!] Failed to install some packages, check your connection and retry. Alternatively, if those packages are no longer available, please open an issue at https://github.com/sailfish-containers/harbour-containers. Press [Return] to quit. \033[0m" && read -r _ && exit
 fi
@@ -175,7 +178,7 @@ printf "\033[1;32m[?] Extra packages Xwayland depends on have to be compiled. Th
             runuser -l $USER_NAME -c "git clone https://aur.archlinux.org/libselinux.git /tmp/libselinux"
             runuser -l $USER_NAME -c "cd /tmp/libselinux && makepkg -siL --noconfirm --skippgpcheck --needed" || err=2
 
-            if [ "$err" -eq "2" ]; then
+            if [[ "$err" -eq "2" ]]; then
                 sep="\n---\n"
                 printf "\033[0;31m[!] Failed to compile and install dependencies for Xwayland, check your connection and retry. If the error persits, please open an issue at https://github.com/sailfish-containers/harbour-containers. Press [Return] to quit. \033[0m" && read -r _ && exit
             fi

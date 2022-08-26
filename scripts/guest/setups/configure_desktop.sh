@@ -25,7 +25,7 @@ xrdb ~/.Xresources
 
     # Copy wallpapers
     runuser -l $USER_NAME -c "xdg-user-dirs-update 2> /dev/null"
-    rsync -a --mkpath /mnt/guest/configs/Wallpapersi/ /home/$USER_NAME/Pictures/Wallpapers/
+    rsync -a --mkpath /mnt/guest/configs/Wallpapers/ /home/$USER_NAME/Pictures/Wallpapers/
     chown -R $USER_NAME:$USER_NAME /home/$USER_NAME/Pictures/Wallpapers
 
     # Add font for i3status
@@ -72,6 +72,13 @@ TERMBIN --hide-scrollbar --hide-menubar --color-bg=#222222 --zoom=-1 $@\n' > /ho
             sed 's/dock-height=200/dock-height=480/g' /mnt/guest/configs/onboard-default.conf > /tmp/onboard-i3.conf
             sed -i 's/dock-height=240/dock-height=500/g' /tmp/onboard-i3.conf
             runuser -l $USER_NAME -c "dbus-launch dconf load /org/onboard/ < /tmp/onboard-i3.conf" 2> /dev/null
+
+            # Sway-launcher-desktop
+            mkdir -p /home/$USER_NAME/.config/sway-launcher-desktop/
+            wget https://github.com/Biont/sway-launcher-desktop/raw/master/sway-launcher-desktop.sh \
+            	-O /home/$USER_NAME/.config/sway-launcher-desktop/sway-launcher-desktop.sh -q --show-progress
+            chmod +x /home/$USER_NAME/.config/sway-launcher-desktop/sway-launcher-desktop.sh
+            chown -R $USER_NAME:$USER_NAME/.config/sway-launcher-desktop
         ;;
         "x" | "xfce" | "xfce4" | "" | *)
             # Xfce4 settings
