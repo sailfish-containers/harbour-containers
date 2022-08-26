@@ -20,7 +20,7 @@ load {
 
 cpu_temperature 0 {
         format = "<span background='#bf616a'>  %degrees °C </span>"
-        path = "/sys/class/thermal/thermal_zone0/temp"
+        path = "/sys/devices/virtual/thermal/thermal_zone50/hwmon0/temp1_input"
 }
 
 disk "/" {

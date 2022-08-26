@@ -42,10 +42,10 @@
 ! ------------------------------------------------------------------------------
 
 xterm*font:   		*-fixed-*-*-*-20-*
-URxvt*font:		xft:DejaVu Sans Mono:regular:size=11:antialias=true
-URxvt*boldFont:		xft:DejaVu Sans Mono:bold:size=11:antialias=true
-URxvt*italicFont:	xft:DejaVu Sans Mono:italic:size=11:antialias=true
-URxvt*boldItalicFont:	xft:DejaVu Sans Mono:bold italic:size=11:antialias=true
+URxvt*font:		xft:DejaVu Sans Mono:regular:size=10:antialias=true
+URxvt*boldFont:		xft:DejaVu Sans Mono:bold:size=10:antialias=true
+URxvt*italicFont:	xft:DejaVu Sans Mono:italic:size=10:antialias=true
+URxvt*boldItalicFont:	xft:DejaVu Sans Mono:bold italic:size=10:antialias=true
 
 ! ------------------------------------------------------------------------------
 ! Xft Font Configuration
@@ -94,6 +94,7 @@ URxvt.perl-ext-common:	default,clipboard,url-select,keyboard-select,resize-font
 
 ! macros for clipboard and selection
 URxvt.keysym.C-Escape:	perl:keyboard-select:activate
+URxvt.keyboard-select.clipboard: true
 URxvt.keysym.C-slash:	perl:keyboard-select:search
 URxvt.keysym.C-u:	perl:url-select:select_next
 URxvt.urlLauncher:	firefox

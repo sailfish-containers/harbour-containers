@@ -6,13 +6,13 @@ Release: 1
 # https://github.com/mer-tools/spectacle/blob/master/data/GROUPS
 Group: Qt/Qt
 URL: https://github.com/sailfish-containers/harbour-containers
-License: PLv3
+License: GPLv3
 # This must be generated before uploading a package to a remote build service.
 # Usually this line does not need to be modified.
 Sources:
 - '%{name}-%{version}.tar.bz2'
 Description: |
-  Containers is an application to create, download, manage and run LXC containers. It relies on Xwayland to run the associated desktop environment inside a new SailifshOS window.
+  Containers is an application to create, download, manage and run LXC containers. It relies on Xwayland to run the associated desktop environment inside a new SailifshOS window. For now, the application requires that your SailfishOS user name is "defaultuser". See known issues and limitations in the project page.
 
 Configure: none
 Builder: qmake5

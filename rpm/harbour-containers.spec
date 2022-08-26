@@ -14,6 +14,7 @@ Release:    0
 Group:      Qt/Qt
 License:    GPLv3
 URL:        http://github.com/sailfish-containers/harbour-containers
+Packager:   Kabouik <matf[redactedforbots]disr.it>
 Source0:    %{name}-%{version}.tar.bz2
 Source100:  harbour-containers.yaml
 Requires:   sailfishsilica-qt5 >= 0.10.9
@@ -38,6 +39,7 @@ Containers is an application to create, download, manage and run LXC containers.
 PackageName: Containers
 Type: desktop-application
 DeveloperName: r3vn
+PackagerName: Kabouik
 Categories:
  - Development
  - Utilities

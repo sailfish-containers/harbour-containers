@@ -28,11 +28,6 @@ xrdb ~/.Xresources
     rsync -a --mkpath /mnt/guest/configs/Wallpapers/ /home/$USER_NAME/Pictures/Wallpapers/
     chown -R $USER_NAME:$USER_NAME /home/$USER_NAME/Pictures/Wallpapers
 
-    # Add font for i3status
-    rsync -a --mkpath /mnt/guest/configs/fonts/ /home/$USER_NAME/.fonts/
-    chown -R $USER_NAME:$USER_NAME /home/$USER_NAME/.fonts
-    fc-cache -fv > /dev/null
-
     # Beautify urxvt
     rsync -a --mkpath /mnt/guest/configs/urxvt/ /home/$USER_NAME/.urxvt/
     rsync -a /mnt/guest/configs/Xresources /home/$USER_NAME/.Xresources
@@ -61,6 +56,11 @@ TERMBIN --hide-scrollbar --hide-menubar --color-bg=#222222 --zoom=-1 $@\n' > /ho
             fi
             chown -R $USER_NAME:$USER_NAME /home/$USER_NAME/.config
             
+            # Add font for i3status
+            rsync -a --mkpath /mnt/guest/configs/fonts/ /home/$USER_NAME/.fonts/
+            chown -R $USER_NAME:$USER_NAME /home/$USER_NAME/.fonts
+            fc-cache -fv > /dev/null
+
             # Wallpaper
             if [ "$1" = "debian" ] || [ "$1" = "archarm" ] || [ "$1" = "archlinux" ] || [ "$1" = "kali" ]; then
                 sed -i "s/PLACEHOLDER/$1/g" /home/$USER_NAME/.config/i3/config
@@ -79,6 +79,10 @@ TERMBIN --hide-scrollbar --hide-menubar --color-bg=#222222 --zoom=-1 $@\n' > /ho
             	-O /home/$USER_NAME/.config/sway-launcher-desktop/sway-launcher-desktop.sh -q --show-progress
             chmod +x /home/$USER_NAME/.config/sway-launcher-desktop/sway-launcher-desktop.sh
             chown -R $USER_NAME:$USER_NAME/.config/sway-launcher-desktop
+
+            # yt-dlp (limit quality and avoid vp9, we have no HW acceleration)
+            rsync -a --mkpath /mnt/guest/configs/config/yt-dlp/ /home/$USER_NAME/.config/yt-dlp/
+
         ;;
         "x" | "xfce" | "xfce4" | "" | *)
             # Xfce4 settings

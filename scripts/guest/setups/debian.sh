@@ -10,7 +10,7 @@ source /mnt/guest/setups/configure_desktop.sh
 
 # Choose default WM
 sleep 3
-printf '\033[1;32m[?] Choose default window manager for the %s container: [x]fce4, [i]3 (default=x): \033[0m' "${3^}" && read -r REPLY
+printf '\033[1;32m[?] Choose [x]fce4 or [i]3 as window manager for this %s container (default=x): \033[0m' "${3^}" && read -r REPLY
 
 # Check if user setup is required
 if [ ! -d "/home/${USER_NAME}" ]
@@ -80,7 +80,9 @@ case "$REPLY" in
             xdg-user-dirs \
             xfce4-terminal \
             xsel \
-            xsettingsd || err=1
+            xsettingsd \
+            yad \
+            yt-dlp || err=1
         apt install -y firefox 2> /dev/null || err=1 # Firefox is not available in Kali and would prevent installing
         		       		             # the other packages if it was inclided in the same list
         if ! type firefox > /dev/null; then
@@ -115,8 +117,19 @@ esac
 
 if [[ "$err" -eq "1" ]]; then
     sep="\n---\n"
-    printf "\033[0;31m[!] Failed to install some packages, check your connection and retry. Alternatively, if those packages are no longer available, please open an issue at https://github.com/sailfish-containers/harbour-containers. Press [Return] to quit. \033[0m" && read -r _ && exit
-fi
+    printf "\033[0;31m\n[!] Failed to install some packages, check your connection and retry. Alternatively, if those packages are no longer available, please open an issue at https://github.com/sailfish-containers/harbour-containers. Continue anyway? [y/N] \033[0m" && read -r CONTINUE1
+    
+    case "$CONTINUE1" in
+        "y" | "yes" | "Y" | "Yes" | "Yes")
+            printf "\033[0;33mIgnoring the install error(s)…\033[0m\n"
+        ;;
+        "n" | "no" | "N" | "No" | "NO" | "" | *)
+            printf "Aborting setup…\n"
+            sleep 3
+            exit
+        ;;
+    esac
+fi 
 
 # Mask unused services
 systemctl mask lightdm

@@ -13,15 +13,16 @@ exec_always --no-startup-id dunst
 exec_always --no-startup-id "sleep 2; hsetroot -cover ~/Pictures/Wallpapers/PLACEHOLDER-1.jpg"
 exec_always --no-startup-id "mousetweaks --ssc --ssc-time=0.5 --threshold=30 --daemonize"
 
+########## KEYBINDINGS ##########
 # Start a terminal
-bindsym $mod+Return exec urxvt
+bindsym $mod+Return exec urxvt -cd ~/
 
 # Sway menu
 for_window [instance="^launcher$"] floating enable, sticky enable, resize set 40 ppt 60 ppt, border pixel 10
-bindsym $mnod+m exec TERMINAL_COMMAND=urxvt urxvt -name launcher -e env GLYPH_COMMAND="" GLYPH_DESKTOP="" GLYPH_PROMPT="? " ~/.config/sway-launcher-desktop/sway-launcher-desktop.sh -hold
+bindsym $mod+m exec TERMINAL_COMMAND=urxvt urxvt -name launcher +transparent -bg black -e env GLYPH_COMMAND="" GLYPH_DESKTOP="" GLYPH_PROMPT="? " ~/.config/sway-launcher-desktop/sway-launcher-desktop.sh -hold
 
 # Start dmenu (program launcher) 
-bindsym $mod+d exec i3-dmenu-desktop --dmenu="dmenu -i -fn 'Noto Sans:size=9'"
+bindsym $mod+d exec i3-dmenu-desktop --dmenu="dmenu -i -fn 'Noto Sans:size=10'"
 
 # Start rofi (program launcher and window switcher), you may need a hardware keyboard
 bindsym Ctrl+Tab exec "rofi -lines 12 -padding 18 -width 60 -location 0 -show drun -sidebar-mode -columns 3 -font 'Noto Sans 20' -modi 'drun,windowcd,run,ssh' -kb-mode-next 'Shift+Right,Ctrl+Tab' -kb-mode-previous 'Shift+Left' -cycle -theme /usr/share/rofi/themes/glue_pro_blue.rasi"
@@ -46,7 +47,7 @@ bindsym $mod+Shift+Up move up
 bindsym $mod+Shift+Right move right
 
 # Split in horizontal orientation
-bindsym $mod+h split h
+bindsym $mod+i split h
 
 # Split in vertical orientation
 bindsym $mod+v split v
@@ -60,7 +61,7 @@ bindsym $mod+w layout tabbed
 bindsym $mod+e layout toggle split
 
 # Toggle tiling/floating
-bindsym $mod+Shift+space floating toggle
+bindsym $mod+space floating toggle
 
 # Toggle sticky
 bindsym $mod+Shift+s sticky toggle
@@ -156,19 +157,28 @@ bar {
 # Toggle i3-bar visibility
 bindsym $mod+b bar mode toggle
 
+# Show help
+bindsym $mod+h exec grep -A200 KEYBINDINGS ~/.config/i3/config | tee -a ${test} | yad --text-info --width=800 --height=1000 --name floating --no-buttons --close-on-unfocus --lang=markdown --title="i3wm keybindings"
+
+########## RULES ##########
 # Window rules, you can find the window class using xprop
 for_window [class=".*"] border pixel 2
 assign [class=xfce4-terminal] 1
 assign [class=Firefox|Transmission-gtk] 2
 assign [class=Thunar|File-roller] 3
 assign [class=Geany|Evince|Gucharmap|Soffice|libreoffice*] 4
-assign [class=Audacity|Vlc|mpv|Ghb|Xfburn|Gimp*|Inkscape] 5
+assign [class=Audacity|Vlc|Ghb|Xfburn|Gimp*|Inkscape] 5
 assign [class=Lxappearance|System-config-printer.py|Lxtask|GParted|Pavucontrol|Exo-helper*|Lxrandr|Arandr] 6
+for_window [instance="floating"] floating enable
+for_window [class="Peek"] floating enable
+for_window [window_role="pop-up"] floating enable
+for_window [window_role="task_dialog"] floating enable
 for_window [class=Viewnior|feh|Audacious|File-roller|Lxappearance|Lxtask|Pavucontrol] floating enable
 for_window [class=URxvt|Firefox|Geany|Evince|Soffice|libreoffice*|mpv|Ghb|Xfburn|Gimp*|Inkscape|Vlc|Lxappearance|Audacity] focus
 for_window [class=Xfburn|GParted|System-config-printer.py|Lxtask|Pavucontrol|Exo-helper*|Lxrandr|Arandr] focus
 for_window [class=mpv] floating enable, sticky toggle, resize set 800 450
 
+########## STYLING ##########
 # Colour of border, background, text, indicator, and child_border
 client.focused              #bf616a #2f343f #d8dee8 #bf616a #d8dee8
 client.focused_inactive     #2f343f #2f343f #d8dee8 #2f343f #2f343f

@@ -1,0 +1,5 @@
+# Avoid vp9 because we have no HW acceleration in LXC
+-S vcodec:h264
+
+# Limit quality to 1080p
+-f "bv*[height<=1080]+ba/b[height<=1080] / wv*+ba/w"

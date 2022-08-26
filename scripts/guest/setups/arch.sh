@@ -10,7 +10,7 @@ source /mnt/guest/setups/configure_desktop.sh
 
 # Choose default WM
 sleep 3
-printf '\033[1;32m[?] Choose default window manager for the %s container: [x]fce4, [i]3 (default=x): \033[0m' "${3^}" && read -r REPLY
+printf '\033[1;32m[?] Choose [x]fce4 or [i]3 as window manager for this %s container (default=x): \033[0m' "${3^}" && read -r REPLY
 
 # Check if user setup is required
 if [ ! -d "/home/${USER_NAME}" ]
@@ -61,6 +61,7 @@ case "$REPLY" in
             sudo \
             thunar \
             thunar-volman \
+            ttf-dejavu \
             tumbler \
             viewnior \
             wget \
@@ -70,7 +71,9 @@ case "$REPLY" in
             xsel \
             xsettingsd \
             xorg-server \
-            xorg-xinit || err=1
+            xorg-xinit \
+            yad \
+            yt-dlp || err=1
         pacman -Syu --noconfirm xorg-apps || err=1 # --needed has to be dropped for xorg-apps due to a package conflict
         				           # that would break the script when run more than once on a container
         ;;
@@ -91,6 +94,7 @@ case "$REPLY" in
             sudo \
             thunar \
             thunar-volman \
+            ttf-dejavu \
             tumbler \
             viewnior \
             wget \
@@ -114,8 +118,19 @@ esac
 
 if [[ "$err" -eq "1" ]]; then
     sep="\n---\n"
-    printf "\033[0;31m[!] Failed to install some packages, check your connection and retry. Alternatively, if those packages are no longer available, please open an issue at https://github.com/sailfish-containers/harbour-containers. Press [Return] to quit. \033[0m" && read -r _ && exit
-fi
+    printf "\033[0;31m\n[!] Failed to install some packages, check your connection and retry. Alternatively, if those packages are no longer available, please open an issue at https://github.com/sailfish-containers/harbour-containers. Continue anyway? [y/N] \033[0m" && read -r CONTINUE1
+    
+    case "$CONTINUE1" in
+        "y" | "yes" | "Y" | "Yes" | "Yes")
+            printf "\033[0;33mIgnoring the install error(s)…\033[0m\n"
+        ;;
+        "n" | "no" | "N" | "No" | "NO" | "" | *)
+            printf "Aborting setup…\n"
+            sleep 3
+            exit
+        ;;
+    esac
+fi 
 
 # Mask unused services
 systemctl mask lightdm
@@ -155,9 +170,7 @@ else
 fi
 
 # Compile from AUR the extra packages required for Xwayland
-printf "\033[1;32m[?] Extra packages Xwayland depends on have to be compiled. This will take a long time but should only
-    be necessary once per container. If this one has already been set up to launch X (even another WM),
-    then this step can be skipped. Skip? [y/N] \033[0m" && read -r SKIP
+printf "\033[1;32m[?] Extra packages Xwayland depends on have to be compiled. This will take a long time but should only be necessary once per container. If this one has already been set up to launch X (even another WM), then this step can be skipped. Skip? [y/N] \033[0m" && read -r SKIP
 
     # Add user to sudoers, temporarily with no password to avoid password prompts for makepkg below
     usermod -aG wheel $USER_NAME
@@ -180,7 +193,18 @@ printf "\033[1;32m[?] Extra packages Xwayland depends on have to be compiled. Th
 
             if [[ "$err" -eq "2" ]]; then
                 sep="\n---\n"
-                printf "\033[0;31m[!] Failed to compile and install dependencies for Xwayland, check your connection and retry. If the error persits, please open an issue at https://github.com/sailfish-containers/harbour-containers. Press [Return] to quit. \033[0m" && read -r _ && exit
+                printf "\033[0;31m[!] Failed to compile and install dependencies for Xwayland, check your connection and retry. If the error persits, please open an issue at https://github.com/sailfish-containers/harbour-containers. Continue anyway? [y/N] \033[0m" && read -r CONTINUE2i
+                
+                case "$CONTINUE2" in
+                    "y" | "yes" | "Y" | "Yes" | "Yes")
+                        printf "\033[0;33mIgnoring the install error(s)…\033[0m\n"
+                    ;;
+                    "n" | "no" | "N" | "No" | "NO" | "" | *)
+                        printf "Aborting setup…\n"
+                        sleep 3
+                        exit
+                    ;;
+                esac
             fi
         ;;
     esac
