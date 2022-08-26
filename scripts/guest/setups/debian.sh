@@ -64,6 +64,7 @@ case "$REPLY" in
             i3blocks \
             i3lock \
             i3status \
+            mpv \
             onboard \
             rofi \
             rxvt-unicode \
@@ -73,6 +74,7 @@ case "$REPLY" in
             tumbler \
             viewnior \
             wget \
+            xclip \
             xdg-user-dirs \
             xfce4-terminal \
             xsel \
@@ -89,7 +91,7 @@ case "$REPLY" in
             dbus-x11 \
             dconf-cli \
             dmenu \
-            mousetweaks \
+            mpv \
             onboard \
             sudo \
             thunar \

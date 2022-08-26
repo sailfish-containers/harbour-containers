@@ -51,6 +51,7 @@ case "$REPLY" in
             i3lock \
             i3status \
             libbsd \
+            mpv \
             mousetweaks \
             onboard \
             rofi \
@@ -62,6 +63,7 @@ case "$REPLY" in
             tumbler \
             viewnior \
             wget \
+            xclip \
             xdg-user-dirs \
             xfce4-terminal \
             xsel \
@@ -80,6 +82,7 @@ case "$REPLY" in
             firefox \
             garcon \
             libbsd \
+            mpv \
             mousetweaks \
             onboard \
             rxvt-unicode \

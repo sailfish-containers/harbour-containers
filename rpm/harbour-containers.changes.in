@@ -12,6 +12,9 @@
 # * date Author's Name <author's email> version-release
 # - Summary of changes
 
+* Fri Aug 26 2022 kabouik
+- Configuration overhaul to tidy up and use external files instead of inline text chagnes from configure_desktop, which will allow users to use their own customized configuration files on new containers
+
 * Tue Aug 24 2022 kabouik
 - Add a script to install Arch-based distributions
 - WM choice when installing (xfce4 or i3), should work for all supported types of distros (Arch, Debian)

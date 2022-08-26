@@ -1,5 +1,4 @@
-# set modifier
-#set $mod Mod4
+# Set modifier
 set $mod Mod1
 
 # Set font
@@ -11,15 +10,20 @@ floating_modifier $mod
 # Autostart
 exec --no-startup-id xsettingsd &
 exec_always --no-startup-id dunst
-exec_always --no-startup-id hsetroot -cover ~/Pictures/Wallpapers/PLACEHOLDER-1.jpg
+exec_always --no-startup-id "sleep 2; hsetroot -cover ~/Pictures/Wallpapers/PLACEHOLDER-1.jpg"
 exec_always --no-startup-id "mousetweaks --ssc --ssc-time=0.5 --threshold=30 --daemonize"
 
 # Start a terminal
 bindsym $mod+Return exec urxvt
 
-# Start dmenu (a program launcher)
+# Start dmenu (program launcher) 
 bindsym $mod+d exec i3-dmenu-desktop --dmenu="dmenu -i -fn 'Noto Sans:size=9'"
+
+# Start rofi (program launcher and window switcher)
 bindsym Ctrl+Tab exec "rofi -lines 12 -padding 18 -width 60 -location 0 -show drun -sidebar-mode -columns 3 -font 'Noto Sans 20' -modi 'drun,windowcd,run,ssh' -kb-mode-next 'Shift+Right,Ctrl+Tab' -kb-mode-previous 'Shift+Left' -cycle -theme /usr/share/rofi/themes/glue_pro_blue.rasi"
+
+# Open video URL stored in the clipboard in a floating mpv window
+bindsym $mod+y exec mpv "$(xclip -selection c -out)"
 
 # Kill focused window
 bindsym $mod+backspace kill
@@ -160,6 +164,7 @@ assign [class=Lxappearance|System-config-printer.py|Lxtask|GParted|Pavucontrol|E
 for_window [class=Viewnior|feh|Audacious|File-roller|Lxappearance|Lxtask|Pavucontrol] floating enable
 for_window [class=URxvt|Firefox|Geany|Evince|Soffice|libreoffice*|mpv|Ghb|Xfburn|Gimp*|Inkscape|Vlc|Lxappearance|Audacity] focus
 for_window [class=Xfburn|GParted|System-config-printer.py|Lxtask|Pavucontrol|Exo-helper*|Lxrandr|Arandr] focus
+for_window [class=mpv] floating enable, sticky toggle, resize set 800 450
 
 # Colour of border, background, text, indicator, and child_border
 client.focused              #bf616a #2f343f #d8dee8 #bf616a #d8dee8

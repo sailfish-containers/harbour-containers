@@ -94,7 +94,7 @@ URxvt.perl-ext-common:	default,clipboard,url-select,keyboard-select,resize-font
 
 ! macros for clipboard and selection
 URxvt.keysym.C-Escape:	perl:keyboard-select:activate
-URxvt.keysym.C-f:	perl:keyboard-select:search
+URxvt.keysym.C-slash:	perl:keyboard-select:search
 URxvt.keysym.C-u:	perl:url-select:select_next
 URxvt.urlLauncher:	firefox
 URxvt.underlineURLs:	true

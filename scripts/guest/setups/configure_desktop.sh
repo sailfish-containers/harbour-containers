@@ -20,7 +20,7 @@ xrdb ~/.Xresources
     cp /mnt/guest/configs/45-allow-colord.pkla /etc/polkit-1/localauthority/50-local.d/45-allow-colord.pkla
 
     # Add .xsettingsd (font anti-aliasing)
-    cp /mnt/guest/configs/.xsettingsd /home/$USER_NAME/
+    cp /mnt/guest/configs/xsettingsd /home/$USER_NAME/.xsettingsd
     chown $USER_NAME:$USER_NAME /home/$USER_NAME/.xsettingsd
 
     # Copy wallpapers
@@ -28,14 +28,14 @@ xrdb ~/.Xresources
     cp -r /mnt/guest/configs/Wallpapers /home/$USER_NAME/Pictures/
     chown -R $USER_NAME:$USER_NAME /home/$USER_NAME/Pictures/Wallpapers
 
-    # Reload font cache
-    cp -r /mnt/guest/configs/.fonts /home/$USER_NAME/
+    # Add font for i3status
+    cp -r /mnt/guest/configs/fonts /home/$USER_NAME/.fonts
     chown -R $USER_NAME:$USER_NAME /home/$USER_NAME/.fonts
-    fc-cache -fv
+    fc-cache -fv > /dev/null
 
     # Beautify urxvt
-    cp -r /mnt/guest/configs/.urxvt /home/$USER_NAME/
-    cp /mnt/guest/configs/.Xresources /home/$USER_NAME/
+    cp -r /mnt/guest/configs/urxvt /home/$USER_NAME/.urxvt
+    cp /mnt/guest/configs/Xresources /home/$USER_NAME/.Xresources
     chown -R $USER_NAME:$USER_NAME /home/$USER_NAME/.urxvt
     chown $USER_NAME:$USER_NAME /home/$USER_NAME/.Xresources
 
@@ -53,9 +53,9 @@ TERMBIN --hide-scrollbar --hide-menubar --color-bg=#222222 --zoom=-1 $@\n' > /ho
         "i" | "i3")
             # Import i3 configuration files
             mkdir -p /home/$USER_NAME/.config
-            cp -r /mnt/guest/configs/.config/i3 /home/$USER_NAME/config/
-            cp -r /mnt/guest/configs/.config/i3status /home/$USER_NAME/config/
-            if [ "$1" = "debian" ]; then     # Debian doesn't have i3-gaps so we remove the corresponding config lines
+            cp -r /mnt/guest/configs/config/i3 /home/$USER_NAME/.config/
+            cp -r /mnt/guest/configs/config/i3status /home/$USER_NAME/.config/
+            if [ "$1" = "debian" ]; then  # Debian doesn't have i3-gaps so we remove the corresponding config lines
                 head -n -12 /home/$USER_NAME/.config/i3/config > /tmp/config 2> /dev/null
                 mv /tmp/config /home/$USER_NAME/.config/i3/config 2> /dev/null
             fi
@@ -76,7 +76,7 @@ TERMBIN --hide-scrollbar --hide-menubar --color-bg=#222222 --zoom=-1 $@\n' > /ho
         "x" | "xfce" | "xfce4" | "" | *)
             # Xfce4 settings
             mkdir -p /home/$USER_NAME/.config/xfce4/xfconf/xfce-perchannel-xml
-            cp -a /mnt/guest/configs/xfce4/xfconf/xfce-perchannel-xml/. /home/$USER_NAME/.config/xfce4/xfconf/xfce-perchannel-xml/
+            cp -a /mnt/guest/configs/config/xfce4/xfconf/xfce-perchannel-xml/. /home/$USER_NAME/.config/xfce4/xfconf/xfce-perchannel-xml/
 
             # Wallpaper
             if [ "$1" = "debian" ] || [ "$1" = "archarm" ] || [ "$1" = "archlinux" ] || [ "$1" = "kali" ]; then
