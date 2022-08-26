@@ -52,7 +52,7 @@ case "$REPLY" in
         LAUNCHCMD="exec i3"
         apt install -y i3-gaps 2> /dev/null # i3-gaps is available in some debian-based distros, but not all
         if ! type i3 > /dev/null; then
-            apt install -y i3 || err=1      # Install base i3 only if i3-gaps didn't install above
+            apt install -y i3 > /tmp/harbour-containers_apt.log || err=1      # Install base i3 only if i3-gaps didn't install above
         fi
         apt install -y \
             dbus-x11 \
@@ -82,11 +82,11 @@ case "$REPLY" in
             xsel \
             xsettingsd \
             yad \
-            yt-dlp || err=1
-        apt install -y firefox 2> /dev/null || err=1 # Firefox is not available in Kali and would prevent installing
-        		       		             # the other packages if it was inclided in the same list
+            yt-dlp >> /tmp/harbour-containers_apt.log || err=1
+        apt install -y firefox 2> /dev/null || err=1                                 # Firefox is not available in Kali and would prevent installing
+        		       		                                             # the other packages if it was inclided in the same list
         if ! type firefox > /dev/null; then
-            apt install -y firefox-esr || err=1      # Install firefox-esr only if firefox didn't install above
+            apt install -y firefox-esr >> /tmp/harbour-containers_apt.log || err=1      # Install firefox-esr only if firefox didn't install above
             fi
         ;;
     "x" | "xfce" | "xfce4" | "" | *)
@@ -106,27 +106,27 @@ case "$REPLY" in
             wget \
             xdg-user-dirs \
             xfce4 \
-            xfce4-terminal || err=1
-        apt install -y firefox 2> /dev/null || err=1 # Firefox is not available in Kali and would prevent installing
-        		       		             # the other packages if it was inclided in the same list
+            xfce4-terminal > /tmp/harbour-containers_apt.log || err=1
+        apt install -y firefox 2> /dev/null || err=1                                # Firefox is not available in Kali and would prevent installing
+        		       		                                            # the other packages if it was inclided in the same list
         if ! type firefox > /dev/null; then
-            apt install -y firefox-esr || err=1     # Install firefox-esr only if firefox didn't install above
+            apt install -y firefox-esr >> /tmp/harbour-containers_apt.log || err=1     # Install firefox-esr only if firefox didn't install above
             fi
         ;;
 esac
 
 if [[ "$err" -eq "1" ]]; then
     sep="\n---\n"
-    printf "\033[0;31m\n[!] Failed to install some packages, check your connection and retry. Alternatively, if those packages are no longer available, please open an issue at https://github.com/sailfish-containers/harbour-containers. Continue anyway? [y/N] \033[0m" && read -r CONTINUE1
+    printf "\033[0;31m\n[!] Some errors have been encountered when installing packages. They are not necessarily critical, you may proceed to the next step. If however the container does not work properly at the end, please check that your Internet connection is stable, try again, and open an issue on Github with your /tmp/harbour-containers_apt.log file. Continue? [Y/n] \033[0m" && read -r CONTINUE1
     
     case "$CONTINUE1" in
-        "y" | "yes" | "Y" | "Yes" | "Yes")
-            printf "\033[0;33mIgnoring the install error(s)…\033[0m\n"
-        ;;
-        "n" | "no" | "N" | "No" | "NO" | "" | *)
+        "n" | "no" | "N" | "No" | "NO")
             printf "Aborting setup…\n"
             sleep 3
             exit
+        ;;
+        "y" | "yes" | "Y" | "Yes" | "Yes" | "" | *)
+            printf "\033[0;33mIgnoring the install error(s)…\033[0m\n"
         ;;
     esac
 fi 
