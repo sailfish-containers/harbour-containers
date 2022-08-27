@@ -9,8 +9,6 @@ from libs import lxc, qxcompositor
 import dbus
 import dbus.service
 import pathlib
-from pwd import getpwnam
-import getpass
 
 DBUS_IFACE="org.sailfishcontainers.daemon"
 
