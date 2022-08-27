@@ -16,7 +16,7 @@ printf '\033[1;32m[?] Choose [x]fce4 or [i]3 as window manager for this %s conta
 if [ ! -d "/home/${USER_NAME}" ]
 then
 	# Add user without interaction
-        echo "[+] creating new user '$USER_NAME', please enter user password."
+        printf "\033[0;36m[+] Creating new user '$USER_NAME', please type new password password.\033[0m\n"
         adduser --disabled-password --gecos "" --uid $USER_UID $USER_NAME
 	sleep 1
         passwd $USER_NAME
@@ -43,112 +43,113 @@ fi
 
 # Install base utilities for selected WM and X setup
 printf "\033[0;36m[+] Installing selected WM and base utilities…\033[0m\n"
-apt install -y sudo xfce4 onboard dbus-x11 dconf-cli
 
-# Install base utilities for selected WM and X setup
-printf "\033[0;36m[+] Installing selected WM and base utilities…\033[0m\n"
-case "$REPLY" in
-    "i" | "i3")
-        LAUNCHCMD="exec i3"
-        apt install -y i3-gaps 2> /dev/null # i3-gaps is available in some debian-based distros, but not all
-        if ! type i3 > /dev/null; then
-            apt install -y i3 || err=1      # Install base i3 only if i3-gaps didn't install above
-        fi
-        apt install -y \
-            dbus-x11 \
-            dconf-cli \
-            dmenu \
-            dunst \
-            fonts-noto \
-            fzf \
-            hsetroot \
-            i3blocks \
-            i3lock \
-            i3status \
-            mpv \
-            onboard \
-            rofi \
-            rsync \
-            rxvt-unicode \
-            sudo \
-            thunar \
-            thunar-volman \
-            tumbler \
-            viewnior \
-            wget \
-            xclip \
-            xdg-user-dirs \
-            xfce4-terminal \
-            xsel \
-            xsettingsd \
-            yad \
-            yt-dlp || err=1
-        apt install -y firefox 2> /dev/null # Firefox is not available in Kali and would prevent installing
-        		       		    # the other packages if it was inclided in the same list
-        if ! type firefox > /dev/null; then
-            apt install -y firefox-esr      # Install firefox-esr only if firefox didn't install above
+install_packages() {
+    case "$REPLY" in
+        "i" | "i3")
+            LAUNCHCMD="exec i3"
+            apt install -y i3-gaps 2> /dev/null # i3-gaps is available in some debian-based distros, but not all
+            if ! type i3 > /dev/null; then
+                apt install -y i3 || err=1      # Install base i3 only if i3-gaps didn't install above
             fi
-        ;;
-    "x" | "xfce" | "xfce4" | "" | *)
-        LAUNCHCMD="exec startxfce4"
-        apt install -y \
-            dbus-x11 \
-            dconf-cli \
-            dmenu \
-            mpv \
-            onboard \
-            rsync \
-            sudo \
-            thunar \
-            thunar-volman \
-            tumbler \
-            viewnior \
-            wget \
-            xdg-user-dirs \
-            xfce4 \
-            xfce4-terminal || err=1
-        apt install -y firefox 2> /dev/null # Firefox is not available in Kali and would prevent installing
-        		       		    # the other packages if it was inclided in the same list
-        if ! type firefox > /dev/null; then
-            apt install -y firefox-esr      # Install firefox-esr only if firefox didn't install above
-            fi
-        ;;
-esac
-
-if [[ "$err" -eq "1" ]]; then
-    sep="\n---\n"
-    printf "\033[0;33m\n[!] Some errors have been encountered when installing packages. They are not necessarily critical, you may proceed to the next step. If however the container does not work properly at the end, please check that your Internet connection is stable, try again, and open an issue on Github with the above logs. Continue? [Y/n] \033[0m" && read -r CONTINUE1
-    
-    case "$CONTINUE1" in
-        "n" | "no" | "N" | "No" | "NO")
-            printf "Aborting setup…\n"
-            sleep 3
-            exit
-        ;;
-        "y" | "yes" | "Y" | "Yes" | "Yes" | "" | *)
-            printf "\033[0;33mIgnoring the install error(s)…\033[0m\n"
-        ;;
+            apt install -y \
+                dbus-x11 \
+                dconf-cli \
+                dmenu \
+                dunst \
+                fonts-noto \
+                fzf \
+                hsetroot \
+                i3blocks \
+                i3lock \
+                i3status \
+                mpv \
+                onboard \
+                rofi \
+                rsync \
+                rxvt-unicode \
+                sudo \
+                thunar \
+                thunar-volman \
+                tumbler \
+                viewnior \
+                wget \
+                xclip \
+                xdg-user-dirs \
+                xfce4-terminal \
+                xsel \
+                xsettingsd \
+                yad \
+                yt-dlp || err=1
+            apt install -y firefox 2> /dev/null # Firefox is not available in Kali and would prevent installing
+            		       		    # the other packages if it was inclided in the same list
+            if ! type firefox > /dev/null; then
+                apt install -y firefox-esr      # Install firefox-esr only if firefox didn't install above
+                fi
+            ;;
+        "x" | "xfce" | "xfce4" | "" | *)
+            LAUNCHCMD="exec startxfce4"
+            apt install -y \
+                dbus-x11 \
+                dconf-cli \
+                dmenu \
+                mpv \
+                onboard \
+                rsync \
+                sudo \
+                thunar \
+                thunar-volman \
+                tumbler \
+                viewnior \
+                wget \
+                xdg-user-dirs \
+                xfce4 \
+                xfce4-terminal || err=1
+            apt install -y firefox 2> /dev/null # Firefox is not available in Kali and would prevent installing
+            		       		    # the other packages if it was inclided in the same list
+            if ! type firefox > /dev/null; then
+                apt install -y firefox-esr      # Install firefox-esr only if firefox didn't install above
+                fi
+            ;;
     esac
-fi 
+
+    if [[ "$err" -eq "1" ]]; then
+        printf "\033[0;33m\n[!] Error(s) encountered when installing base packages. This may be caused by an unstable Internet connection. [R]etry or [c]ontinue anyway? \033[0m" && read -r RETRY
+        
+        case "$RETRY" in
+            "r" | "R" | "retry" | "Retry" | "RETRY")
+                printf "Retrying to install base packages…\n"
+                echo "nameserver 8.8.8.8" >> /etc/resolv.conf # One possible cause of failure in Debian
+                sleep 2
+                install_packages
+            ;;
+            "c" | "C" | "continue" | "Continue" | "CONTINUE" | "" | *)
+                printf "\033[0;33mIgnoring install error(s) and continuing to next step…\033[0m\n"
+                sleep 2
+            ;;
+        esac
+    fi
+}
+
+install_packages
 
 # Mask unused services
 systemctl mask lightdm
 systemctl mask upower
 
-# Download latest Xwayland binary from the sailfish-containers/xserver repo,
-# since current Xwayland does not support XDG_WM_BASE
-ARCH=$(uname -m)
+# Download latest Xwayland binary from the sailfish-containers/xserver repo, since current Xwayland does not support XDG_WM_BASE
 printf "\033[0;36m[+] Fetching prebuilt Xwayland…\033[0m\n"
+ARCH=$(uname -m)
 mkdir -p /opt/bin
 wget https://github.com/sailfish-containers/xserver/releases/download/b1/Xwayland.${ARCH}.libc-2.29.bin \
 	-O /opt/bin/Xwayland -nc -q --show-progress
 chmod +x /opt/bin/Xwayland
 
 # Link harbour-containers scripts
-ln -s /mnt/guest/start_desktop.sh /opt/bin/start_desktop.sh
-ln -s /mnt/guest/setup_desktop.sh /opt/bin/setup_desktop.sh
-ln -s /mnt/guest/start_onboard.sh /opt/bin/start_onboard.sh
-ln -s /mnt/guest/kill_xwayland.sh /opt/bin/kill_xwayland.sh
+ln -s /mnt/guest/start_desktop.sh /opt/bin/start_desktop.sh 2> /dev/null
+ln -s /mnt/guest/setup_desktop.sh /opt/bin/setup_desktop.sh 2> /dev/null
+ln -s /mnt/guest/start_onboard.sh /opt/bin/start_onboard.sh 2> /dev/null
+ln -s /mnt/guest/kill_xwayland.sh /opt/bin/kill_xwayland.sh 2> /dev/null
 
 # Desktop configuration prompt
 printf "\033[0;36m[+] Preconfiguring desktop with sane default settings…\033[0m\n"
@@ -159,8 +160,8 @@ if [ -e "/home/$USER_NAME/.config/i3/config" ] || [ -e "/home/$USER_NAME/.config
             configure_desktop $3
             printf "\033[0;32mDefault configuration re-applied.\033[0m\n"
         ;;
-        "n" | "no" | "N" | "No" | "NO" | "" | *)
-            printf "Aborting desktop reconfiguration…\n"
+        "n" | "no" | "N" | "No" |x "NO" | "" | *)
+            printf "\033[0;33mAborting desktop reconfiguration…\033[0m"
         ;;
     esac
 else
@@ -207,7 +208,7 @@ fi
 # apt update
 
 # Wrap up
-printf "\033[1;32m[Success] Xsession ready. Press [Return] to close this terminal window. You will then be able to start X from the GUI.\033[0m\n"
+printf "\033[1;32m[✔] Setup complete. Press [Return] to close this terminal window. If everything went well, you should be able  to start X from the GUI.\033[0m\n"
 read -r _
 
 # Reboot the container

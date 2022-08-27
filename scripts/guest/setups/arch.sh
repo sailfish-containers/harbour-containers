@@ -16,7 +16,7 @@ printf '\033[1;32m[?] Choose [x]fce4 or [i]3 as window manager for this %s conta
 if [ ! -d "/home/${USER_NAME}" ]
 then
 	# Add user without interaction
-        printf "\033[1;36m\n[+] Creating new user '$USER_NAME', please enter user password.\033[0m\n"
+        printf "\033[0;36m[+] Creating new user '$USER_NAME', please type new password password.\033[0m\n"
         useradd -m -u $USER_UID $USER_NAME
 	sleep 1
         passwd $USER_NAME
@@ -36,6 +36,8 @@ fi
 
 # Install base utilities for selected WM and X setup
 printf "\033[0;36m[+] Installing selected WM and base utilities…\033[0m\n"
+
+install_packages() {
 case "$REPLY" in
     "i" | "i3")
         LAUNCHCMD="exec i3"
@@ -56,100 +58,102 @@ case "$REPLY" in
             noto-fonts \
             onboard \
             rofi \
-            rsync \
-            rxvt-unicode \
-            sudo \
-            thunar \
-            thunar-volman \
-            ttf-dejavu \
-            tumbler \
-            viewnior \
-            wget \
-            xclip \
-            xdg-user-dirs \
-            xfce4-terminal \
-            xsel \
-            xsettingsd \
-            xorg-server \
-            xorg-xinit \
-            yad \
-            yt-dlp || err=1
-        pacman -Syu --noconfirm xorg-apps || err=1 # --needed has to be dropped for xorg-apps due to a package conflict
-        				           # that would break the script when run more than once on a container
-        ;;
-    "x" | "xfce" | "xfce4" | "" | *)
-        LAUNCHCMD="exec startxfce4"
-        pacman -Syu --noconfirm --needed \
-            dconf \
-            dmenu \
-            exo \
-            firefox \
-            garcon \
-            libbsd \
-            mpv \
-            mousetweaks \
-            onboard \
-            rsync \
-            rxvt-unicode \
-            sudo \
-            thunar \
-            thunar-volman \
-            ttf-dejavu \
-            tumbler \
-            viewnior \
-            wget \
-            xdg-user-dirs \
-            xfce4-appfinder \
-            xfce4-panel \
-            xfce4-power-manager \
-            xfce4-session \
-            xfce4-settings \
-            xfce4-terminal \
-            xfconf \
-            xfdesktop \
-            xfwm4 \
-            xfwm4-themes \
-            xorg-server \
-            xorg-xinit || err=1
-        pacman -Syu --noconfirm xorg-apps || err=1 # --needed has to be dropped for xorg-apps due to a package conflict
-        				           # that would break the script when run more than once on a container
-        ;;
-esac
-
-if [[ "$err" -eq "1" ]]; then
-    sep="\n---\n"
-    printf "\033[0;33m\n[!] Some errors have been encountered when installing packages. They are not necessarily critical, you may proceed to the next step. If however the container does not work properly at the end, please check that your Internet connection is stable, try again, and open an issue on Github with the above logs. Continue? [Y/n] \033[0m" && read -r CONTINUE1
-    
-    case "$CONTINUE1" in
-        "n" | "no" | "N" | "No" | "NO")
-            printf "Aborting setup…\n"
-            sleep 3
-            exit
-        ;;
-        "y" | "yes" | "Y" | "Yes" | "Yes" | "" | *)
-            printf "\033[0;33mIgnoring the install error(s)…\033[0m\n"
-        ;;
+                rsync \
+                rxvt-unicode \
+                sudo \
+                thunar \
+                thunar-volman \
+                ttf-dejavu \
+                tumbler \
+                viewnior \
+                wget \
+                xclip \
+                xdg-user-dirs \
+                xfce4-terminal \
+                xsel \
+                xsettingsd \
+                xorg-server \
+                xorg-xinit \
+                yad \
+                yt-dlp || err=1
+            pacman -Syu --noconfirm xorg-apps || err=1 # --needed has to be dropped for xorg-apps due to a package conflict
+            				           # that would break the script when run more than once on a container
+            ;;
+        "x" | "xfce" | "xfce4" | "" | *)
+            LAUNCHCMD="exec startxfce4"
+            pacman -Syu --noconfirm --needed \
+                dconf \
+                dmenu \
+                exo \
+                firefox \
+                garcon \
+                libbsd \
+                mpv \
+                mousetweaks \
+                onboard \
+                rsync \
+                rxvt-unicode \
+                sudo \
+                thunar \
+                thunar-volman \
+                ttf-dejavu \
+                tumbler \
+                viewnior \
+                wget \
+                xdg-user-dirs \
+                xfce4-appfinder \
+                xfce4-panel \
+                xfce4-power-manager \
+                xfce4-session \
+                xfce4-settings \
+                xfce4-terminal \
+                xfconf \
+                xfdesktop \
+                xfwm4 \
+                xfwm4-themes \
+                xorg-server \
+                xorg-xinit || err=1
+            pacman -Syu --noconfirm xorg-apps || err=1 # --needed has to be dropped for xorg-apps due to a package conflict
+            				           # that would break the script when run more than once on a container
+            ;;
     esac
-fi 
+
+    if [[ "$err" -eq "1" ]]; then
+        printf "\033[0;33m\n[!] Error(s) encountered when installing base packages. This may be caused by an unstable Internet connection. [R]etry or [c]ontinue anyway? \033[0m" && read -r RETRY
+        
+        case "$RETRY" in
+            "r" | "R" | "retry" | "Retry" | "RETRY")
+                printf "Retrying to install base packages…\n"
+                sleep 2
+                install_packages
+            ;;
+            "c" | "C" | "continue" | "Continue" | "CONTINUE" | "" | *)
+                printf "\033[0;33mIgnoring install error(s) and continuing to next step…\033[0m\n"
+                sleep 2
+            ;;
+        esac
+    fi
+}
+
+install_packages
 
 # Mask unused services
 systemctl mask lightdm
 systemctl mask upower
 
-# Download latest Xwayland binary from the sailfish-containers/xserver repo,
-# since current Xwayland does not support XDG_WM_BASE
-ARCH=$(uname -m)
+# Download latest Xwayland binary from the sailfish-containers/xserver repo, since current Xwayland does not support XDG_WM_BASE
 printf "\033[0;36m[+] Fetching prebuilt Xwayland…\033[0m\n"
+ARCH=$(uname -m)
 mkdir -p /opt/bin
 wget https://github.com/sailfish-containers/xserver/releases/download/b1/Xwayland.${ARCH}.libc-2.29.bin \
 	-O /opt/bin/Xwayland -nc -q --show-progress || err=xwayland
 chmod +x /opt/bin/Xwayland
 
 # Link harbour-containers scripts
-ln -s /mnt/guest/start_desktop.sh /opt/bin/start_desktop.sh
-ln -s /mnt/guest/setup_desktop.sh /opt/bin/setup_desktop.sh
-ln -s /mnt/guest/start_onboard.sh /opt/bin/start_onboard.sh
-ln -s /mnt/guest/kill_xwayland.sh /opt/bin/kill_xwayland.sh
+ln -s /mnt/guest/start_desktop.sh /opt/bin/start_desktop.sh 2> /dev/null
+ln -s /mnt/guest/setup_desktop.sh /opt/bin/setup_desktop.sh 2> /dev/null
+ln -s /mnt/guest/start_onboard.sh /opt/bin/start_onboard.sh 2> /dev/null
+ln -s /mnt/guest/kill_xwayland.sh /opt/bin/kill_xwayland.sh 2> /dev/null
 
 # Desktop configuration prompt
 printf "\033[0;36m[+] Preconfiguring desktop with sane default settings…\033[0m\n"
@@ -161,7 +165,7 @@ if [ -e "/home/$USER_NAME/.config/i3/config" ] || [ -e "/home/$USER_NAME/.config
             printf "\033[0;32mDefault configuration re-applied.\033[0m\n"
         ;;
         "n" | "no" | "N" | "No" | "NO" | "" | *)
-            printf "Aborting desktop reconfiguration…\n"
+            printf "\033[0;33mAborting desktop reconfiguration…\033[0m"
         ;;
     esac
 else
@@ -170,20 +174,25 @@ else
 fi
 
 # Compile from AUR the extra packages required for Xwayland
-printf "\033[1;32m[?] Extra packages Xwayland depends on have to be compiled. This will take a long time but should only be necessary once per container. If this one has already been set up to launch X (even another WM), then this step can be skipped. Skip? [y/N] \033[0m" && read -r SKIP
+printf "\033[1;32m[?] Xwayland depends on extra packages that have to be compiled on Arch. This will take a long time but is necessary once per container. If this one has already been set up to launch X (even another WM), then this step can be skipped. Skip? [y/N] \033[0m" && read -r SKIP
 
-    # Add user to sudoers, temporarily with no password to avoid password prompts for makepkg below
-    usermod -aG wheel $USER_NAME
-    sed -i 's/# %wheel ALL=(ALL:ALL) NOPASSWD: ALL/%wheel ALL=(ALL:ALL) NOPASSWD: ALL/g' /etc/sudoers
-
+compile_aur() {
     case "$SKIP" in
         "y" | "yes" | "Y" | "Yes" | "Yes")
             printf '\033[0;32mSkipping.\033[0m\n'
         ;;
         "n" | "no" | "N" | "No" | "NO" | "" | *)
-            printf "\033[0;32mCompiling dbus-x11, libsepol and libselinux from AUR. A good time to brew some coffee…\033[0m\n"
+            printf "\033[0;32mCompiling dbus-x11, libsepol and libselinux from AUR. Now is a good time to brew some coffee…\033[0m\n"
+
+            # Add user to sudoers, temporarily with no password to avoid password prompts for makepkg below
+            usermod -aG wheel $USER_NAME
+            sed -i 's/# %wheel ALL=(ALL:ALL) NOPASSWD: ALL/%wheel ALL=(ALL:ALL) NOPASSWD: ALL/g' /etc/sudoers
+
             # Compile and install dbus-x11, libsepol and libselinux from AUR
-            pacman -Syu --needed --noconfirm git autoconf automake binutils make pkgconf bison fakeroot gcc flex patch
+            pacman -Syu --needed --noconfirm git autoconf automake binutils make pkgconf bison fakeroot gcc flex patch || err=2
+            rm -rf /tmp/dbus-x11 2> /dev/null
+            rm -rf /tmp/libsepol 2> /dev/null
+            rm -rf /tmp/libselinux 2> /dev/null
             runuser -l $USER_NAME -c "git clone https://aur.archlinux.org/dbus-x11.git /tmp/dbus-x11"
             runuser -l $USER_NAME -c "cd /tmp/dbus-x11 && yes | makepkg -AsiL --skippgpcheck --needed" || err=2
             runuser -l $USER_NAME -c "git clone https://aur.archlinux.org/libsepol.git /tmp/libsepol"
@@ -193,28 +202,33 @@ printf "\033[1;32m[?] Extra packages Xwayland depends on have to be compiled. Th
 
             if [[ "$err" -eq "2" ]]; then
                 sep="\n---\n"
-                printf "\033[0;31m[!] Failed to compile and install dependencies for Xwayland, check your Internet connection and retry. If the error persists and you cannot start X, then please open an issue on Github with the above logs. Continue anyway? [y/N] \033[0m" && read -r CONTINUE2
+                printf "\033[0;31m[!] Error(s) encountered. Please check your Internet connection. If errors persist and you cannot start X when ignoring them, then please open an issue on Github with the above logs. [R]etry or [c]ontinue anyway? \033[0m" && read -r RETRY2
 
-                case "$CONTINUE2" in
-                    "y" | "yes" | "Y" | "Yes" | "Yes")
-                        printf "\033[0;33mIgnoring the error(s)…\033[0m\n"
+                case "$RETRY2" in
+                    "r" | "R" | "retry" | "Retry" | "RETRY")
+                        printf "Retrying…\n"
+                        sleep 2
+                        compile_aur
                     ;;
-                    "n" | "no" | "N" | "No" | "NO" | "" | *)
-                        printf "Aborting setup…\n"
-                        sleep 3
-                        exit
+                    "c" | "C" | "continue" | "Continue" | "CONTINUE" | "" | *)
+                        printf "\033[0;33mIgnoring compile error(s)…\033[0m\n"
+                        sleep 2
                     ;;
                 esac
             fi
         ;;
     esac
 
-    # Change /etc/sudoers to prompt user for password on sudo again
-    sed -i 's/%wheel ALL=(ALL:ALL) NOPASSWD: ALL/# %wheel ALL=(ALL:ALL) NOPASSWD: ALL/g' /etc/sudoers
-    sed -i 's/# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/g' /etc/sudoers
+}
+
+compile_aur
+
+# Change /etc/sudoers to prompt user for password on sudo again
+sed -i 's/%wheel ALL=(ALL:ALL) NOPASSWD: ALL/# %wheel ALL=(ALL:ALL) NOPASSWD: ALL/g' /etc/sudoers
+sed -i 's/# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/g' /etc/sudoers
 
 # Wrap up
-printf "\033[1;32m[Success] Xsession ready. Press [Return] to close this terminal window. You will then be able to start X from the GUI.\033[0m\n"
+printf "\033[1;32m[✔] Setup complete. Press [Return] to close this terminal window. If everything went well, you should be able  to start X from the GUI.\033[0m\n"
 read -r _
 
 # Reboot the container

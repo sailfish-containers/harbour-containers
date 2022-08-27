@@ -76,7 +76,7 @@ TERMBIN --hide-scrollbar --hide-menubar --color-bg=#222222 --zoom=-1 $@\n' > /ho
             # Sway-launcher-desktop
             mkdir -p /home/$USER_NAME/.config/sway-launcher-desktop/
             wget https://github.com/Biont/sway-launcher-desktop/raw/master/sway-launcher-desktop.sh \
-            	-O /home/$USER_NAME/.config/sway-launcher-desktop/sway-launcher-desktop.sh -q --show-progress
+            	-O /home/$USER_NAME/.config/sway-launcher-desktop/sway-launcher-desktop.sh -q
             chmod +x /home/$USER_NAME/.config/sway-launcher-desktop/sway-launcher-desktop.sh
             chown -R $USER_NAME:$USER_NAME /home/$USER_NAME/.config/sway-launcher-desktop
 
