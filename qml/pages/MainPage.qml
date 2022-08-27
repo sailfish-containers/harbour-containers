@@ -41,7 +41,7 @@ Page {
                     if (result){
                         // Container started
                         // Run setup script
-                        daemon.call('container_xsession_setup',[name,"xfce4"], function (result) {})
+                        daemon.call('container_xsession_setup',[name,"wm"], function (result) {})
                     }
                 })
             }
