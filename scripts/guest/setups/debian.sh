@@ -83,10 +83,10 @@ case "$REPLY" in
             xsettingsd \
             yad \
             yt-dlp || err=1
-        apt install -y firefox 2> /dev/null || err=1 # Firefox is not available in Kali and would prevent installing
-        		       		             # the other packages if it was inclided in the same list
+        apt install -y firefox 2> /dev/null # Firefox is not available in Kali and would prevent installing
+        		       		    # the other packages if it was inclided in the same list
         if ! type firefox > /dev/null; then
-            apt install -y firefox-esr || err=1      # Install firefox-esr only if firefox didn't install above
+            apt install -y firefox-esr      # Install firefox-esr only if firefox didn't install above
             fi
         ;;
     "x" | "xfce" | "xfce4" | "" | *)
@@ -107,10 +107,10 @@ case "$REPLY" in
             xdg-user-dirs \
             xfce4 \
             xfce4-terminal || err=1
-        apt install -y firefox 2> /dev/null || err=1 # Firefox is not available in Kali and would prevent installing
-        		       		             # the other packages if it was inclided in the same list
+        apt install -y firefox 2> /dev/null # Firefox is not available in Kali and would prevent installing
+        		       		    # the other packages if it was inclided in the same list
         if ! type firefox > /dev/null; then
-            apt install -y firefox-esr || err=1      # Install firefox-esr only if firefox didn't install above
+            apt install -y firefox-esr      # Install firefox-esr only if firefox didn't install above
             fi
         ;;
 esac
