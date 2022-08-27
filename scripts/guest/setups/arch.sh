@@ -73,9 +73,9 @@ case "$REPLY" in
             xorg-server \
             xorg-xinit \
             yad \
-            yt-dlp > /tmp/harbour-containers_pacman.log || err=1
-        pacman -Syu --noconfirm xorg-apps >> /tmp/harbour-containers_pacman.log || err=1 # --needed has to be dropped for xorg-apps due to a package conflict
-        				                                            # that would break the script when run more than once on a container
+            yt-dlp || err=1
+        pacman -Syu --noconfirm xorg-apps || err=1 # --needed has to be dropped for xorg-apps due to a package conflict
+        				           # that would break the script when run more than once on a container
         ;;
     "x" | "xfce" | "xfce4" | "" | *)
         LAUNCHCMD="exec startxfce4"
@@ -110,15 +110,15 @@ case "$REPLY" in
             xfwm4 \
             xfwm4-themes \
             xorg-server \
-            xorg-xinit > /tmp/harbour-containers_pacman.log || err=1
-        pacman -Syu --noconfirm xorg-apps >> /tmp/harbour-containers_pacman.log || err=1 # --needed has to be dropped for xorg-apps due to a package conflict
-        				                                            # that would break the script when run more than once on a container
+            xorg-xinit || err=1
+        pacman -Syu --noconfirm xorg-apps || err=1 # --needed has to be dropped for xorg-apps due to a package conflict
+        				           # that would break the script when run more than once on a container
         ;;
 esac
 
 if [[ "$err" -eq "1" ]]; then
     sep="\n---\n"
-    printf "\033[0;31m\n[!] Some errors have been encountered when installing packages. They are not necessarily critical, you may proceed to the next step. If however the container does not work properly at the end, please check that your Internet connection is stable, try again, and open an issue on Github with your /tmp/harbour-containers_pacman.log file. Continue? [Y/n] \033[0m" && read -r CONTINUE1
+    printf "\033[0;33m\n[!] Some errors have been encountered when installing packages. They are not necessarily critical, you may proceed to the next step. If however the container does not work properly at the end, please check that your Internet connection is stable, try again, and open an issue on Github with the above logs. Continue? [Y/n] \033[0m" && read -r CONTINUE1
     
     case "$CONTINUE1" in
         "n" | "no" | "N" | "No" | "NO")
@@ -185,15 +185,15 @@ printf "\033[1;32m[?] Extra packages Xwayland depends on have to be compiled. Th
             # Compile and install dbus-x11, libsepol and libselinux from AUR
             pacman -Syu --needed --noconfirm git autoconf automake binutils make pkgconf bison fakeroot gcc flex patch
             runuser -l $USER_NAME -c "git clone https://aur.archlinux.org/dbus-x11.git /tmp/dbus-x11"
-            runuser -l $USER_NAME -c "cd /tmp/dbus-x11 && yes | makepkg -AsiL --skippgpcheck --needed" > /tmp/harbour-containers_aur.log || err=2
+            runuser -l $USER_NAME -c "cd /tmp/dbus-x11 && yes | makepkg -AsiL --skippgpcheck --needed" || err=2
             runuser -l $USER_NAME -c "git clone https://aur.archlinux.org/libsepol.git /tmp/libsepol"
-            runuser -l $USER_NAME -c "cd /tmp/libsepol && makepkg -siL --noconfirm --skippgpcheck --needed" >> /tmp/harbour-containers_aur.log || err=2
+            runuser -l $USER_NAME -c "cd /tmp/libsepol && makepkg -siL --noconfirm --skippgpcheck --needed" || err=2
             runuser -l $USER_NAME -c "git clone https://aur.archlinux.org/libselinux.git /tmp/libselinux"
-            runuser -l $USER_NAME -c "cd /tmp/libselinux && makepkg -siL --noconfirm --skippgpcheck --needed" >> /tmp/harbour-containers_aur.log || err=2
+            runuser -l $USER_NAME -c "cd /tmp/libselinux && makepkg -siL --noconfirm --skippgpcheck --needed" || err=2
 
             if [[ "$err" -eq "2" ]]; then
                 sep="\n---\n"
-                printf "\033[0;31m[!] Failed to compile and install dependencies for Xwayland, check your Internet connection and retry. If the error persists you cannot start X, then please open an issue on Github with your /tmp/harbour-containers_aur.log. Continue anyway? [y/N] \033[0m" && read -r CONTINUE2
+                printf "\033[0;31m[!] Failed to compile and install dependencies for Xwayland, check your Internet connection and retry. If the error persists and you cannot start X, then please open an issue on Github with the above logs. Continue anyway? [y/N] \033[0m" && read -r CONTINUE2
 
                 case "$CONTINUE2" in
                     "y" | "yes" | "Y" | "Yes" | "Yes")

@@ -78,7 +78,7 @@ TERMBIN --hide-scrollbar --hide-menubar --color-bg=#222222 --zoom=-1 $@\n' > /ho
             wget https://github.com/Biont/sway-launcher-desktop/raw/master/sway-launcher-desktop.sh \
             	-O /home/$USER_NAME/.config/sway-launcher-desktop/sway-launcher-desktop.sh -q --show-progress
             chmod +x /home/$USER_NAME/.config/sway-launcher-desktop/sway-launcher-desktop.sh
-            chown -R $USER_NAME:$USER_NAME/.config/sway-launcher-desktop
+            chown -R $USER_NAME:$USER_NAME /home/$USER_NAME/.config/sway-launcher-desktop
 
             # yt-dlp (limit quality and avoid vp9, we have no HW acceleration)
             rsync -a --mkpath /mnt/guest/configs/config/yt-dlp/ /home/$USER_NAME/.config/yt-dlp/
