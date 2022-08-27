@@ -8,19 +8,19 @@ general {
 		color_bad = '#ba5e57'
 }
 
-order += "load"
 order += "cpu_temperature 0"
+order += "load"
 order += "disk /"
 order += "wireless wlan0"
 order += "battery 1"
 
-load {
-        format = "<span background='#f59335'>  %5min Load </span>"
-}
-
 cpu_temperature 0 {
         format = "<span background='#bf616a'>  %degrees °C </span>"
         path = "/sys/devices/virtual/thermal/thermal_zone50/hwmon0/temp1_input"
+}
+
+load {
+        format = "<span background='#f59335'>  %5min Load </span>"
 }
 
 disk "/" {

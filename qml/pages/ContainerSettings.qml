@@ -100,7 +100,7 @@ Page {
                     ComboBox {
                         id: orientationBox
                         width: parent.width
-                        label: "Screen orientation"
+                        label: "SFOS < 4.2: set X orientation to"
 
                         menu: ContextMenu {
                             MenuItem { text: "landscape" }
