@@ -64,6 +64,7 @@ install_packages() {
                 i3lock \
                 i3status \
                 mpv \
+                pavucontrol \
                 onboard \
                 rofi \
                 rsync \
@@ -94,6 +95,7 @@ install_packages() {
                 dconf-cli \
                 dmenu \
                 mpv \
+                pavucontrol \
                 onboard \
                 rsync \
                 sudo \
@@ -169,6 +171,13 @@ else
     printf "\033[0;32mDone.\033[0m\n"
 fi
 
+# Wrap up
+printf "\033[1;32m[✔] Setup complete. Press [Return] to close this terminal window. If everything went well, you should be able  to start X from the GUI.\033[0m\n"
+read -r _
+
+# Reboot the container
+shutdown -h now
+
 # # Compile Xwayland from sources - disabled for now because sources no longer support required XDG_WM_BASE
 # # Add sources repository
 # echo "[+] Adding sources repository"
@@ -206,10 +215,3 @@ fi
 # rm /etc/apt/sources.list.d/deb-src.list
 # rm -rf /usr/src/*
 # apt update
-
-# Wrap up
-printf "\033[1;32m[✔] Setup complete. Press [Return] to close this terminal window. If everything went well, you should be able  to start X from the GUI.\033[0m\n"
-read -r _
-
-# Reboot the container
-shutdown -h now

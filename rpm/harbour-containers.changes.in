@@ -12,6 +12,9 @@
 # * date Author's Name <author's email> version-release
 # - Summary of changes
 
+* Sun Aug 28 2022 kabouik
+- Audio now working (volume is independent from the phone volume rocker, but can be changed from within the container)
+
 * Fri Aug 26 2022 kabouik
 - Configuration overhaul to tidy up and use external files instead of inline text chagnes from configure_desktop, which will allow users to use their own customized configuration files on new containers
 

@@ -38,26 +38,27 @@ fi
 printf "\033[0;36m[+] Installing selected WM and base utilities…\033[0m\n"
 
 install_packages() {
-case "$REPLY" in
-    "i" | "i3")
-        LAUNCHCMD="exec i3"
-        pacman -Syu --noconfirm --needed \
-            dconf \
-            dmenu \
-            dunst \
-            firefox \
-            fzf \
-            hsetroot \
-            i3blocks \
-            i3-gaps \
-            i3lock \
-            i3status \
-            libbsd \
-            mpv \
-            mousetweaks \
-            noto-fonts \
-            onboard \
-            rofi \
+    case "$REPLY" in
+        "i" | "i3")
+            LAUNCHCMD="exec i3"
+            pacman -Syu --noconfirm --needed \
+                dconf \
+                dmenu \
+                dunst \
+                firefox \
+                fzf \
+                hsetroot \
+                i3blocks \
+                i3-gaps \
+                i3lock \
+                i3status \
+                libbsd \
+                mpv \
+                mousetweaks \
+                noto-fonts \
+                onboard \
+                pavucontrol \
+                rofi \
                 rsync \
                 rxvt-unicode \
                 sudo \
@@ -90,6 +91,7 @@ case "$REPLY" in
                 libbsd \
                 mpv \
                 mousetweaks \
+                pavucontrol \
                 onboard \
                 rsync \
                 rxvt-unicode \
@@ -228,7 +230,7 @@ sed -i 's/%wheel ALL=(ALL:ALL) NOPASSWD: ALL/# %wheel ALL=(ALL:ALL) NOPASSWD: AL
 sed -i 's/# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/g' /etc/sudoers
 
 # Wrap up
-printf "\033[1;32m[✔] Setup complete. Press [Return] to close this terminal window. If everything went well, you should be able  to start X from the GUI.\033[0m\n"
+printf "\033[1;32m[✔] Setup complete. Press [Return] to close this terminal window. If everything went well, you should be able to start X from the GUI.\033[0m\n"
 read -r _
 
 # Reboot the container

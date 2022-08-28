@@ -9,7 +9,7 @@ Name:       harbour-containers
 # << macros
 
 Summary:    LXC manager and runner with Silica UI
-Version:    0.7
+Version:    0.8
 Release:    0
 Group:      Qt/Qt
 License:    GPLv3
@@ -18,7 +18,7 @@ Packager:   Kabouik <matf[redactedforbots]disr.it>
 Source0:    %{name}-%{version}.tar.bz2
 Source100:  harbour-containers.yaml
 Requires:   sailfishsilica-qt5 >= 0.10.9
-Requires:   lxc-templates-desktop >= 1.3
+Requires:   lxc-templates-desktop >= 1.4
 Requires:   python3-gobject
 Requires:   dbus-python3
 Requires:   nemo-qml-plugin-dbus-qt5
