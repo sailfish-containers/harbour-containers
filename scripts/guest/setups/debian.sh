@@ -83,7 +83,7 @@ install_packages() {
                 yad \
                 yt-dlp || err=1
             apt install -y firefox 2> /dev/null # Firefox is not available in Kali and would prevent installing
-            		       		    # the other packages if it was inclided in the same list
+            		       		        # the other packages if it was inclided in the same list
             if ! type firefox > /dev/null; then
                 apt install -y firefox-esr      # Install firefox-esr only if firefox didn't install above
                 fi
@@ -108,7 +108,7 @@ install_packages() {
                 xfce4 \
                 xfce4-terminal || err=1
             apt install -y firefox 2> /dev/null # Firefox is not available in Kali and would prevent installing
-            		       		    # the other packages if it was inclided in the same list
+            		       		        # the other packages if it was inclided in the same list
             if ! type firefox > /dev/null; then
                 apt install -y firefox-esr      # Install firefox-esr only if firefox didn't install above
                 fi
@@ -167,7 +167,7 @@ if [ -e "/home/$USER_NAME/.config/i3/config" ] || [ -e "/home/$USER_NAME/.config
             configure_desktop $3
             printf "\033[0;32mDefault configuration re-applied.\033[0m\n"
         ;;
-        "n" | "no" | "N" | "No" |x "NO" | "" | *)
+        "n" | "no" | "N" | "No" | "NO" | "" | *)
             printf "\033[0;33mAborting desktop reconfiguration…\033[0m"
         ;;
     esac
