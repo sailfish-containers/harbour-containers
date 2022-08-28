@@ -176,6 +176,10 @@ else
     printf "\033[0;32mDone.\033[0m\n"
 fi
 
+# Make audio work within container
+printf "\033[0;36m[+] Setting up audio…\033[0m\n"
+usermod -aG audio $USER_NAME
+
 # Wrap up
 printf "\033[1;32m[✔] Setup complete. Press [Return] to close this terminal window. If everything went well, you should be able  to start X from the GUI.\033[0m\n"
 read -r _

@@ -225,6 +225,10 @@ compile_aur() {
 
 compile_aur
 
+# Make audio work within container
+printf "\033[0;36m[+] Setting up audio…\033[0m\n"
+usermod -aG audio $USER_NAME
+
 # Change /etc/sudoers to prompt user for password on sudo again
 sed -i 's/%wheel ALL=(ALL:ALL) NOPASSWD: ALL/# %wheel ALL=(ALL:ALL) NOPASSWD: ALL/g' /etc/sudoers
 sed -i 's/# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/g' /etc/sudoers
