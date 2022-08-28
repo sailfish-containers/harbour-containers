@@ -123,6 +123,11 @@ install_packages() {
                 printf "Retrying to install base packages…\n"
                 echo "nameserver 8.8.8.8" >> /etc/resolv.conf # One possible cause of failure in Debian
                 sleep 2
+        	apt update
+        	apt install -y resolvconf
+        	echo "nameserver 8.8.8.8" >> /etc/resolvconf/resolv.conf.d/tail
+        	resolvconf --enable-updates
+        	resolvconf -u
                 install_packages
             ;;
             "c" | "C" | "continue" | "Continue" | "CONTINUE" | "" | *)
