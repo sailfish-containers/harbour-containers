@@ -126,7 +126,7 @@ install_packages() {
     esac
 
     if [[ "$err" -eq "1" ]]; then
-        printf "\033[0;33m\n[!] Error(s) encountered when installing base packages. This may be caused by an unstable Internet connection. [R]etry or [c]ontinue anyway? \033[0m" && read -r RETRY
+        printf "\033[0;33m\n[!] Error(s) encountered when installing base packages. This may be caused by an unstable Internet connection. [R]etry or [c]ontinue anyway? (default=c) \033[0m" && read -r RETRY
         
         case "$RETRY" in
             "r" | "R" | "retry" | "Retry" | "RETRY")
@@ -184,7 +184,8 @@ fi
 printf "\033[0;36m[+] Generating en_GB.UTF-8 locale…\033[0m\n"
 sed -i "s/#en_GB.UTF-8 UTF-8/en_GB.UTF-8 UTF-8/g" /etc/locale.gen
 sed -i "s/#en_GB.UTF-8 UTF-8/en_GB.UTF-8 UTF-8/g" /etc/locale.gen
-printf 'LANG=en_GB.utf8
+printf '
+LANG=en_GB.utf8
 LC_CTYPE="en_GB.utf8"
 LC_NUMERIC="en_GB.utf8"
 LC_TIME="en_GB.utf8"
@@ -197,18 +198,26 @@ LC_ADDRESS="en_GB.utf8"
 LC_TELEPHONE="en_GB.utf8"
 LC_MEASUREMENT="en_GB.utf8"
 LC_IDENTIFICATION="en_GB.utf8"
-LC_ALL=' > /etc/locale.conf
+LC_ALL=
+' > /etc/locale.conf
 locale-gen
 
 # Compile from AUR the extra packages required for Xwayland
-printf "\033[1;32m[?] Xwayland depends on extra packages that have to be compiled on Arch. This will take a long time but is necessary once per container. If this one has already been set up to launch X (even another WM), then this step can be skipped. Skip? [y/N] \033[0m" && read -r SKIP
+ls /usr/lib/libselinux.so.1 &> /dev/null || err=2
+ls /usr/lib/libdbus-1.so &> /dev/null || err=2
+
+if [[ "$err" -eq "2" ]]; then
+    printf "\033[1;32m[?] Xwayland depends on extra packages that have to be compiled on Arch. This will take a long time but is necessary only once per container. [C]ontinue or [s]kip (default=c)? \033[0m" && read -r SKIP
+else
+    printf "\033[1;32m[?] Xwayland dependencies have already been compiled for this container. Continuing will upgrade and recompile them, but will take a long time and may not be necessary. [C]ontinue or [s]kip (default=c)? \033[0m" && read -r SKIP
+fi
 
 compile_aur() {
     case "$SKIP" in
-        "y" | "yes" | "Y" | "Yes" | "Yes")
+        "s" | "skip" | "S" | "Skip" | "SKIP")
             printf '\033[0;32mSkipping.\033[0m\n'
         ;;
-        "n" | "no" | "N" | "No" | "NO" | "" | *)
+        "c" | "C" | "continue" | "Continue" | "CONTINUE" | "" | *)
             printf "\033[0;32mCompiling dbus-x11, libsepol and libselinux from AUR. Now is a good time to brew some coffee…\033[0m\n"
 
             # Add user to sudoers, temporarily with no password to avoid password prompts for makepkg below
@@ -226,11 +235,12 @@ compile_aur() {
             runuser -l $USER_NAME -c "cd /tmp/libsepol && makepkg -siL --noconfirm --skippgpcheck --needed"
             runuser -l $USER_NAME -c "git clone https://aur.archlinux.org/libselinux.git /tmp/libselinux"
             runuser -l $USER_NAME -c "cd /tmp/libselinux && makepkg -siL --noconfirm --skippgpcheck --needed"
+
             ls /usr/lib/libselinux.so.1 &> /dev/null || err=2
             ls /usr/lib/libdbus-1.so &> /dev/null || err=2
 
             if [[ "$err" -eq "2" ]]; then
-                printf "\033[0;31m[!] Error(s) encountered. Please check your Internet connection. If errors persist and you cannot start X when ignoring them, then please open an issue on Github with the above logs. [R]etry or [c]ontinue anyway? \033[0m" && read -r RETRY2
+                printf "\033[0;31m[!] Error(s) encountered. Please check your Internet connection. If errors persist and you cannot start X when ignoring them, then please open an issue on Github with the above logs. [R]etry or [c]ontinue anyway (default=r)? \033[0m" && read -r RETRY2
 
                 case "$RETRY2" in
                     "r" | "R" | "retry" | "Retry" | "RETRY")
