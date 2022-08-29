@@ -55,6 +55,9 @@ TERMBIN --hide-scrollbar --hide-menubar --color-bg=#222222 --zoom=-1 $@\n' > /ho
                 mv /tmp/config /home/$USER_NAME/.config/i3/config 2> /dev/null
             fi
             chown -R $USER_NAME:$USER_NAME /home/$USER_NAME/.config
+
+            # Create a .XCompose file for compose and dead keys to go with i3 config (in xfce4, use GUI if us-intl is needed)
+            rsync -a /mnt/guest/configs/Xresources /home/$USER_NAME/.Xresources
             
             # Add font for i3status
             rsync -a --mkpath /mnt/guest/configs/fonts/ /home/$USER_NAME/.fonts/

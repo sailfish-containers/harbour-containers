@@ -12,7 +12,7 @@ exec --no-startup-id xsettingsd &
 exec_always --no-startup-id dunst
 exec_always --no-startup-id "sleep 2; hsetroot -cover ~/Pictures/Wallpapers/PLACEHOLDER-1.jpg"
 exec_always --no-startup-id "mousetweaks --ssc --ssc-time=0.5 --threshold=30 --daemonize"
-exec_always --no-startup-id "urxvtd"
+exec --no-startup-id "LC_CTYPE=en_GB.UTF-8 urxvtd"
 exec --no-startup-id setxkbmap -layout us -variant intl -rules evdev compose:caps
 
 ########## KEYBINDINGS ##########
