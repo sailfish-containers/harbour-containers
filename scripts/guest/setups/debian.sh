@@ -45,7 +45,10 @@ fi
 printf "\033[0;36m[+] Installing selected WM and base utilities…\033[0m\n"
 
 install_packages() {
-    case "$REPLY" in
+    # /usr/share/alsa is mounted from the LXC config, so we don't want pacman to try overwriting files during this initial setup
+    umount /usr/share/alsa
+
+case "$REPLY" in
         "i" | "i3")
             LAUNCHCMD="exec i3"
             apt install -y i3-gaps 2> /dev/null # i3-gaps is available in some debian-based distros, but not all
@@ -121,7 +124,8 @@ install_packages() {
         case "$RETRY" in
             "r" | "R" | "retry" | "Retry" | "RETRY")
                 printf "Retrying to install base packages…\n"
-                echo "nameserver 8.8.8.8" >> /etc/resolv.conf # One possible cause of failure in Debian
+                # Redo the above steps for resolv.conf in case they didn't work; sometimes that happens, I have not identified why yet
+                echo "nameserver 8.8.8.8" >> /etc/resolv.conf
                 sleep 2
         	apt update
         	apt install -y resolvconf
@@ -177,7 +181,7 @@ else
 fi
 
 # Make audio work within container
-printf "\033[0;36m[+] Setting up audio…\033[0m\n"
+printf "\033[0;36m[+] Setting up audio (this is still work in progress for Debian-based containers, it may not work)…\033[0m\n"
 usermod -aG audio $USER_NAME
 
 # Wrap up

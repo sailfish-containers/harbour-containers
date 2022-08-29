@@ -12,14 +12,19 @@ exec --no-startup-id xsettingsd &
 exec_always --no-startup-id dunst
 exec_always --no-startup-id "sleep 2; hsetroot -cover ~/Pictures/Wallpapers/PLACEHOLDER-1.jpg"
 exec_always --no-startup-id "mousetweaks --ssc --ssc-time=0.5 --threshold=30 --daemonize"
+exec_always --no-startup-id "urxvtd"
+exec --no-startup-id setxkbmap -layout us -variant intl -rules evdev compose:caps
 
 ########## KEYBINDINGS ##########
-# Start a terminal
-bindsym $mod+Return exec urxvt -cd ~/
+# Start a new urxvtc (client)
+bindsym $mod+Return exec urxvtc -cd ~/
+
+# Start a new urxvt (not running on the urxvtd daemon)
+bindsym $mod+Shift+Return exec urxvt -cd ~/
 
 # Sway menu
 for_window [instance="^launcher$"] floating enable, sticky enable, resize set 30 ppt 55 ppt, border pixel 10, move position center
-bindsym $mod+m exec TERMINAL_COMMAND=urxvt urxvt -name launcher +transparent -bg black -e env GLYPH_COMMAND="" GLYPH_DESKTOP="" GLYPH_PROMPT="? " ~/.config/sway-launcher-desktop/sway-launcher-desktop.sh -hold
+bindsym $mod+m exec TERMINAL_COMMAND=urxvtc urxvtc -name launcher +transparent -bg black -e env GLYPH_COMMAND="" GLYPH_DESKTOP="" GLYPH_PROMPT="? " ~/.config/sway-launcher-desktop/sway-launcher-desktop.sh -hold
 
 # Start dmenu (program launcher) 
 bindsym $mod+d exec i3-dmenu-desktop --dmenu="dmenu -i -fn 'Noto Sans:size=10'"

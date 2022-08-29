@@ -28,7 +28,7 @@ then
 	sleep 5
 
 	# Make the dns change in resolv.conf permanent
-	pacman -Syu --noconfirm resolvconf
+	pacman -Syu --noconfirm --disable-download-timeout resolvconf
 	prtinf "nameserver 8.8.8.8" >> /etc/resolvconf/resolv.conf.d/tail
 	resolvconf --enable-updates
 	resolvconf -u
@@ -38,10 +38,15 @@ fi
 printf "\033[0;36m[+] Installing selected WM and base utilities…\033[0m\n"
 
 install_packages() {
+    # /usr/share/alsa is mounted from the LXC config, so we don't want pacman to try overwriting files during this initial setup
+    umount /usr/share/alsa
+    #sed -i "s/#IgnorePkg   =/IgnorePkg   = alsa-topology-conf alsa-ucm-conf alsa-lib/g" /etc/pacman.conf
+
+    # Base packages for either WM
     case "$REPLY" in
         "i" | "i3")
             LAUNCHCMD="exec i3"
-            pacman -Syu --noconfirm --needed \
+            pacman -Syu --noconfirm --needed --disable-download-timeout \
                 dconf \
                 dmenu \
                 dunst \
@@ -77,12 +82,12 @@ install_packages() {
                 xorg-xinit \
                 yad \
                 yt-dlp || err=1
-            pacman -Syu --noconfirm xorg-apps || err=1 # --needed has to be dropped for xorg-apps due to a package conflict
-            				           # that would break the script when run more than once on a container
+            pacman -Syu --noconfirm --disable-download-timeout xorg-apps || err=1 # --needed has to be dropped for xorg-apps due to a package conflict
+            				                                          # that would break the script when run more than once on a container
             ;;
         "x" | "xfce" | "xfce4" | "" | *)
             LAUNCHCMD="exec startxfce4"
-            pacman -Syu --noconfirm --needed \
+            pacman -Syu --noconfirm --needed --disable-download-timeout \
                 dconf \
                 dmenu \
                 exo \
@@ -115,8 +120,8 @@ install_packages() {
                 xfwm4-themes \
                 xorg-server \
                 xorg-xinit || err=1
-            pacman -Syu --noconfirm xorg-apps || err=1 # --needed has to be dropped for xorg-apps due to a package conflict
-            				           # that would break the script when run more than once on a container
+            pacman -Syu --noconfirm --disable-download-timeout xorg-apps || err=1 # --needed has to be dropped for xorg-apps due to a package conflict
+            				                                          # that would break the script when run more than once on a container
             ;;
     esac
 
@@ -175,6 +180,26 @@ else
     printf "\033[0;32mDone.\033[0m\n"
 fi
 
+# Generate locales
+printf "\033[0;36m[+] Generating en_GB.UTF-8 locale…\033[0m\n"
+sed -i "s/#en_GB.UTF-8 UTF-8/en_GB.UTF-8 UTF-8/g" /etc/locale.gen
+sed -i "s/#en_GB.UTF-8 UTF-8/en_GB.UTF-8 UTF-8/g" /etc/locale.gen
+printf 'LANG=en_GB.utf8
+LC_CTYPE="en_GB.utf8"
+LC_NUMERIC="en_GB.utf8"
+LC_TIME="en_GB.utf8"
+LC_COLLATE="en_GB.utf8"
+LC_MONETARY="en_GB.utf8"
+LC_MESSAGES="en_GB.utf8"
+LC_PAPER="en_GB.utf8"
+LC_NAME="en_GB.utf8"
+LC_ADDRESS="en_GB.utf8"
+LC_TELEPHONE="en_GB.utf8"
+LC_MEASUREMENT="en_GB.utf8"
+LC_IDENTIFICATION="en_GB.utf8"
+LC_ALL=' > /etc/locale.conf
+locale-gen
+
 # Compile from AUR the extra packages required for Xwayland
 printf "\033[1;32m[?] Xwayland depends on extra packages that have to be compiled on Arch. This will take a long time but is necessary once per container. If this one has already been set up to launch X (even another WM), then this step can be skipped. Skip? [y/N] \033[0m" && read -r SKIP
 
@@ -191,19 +216,20 @@ compile_aur() {
             sed -i 's/# %wheel ALL=(ALL:ALL) NOPASSWD: ALL/%wheel ALL=(ALL:ALL) NOPASSWD: ALL/g' /etc/sudoers
 
             # Compile and install dbus-x11, libsepol and libselinux from AUR
-            pacman -Syu --needed --noconfirm git autoconf automake binutils make pkgconf bison fakeroot gcc flex patch || err=2
+            pacman -Syu --needed --noconfirm --disable-download-timeout git autoconf automake binutils make pkgconf bison fakeroot gcc flex patch || err=2
             rm -rf /tmp/dbus-x11 2> /dev/null
             rm -rf /tmp/libsepol 2> /dev/null
             rm -rf /tmp/libselinux 2> /dev/null
             runuser -l $USER_NAME -c "git clone https://aur.archlinux.org/dbus-x11.git /tmp/dbus-x11"
-            runuser -l $USER_NAME -c "cd /tmp/dbus-x11 && yes | makepkg -AsiL --skippgpcheck --needed" || err=2
+            runuser -l $USER_NAME -c "cd /tmp/dbus-x11 && yes | makepkg -AsiL --skippgpcheck --needed"
             runuser -l $USER_NAME -c "git clone https://aur.archlinux.org/libsepol.git /tmp/libsepol"
-            runuser -l $USER_NAME -c "cd /tmp/libsepol && makepkg -siL --noconfirm --skippgpcheck --needed" || err=2
+            runuser -l $USER_NAME -c "cd /tmp/libsepol && makepkg -siL --noconfirm --skippgpcheck --needed"
             runuser -l $USER_NAME -c "git clone https://aur.archlinux.org/libselinux.git /tmp/libselinux"
-            runuser -l $USER_NAME -c "cd /tmp/libselinux && makepkg -siL --noconfirm --skippgpcheck --needed" || err=2
+            runuser -l $USER_NAME -c "cd /tmp/libselinux && makepkg -siL --noconfirm --skippgpcheck --needed"
+            ls /usr/lib/libselinux.so.1 &> /dev/null || err=2
+            ls /usr/lib/libdbus-1.so &> /dev/null || err=2
 
             if [[ "$err" -eq "2" ]]; then
-                sep="\n---\n"
                 printf "\033[0;31m[!] Error(s) encountered. Please check your Internet connection. If errors persist and you cannot start X when ignoring them, then please open an issue on Github with the above logs. [R]etry or [c]ontinue anyway? \033[0m" && read -r RETRY2
 
                 case "$RETRY2" in
