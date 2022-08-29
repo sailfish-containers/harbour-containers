@@ -236,7 +236,8 @@ compile_aur() {
             runuser -l $USER_NAME -c "git clone https://aur.archlinux.org/libselinux.git /tmp/libselinux"
             runuser -l $USER_NAME -c "cd /tmp/libselinux && makepkg -siL --noconfirm --skippgpcheck --needed"
 
-            ls /usr/lib/libselinux.so.1 &> /dev/null || err=2
+	    err=0
+	    ls /usr/lib/libselinux.so.1 &> /dev/null || err=2
             ls /usr/lib/libdbus-1.so &> /dev/null || err=2
 
             if [[ "$err" -eq "2" ]]; then
