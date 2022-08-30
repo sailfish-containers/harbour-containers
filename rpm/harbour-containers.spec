@@ -42,7 +42,7 @@ For now, the application requires that your SailfishOS user name is "defaultuser
 %if "%{?vendor}" == "chum"
 PackageName: Containers
 Type: desktop-application
-DeveloperName: r3vn
+DeveloperName: sailfish-containers
 PackagerName: Kabouik
 Categories:
  - Development
