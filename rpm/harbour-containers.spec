@@ -9,7 +9,7 @@ Name:       harbour-containers
 # << macros
 
 Summary:    LXC manager and runner with Silica UI
-Version:    0.8
+Version:    0.8.1
 Release:    0
 Group:      Qt/Qt
 License:    GPLv3

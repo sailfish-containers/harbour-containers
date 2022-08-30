@@ -82,6 +82,7 @@ case "$REPLY" in
                 xclip \
                 xdg-user-dirs \
                 xfce4-terminal \
+                xinit \
                 xsel \
                 xsettingsd \
                 yad \
@@ -174,7 +175,7 @@ if [ -e "/home/$USER_NAME/.config/i3/config" ] || [ -e "/home/$USER_NAME/.config
             printf "\033[0;32mDefault configuration re-applied.\033[0m\n"
         ;;
         "n" | "no" | "N" | "No" | "NO" | "" | *)
-            printf "\033[0;33mAborting desktop reconfiguration…\033[0m"
+            printf "\033[0;33mAborting desktop reconfiguration…\033[0m\n"
         ;;
     esac
 else
