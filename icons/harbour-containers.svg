@@ -73,15 +73,6 @@
        y1="86"
        x2="11.999863"
        y2="13" />
-    <clipPath
-       clipPathUnits="userSpaceOnUse"
-       id="clipPath17732">
-      <path
-         inkscape:connector-curvature="0"
-         style="display:inline;opacity:0.878103;fill:url(#linearGradient17736);fill-opacity:1"
-         id="path17734"
-         d="m 42.9995,89.7 c 23.583276,0 42.700499,-19.118 42.700499,-42.7 0,-0.408 0,-41.2770005 0,-41.2770005 0,-0.786 -0.637007,-1.423 -1.423017,-1.423 H 1.7230165 c -0.78600897,0 -1.42301597,0.637 -1.42301597,1.423 0,0 0,40.9080005 0,41.2770005 -0.001,23.582 19.11622347,42.7 42.69949947,42.7 z" />
-    </clipPath>
     <linearGradient
        inkscape:collect="always"
        xlink:href="#linearGradient3789-6"
@@ -110,8 +101,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="7.0608622"
-     inkscape:cx="48.436011"
-     inkscape:cy="23.014187"
+     inkscape:cx="48.506824"
+     inkscape:cy="31.794984"
      inkscape:document-units="px"
      inkscape:current-layer="layer2"
      showgrid="true"
@@ -277,16 +268,11 @@
        d="M 60.694519,78.122466 71.453035,44.500109 43.00826,24.734623 42.967308,78.195977 Z"
        id="path12947-7"
        sodipodi:nodetypes="ccccc" />
-    <rect
-       style="opacity:1;fill:url(#linearGradient17744);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.70378;stroke-dasharray:6.81513, 1.70378;stroke-opacity:0.447059;paint-order:stroke markers fill;stop-color:#000000"
+    <path
        id="rect17564"
-       width="69.449898"
-       height="16.137623"
-       x="9.2268085"
-       y="74.780907"
-       rx="0.066200756"
-       ry="0.03421234"
-       clip-path="url(#clipPath17732)" />
+       clip-path="none"
+       style="opacity:1;fill:url(#linearGradient17744);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.70378;stroke-dasharray:6.81513, 1.70378;stroke-opacity:0.447059;paint-order:stroke markers fill;stop-color:#000000"
+       d="M 10.587891 74.78125 C 18.418957 83.908865 30.029791 89.699219 43 89.699219 C 55.970485 89.699219 67.580872 83.909201 75.412109 74.78125 L 10.587891 74.78125 z " />
     <path
        style="display:inline;opacity:1;fill:#e9666a;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 60.645065,78.122466 2.741162,-8.555047 c -8.505933,-1.06386 -16.384322,-5.295831 -20.45628,-5.514053 l -0.0121,14.142611 z"
