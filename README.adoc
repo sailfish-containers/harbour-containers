@@ -123,7 +123,7 @@ NOTE: If unfortunately a terminal window did not appear after you created a new 
 See https://github.com/sailfish-containers/lxc-templates-desktop/wiki[lxc-templates-desktop's wiki] for more details and CLI usage (with extra features). 
 
 ==== Container side
-If you picked i3 as your window manager, `Alt` is your `$mod`, so `Alt`+`Return` to open a terminal, and `Alt`+`d` for `dmenu`. Your i3 configuration can be changed in `~/.config/i3/config`.
+If you picked i3 as your window manager, `Alt` is your `$mod`, so `Alt`+`Return` to open a terminal, and `Alt`+`d` for `dmenu`. For a global help showing your i3 keybindings, press `Alt`+`h`. The i3 configuration can be changed in `~/.config/i3/config`.
 
 == Known issues/limitations
 
