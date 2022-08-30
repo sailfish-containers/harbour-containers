@@ -67,8 +67,9 @@ case "$REPLY" in
                 i3lock \
                 i3status \
                 mpv \
-                pavucontrol \
+                ncurses-term \
                 onboard \
+                pavucontrol \
                 rofi \
                 rsync \
                 rxvt-unicode \
@@ -98,8 +99,9 @@ case "$REPLY" in
                 dconf-cli \
                 dmenu \
                 mpv \
-                pavucontrol \
+                ncurses-term \
                 onboard \
+                pavucontrol \
                 rsync \
                 sudo \
                 thunar \
