@@ -13,7 +13,9 @@ exec_always --no-startup-id dunst
 exec_always --no-startup-id "sleep 2; hsetroot -cover ~/Pictures/Wallpapers/PLACEHOLDER-1.jpg"
 exec_always --no-startup-id "mousetweaks --ssc --ssc-time=0.5 --threshold=30 --daemonize"
 exec --no-startup-id urxvtd
-exec --no-startup-id sleep 3; setxkbmap -layout us -variant intl -option compose:caps
+
+# Keyboard layout: uncomment the line below if you want to use us-intl and a compose key (Caps lock)
+# exec_always --no-startup-id sleep 3; setxkbmap -layout us -variant intl -option compose:caps
 
 ########## KEYBINDINGS ##########
 # Start a new urxvtc (client)
