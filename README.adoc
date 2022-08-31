@@ -128,8 +128,10 @@ If you picked i3 as your window manager, `Alt` is your `$mod`, so `Alt`+`Return`
 == Known issues/limitations
 
 * If your SailfishOS username is not `defaultuser`, then the GUI cannot start an X session; this is being worked on and in the mean time, you can try https://github.com/sailfish-containers/lxc-templates-desktop/wiki/Desktop#start-desktop[opening the X session from CLI]
+* When creating a new container from the GUI, sometimes the new icon will not appear immediately, and the Xsession setup script will not launch automatically even if you checked the option; if that happens, go into the page of that new container, hit "init container config" at the bottom, start the container from the pulley menu, and then hit "setup xsession"
+* If for some reason the GUI does not show any container, try closing it and killing the daemon with `ps aux | grep -ie daemon.py | awk '{print $2}' | xargs kill -9 2> /dev/null` before relaunching the application; if that does not help, a reboot would be recommended
 * Sound may not work in Debian containers yet, and it may silence some SFOS sounds (alarms, media) as well (else, please tell us); it should work in Arch containers though
-* If using i3 and Arch, dead keys may not work immediately in the default terminal, but usually work after a minute or so
+* If using i3, dead keys may not work immediately in the default terminal, but usually work after a minute or so; please don't ask us why
 * No hardware acceleration
 * Only prebuilt binaries of Xwayland can be used at the moment inside containers (this is automated when setting up xsession from the GUI), because latest sources don't support the XDG_WM_Base protocol that we need
 
