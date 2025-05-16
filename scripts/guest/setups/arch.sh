@@ -229,8 +229,9 @@ compile_aur() {
             rm -rf /tmp/dbus-x11 2> /dev/null
             rm -rf /tmp/libsepol 2> /dev/null
             rm -rf /tmp/libselinux 2> /dev/null
+	    rm /usr/lib/systemd/system/dbus.service /usr/lib/systemd/user/dbus.service 2> /dev/null
             runuser -l $USER_NAME -c "git clone https://aur.archlinux.org/dbus-x11.git /tmp/dbus-x11"
-            runuser -l $USER_NAME -c "cd /tmp/dbus-x11 && yes | makepkg -AsiL --skippgpcheck --needed"
+            runuser -l $USER_NAME -c "cd /tmp/dbus-x11 && yes | makepkg -AsiL --skippgpcheck --nocheck --needed"
             runuser -l $USER_NAME -c "git clone https://aur.archlinux.org/libsepol.git /tmp/libsepol"
             runuser -l $USER_NAME -c "cd /tmp/libsepol && makepkg -siL --noconfirm --skippgpcheck --needed"
             runuser -l $USER_NAME -c "git clone https://aur.archlinux.org/libselinux.git /tmp/libselinux"
