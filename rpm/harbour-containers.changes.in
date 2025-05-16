@@ -12,7 +12,10 @@
 # * date Author's Name <author's email> version-release
 # - Summary of changes
 
-* Tue Aug 30 kabouik
+* Fri May 16 2025 kabouik
+- Fix dbus-x11 installation in arch.sh (Matias314's PR)
+
+* Tue Aug 30 2022 kabouik
 - Default to us-intl and dead keys in i3 (easier to set up for users who want it in xfce4, so not default)
 
 * Sun Aug 28 2022 kabouik
